@@ -1,12 +1,16 @@
 package com.example.carrotstatebackend.entities;
 
+import java.util.List;
+
+import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerHouse;
+import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPlot;
+import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPremise;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
 
-@Table(name = "angents")
+@Entity
+@Table(name = "prospectiveBuyer")
 @Getter @Setter
 public class ProspectiveBuyer{
 
@@ -17,10 +21,17 @@ public class ProspectiveBuyer{
     @Column(nullable = false)
     private String name;
 
-    private String contacto;
+    private String contact;
 
-    private Float presupuesto;
+    private Float budget;
 
+    @OneToMany(mappedBy = "prospectiveBuyer")
+    private List<ProspectiveBuyerPremise> prospectiveBuyerPremises;
 
+    @OneToMany(mappedBy = "prospectiveBuyer")
+    private List<ProspectiveBuyerHouse> prospectiveBuyerHouses;
+
+    @OneToMany(mappedBy = "prospectiveBuyer")
+    private List<ProspectiveBuyerPlot> prospectiveBuyerPlots;
 
 }
