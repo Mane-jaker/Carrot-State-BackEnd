@@ -20,16 +20,16 @@ public class Manager {
     @Column(nullable = false)
     private String mail;
 
-    private String profile_photo;
+    private String profilePicture;
 
     @Column(nullable = false)
-    private String manager_code;
+    private String managerCode;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private Float commission_agent;
+    private Float commissionAgent;
 
     @OneToMany(mappedBy = "manager")
     private List<Agent> agent;
