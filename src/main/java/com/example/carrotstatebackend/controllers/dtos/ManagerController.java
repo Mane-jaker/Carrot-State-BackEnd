@@ -1,9 +1,14 @@
 package com.example.carrotstatebackend.controllers.dtos;
 
+import com.example.carrotstatebackend.controllers.dtos.request.CreateManagerRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateManagerRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.CreateManagerResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.carrotstatebackend.controllers.dtos.response.GetManagerResponse;
+import com.example.carrotstatebackend.services.interfaces.IManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -11,10 +16,31 @@ import java.util.List;
 @RequestMapping("manager")
 public class ManagerController {
 
+    @Autowired
+    private IManagerService service;
+
     @GetMapping
-    public List<CreateManagerResponse> list(){
-        return null;
+    public List<GetManagerResponse> list(){
+        return service.list();
     }
 
+    @GetMapping("{id}")
+    public GetManagerResponse get(@PathVariable Long id ){
+        return service.get(id);
+    }
 
+    @PostMapping
+    public GetManagerResponse create(@RequestBody CreateManagerRequest request){
+        return service.create(request);
+    }
+
+    @PutMapping("{id}")
+    public GetManagerResponse update(@PathVariable Long id, @RequestBody UpdateManagerRequest request){
+        return service.update(id, request);
+    }
+
+    @DeleteMapping("{id}")
+    void delete(@PathVariable Long id){
+        service.delete(id);
+    }
 }
