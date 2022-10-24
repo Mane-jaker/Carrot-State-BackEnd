@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class CreateManagerRequest{
+public class UpdateManagerRequest {
 
     private String name;
 
@@ -16,4 +16,3 @@ public class CreateManagerRequest{
 
     private Float commissionAgent;
 }
- 
