@@ -1,13 +1,10 @@
-package com.example.carrotstatebackend.controllers.dtos;
+package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateManagerRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateManagerRequest;
-import com.example.carrotstatebackend.controllers.dtos.response.CreateManagerResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetManagerResponse;
 import com.example.carrotstatebackend.services.interfaces.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IManagerService {
 
+    void updateManagerProfile(String fileUrl, Long idManager);
+
     List<GetManagerResponse> list();
 
     GetManagerResponse get(Long id);

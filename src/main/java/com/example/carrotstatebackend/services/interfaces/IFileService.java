@@ -6,14 +6,16 @@ import java.util.List;
 
 public interface IFileService {
 
-    String uploadManagerProfilePicture(MultipartFile multipartFile);
+    String uploadManagerProfilePicture(MultipartFile multipartFile, Long id);
 
-    String uploadAgentProfilePicture(MultipartFile multipartFile);
+    String uploadAgentProfilePicture(MultipartFile multipartFile, Long id);
 
-    String uploadHousePicture(List<MultipartFile> multipartFile);
+    String uploadHousePicture(List<MultipartFile> multipartFile, Long id);
 
-    String uploadPlotPicture(List<MultipartFile> multipartFile);
+    String uploadPlotPicture(List<MultipartFile> multipartFile, Long id);
 
-    String uploadPremisePicture(List<MultipartFile> multipartFile);
+    String uploadPremisePicture(List<MultipartFile> multipartFile, Long id);
 
 }
+
+ 

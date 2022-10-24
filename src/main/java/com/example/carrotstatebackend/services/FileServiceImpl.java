@@ -10,7 +10,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.GetManagerResponse;
+import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IFileService;
+import com.example.carrotstatebackend.services.interfaces.IManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +25,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+@Service
 public class FileServiceImpl implements IFileService {
+
+    @Autowired
+    IManagerService managerService;
+    IAgentService agentService;
 
     private AmazonS3 s3client;
     private String ENDPOINT_URL = "s3.us-east-2.amazonaws.com";
@@ -28,28 +39,23 @@ public class FileServiceImpl implements IFileService {
     private final String SECRET_KEY = "cwL6L0s/AcxDzvJBuFhi0xLKJuYso7jd/LH7uWBP";
 
     @Override
-    public String uploadManagerProfilePicture(MultipartFile multipartFile) {
-        String fileUrl= "";
-        try{
-            File file = convertMultiPartToFile(multipartFile);
-            String fileName = "manager/" + generateFileName(multipartFile);
-            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + "/manager/" + fileName;
-            uploadFileToS3Bucket(fileName, file);
-            file.delete();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return fileUrl;
-    }
+    public String uploadManagerProfilePicture(MultipartFile multipartFile, Long id) {
 
-    @Override
-    public String uploadAgentProfilePicture(MultipartFile multipartFile) {
+        GetManagerResponse manager = managerService.get(id);
+        String FILE_URI = "persons/manager/" + manager.getMail() + "/profile_picture/";
         String fileUrl = "";
+
         try{
+
             File file = convertMultiPartToFile(multipartFile);
-            String fileName = generateFileName(multipartFile);
-            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + "/Agent/" + fileName;
+            String filePath = FILE_URI + generateFileName(multipartFile);
+
+            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + "/" + filePath;
+            uploadFileToS3Bucket(filePath, file);
+
+            managerService.updateManagerProfile(fileUrl, id);
             file.delete();
+
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -57,17 +63,41 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public String uploadHousePicture(List<MultipartFile> multipartFile) {
+    public String uploadAgentProfilePicture(MultipartFile multipartFile, Long id) {
+
+        GetAgentResponse agent = agentService.get(id);
+        String FILE_URI = "persons/agent/" + agent.getMail() + "/profile_picture/";
+        String fileUrl = "";
+
+        try{
+
+            File file = convertMultiPartToFile(multipartFile);
+            String filePath = FILE_URI + generateFileName(multipartFile);
+
+            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + filePath;
+            uploadFileToS3Bucket(filePath, file);
+
+            //agentService.udateAgentProfile(fileUrl, id);
+            file.delete();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return fileUrl;
+    }
+
+    @Override
+    public String uploadHousePicture(List<MultipartFile> multipartFile, Long id) {
         return null;
     }
 
     @Override
-    public String uploadPlotPicture(List<MultipartFile> multipartFile) {
+    public String uploadPlotPicture(List<MultipartFile> multipartFile,  Long id) {
         return null;
     }
 
     @Override
-    public String uploadPremisePicture(List<MultipartFile> multipartFile) {
+    public String uploadPremisePicture(List<MultipartFile> multipartFile,  Long id) {
         return null;
     }
 

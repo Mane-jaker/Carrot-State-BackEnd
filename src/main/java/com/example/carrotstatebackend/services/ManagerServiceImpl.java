@@ -19,13 +19,19 @@ public class ManagerServiceImpl implements IManagerService {
 
 
     @Override
+    public void updateManagerProfile(String fileUrl, Long idManager) {
+        Manager manager = findOneAndEnsureExist(idManager);
+        manager.setProfilePicture(fileUrl);
+        repository.save(manager);
+    }
+
+    @Override
     public List<GetManagerResponse> list() {
         return repository
                 .findAll()
                 .stream()
                 .map(this::from)
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -46,9 +52,14 @@ public class ManagerServiceImpl implements IManagerService {
 
     @Override
     public GetManagerResponse update(Long id, UpdateManagerRequest request) {
-        Manager manager = repository.findById(id).orElseThrow(()-> new RuntimeException("No ta"));
+        Manager manager = findOneAndEnsureExist(id);
         manager = update(manager, request);
         return from(manager);
+    }
+
+    private Manager findOneAndEnsureExist(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("The user does not exist"));
     }
 
     private  Manager update(Manager manager,UpdateManagerRequest request){
