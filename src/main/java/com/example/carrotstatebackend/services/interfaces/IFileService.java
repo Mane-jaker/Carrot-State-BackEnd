@@ -10,11 +10,11 @@ public interface IFileService {
 
     String uploadAgentProfilePicture(MultipartFile multipartFile, Long id);
 
-    String uploadHousePicture(List<MultipartFile> multipartFile, Long id);
+    String uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent);
 
-    String uploadPlotPicture(List<MultipartFile> multipartFile, Long id);
+    String uploadPlotPicture(MultipartFile multipartFile, Long id);
 
-    String uploadPremisePicture(List<MultipartFile> multipartFile, Long id);
+    String uploadPremisePicture(MultipartFile multipartFile, Long id);
 
 }
 

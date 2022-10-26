@@ -16,8 +16,10 @@ public class ProspectiveBuyerPremise {
     private Long id;
 
     @ManyToOne
-    private ProspectiveBuyer prospectiveBuyer;
+    private Premise premise;
 
     @ManyToOne
-    private Premise premise;
+    private ProspectiveBuyer prospectiveBuyer;
+
+
 }

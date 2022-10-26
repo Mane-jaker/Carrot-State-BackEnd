@@ -20,8 +20,10 @@ public class ProspectiveBuyerHouse {
     private Long id;
 
     @ManyToOne
-    private ProspectiveBuyer prospectiveBuyer;
+    private House house;
 
     @ManyToOne
-    private House house;
+    private ProspectiveBuyer prospectiveBuyer;
+
+
 }

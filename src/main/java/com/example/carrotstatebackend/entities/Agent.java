@@ -24,9 +24,8 @@ public class Agent{
     @Column(nullable = false)
     private String email;
 
+    @Column(length = 1000)
     private String profilePicture;
-
-    private Integer lastSoldProperty;
 
     private Long numberOfSells;
 
@@ -37,6 +36,9 @@ public class Agent{
 
     @ManyToOne
     private Manager manager;
+
+    @ManyToOne
+    private Notifications notifications;
 
     @OneToMany(mappedBy = "agent")
     private List<Owner> owner;

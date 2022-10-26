@@ -3,6 +3,8 @@ package com.example.carrotstatebackend.services.interfaces;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
+import com.example.carrotstatebackend.entities.Agent;
+
 import java.util.List;
 
 public interface IAgentService{
@@ -18,5 +20,7 @@ public interface IAgentService{
     GetAgentResponse update(Long id, UpdateAgentRequest request);
 
     void updateAgentProfile(String fileUrl, Long idManager);
+
+    Agent getAgent(Long id);
 }
  

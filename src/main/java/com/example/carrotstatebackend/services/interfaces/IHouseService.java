@@ -3,16 +3,17 @@ package com.example.carrotstatebackend.services.interfaces;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.GetHouseResponse;
+import com.example.carrotstatebackend.entities.House;
 
 import java.util.List;
 
 public interface IHouseService {
 
-    void updateHouseProfile(String fileUrl, Long idHouse);
-
     List<GetHouseResponse> list();
 
     GetHouseResponse get(Long id);
+
+    House getHouse(Long id);
 
     void delete(Long id);
 

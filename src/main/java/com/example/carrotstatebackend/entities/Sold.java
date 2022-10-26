@@ -14,6 +14,12 @@ public class Sold{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Integer date;
+
+    @Column(nullable = false)
+    private Float comission;
+
     @ManyToOne Owner owner;
 
     @ManyToOne Agent agent;

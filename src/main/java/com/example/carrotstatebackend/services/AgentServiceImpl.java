@@ -2,6 +2,7 @@ package com.example.carrotstatebackend.services;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
+import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.repositories.IAgentRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.List;
 public class AgentServiceImpl implements IAgentService{
 
     @Autowired
-    IAgentRepository repository;
+    private IAgentRepository repository;
 
     @Override
     public List<GetAgentResponse> list() {
@@ -22,6 +23,11 @@ public class AgentServiceImpl implements IAgentService{
 
     @Override
     public GetAgentResponse get(Long id) {
+        return null;
+    }
+
+    @Override
+    public Agent getAgent(Long id){
         return null;
     }
 

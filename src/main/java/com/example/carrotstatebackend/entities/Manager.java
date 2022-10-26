@@ -20,6 +20,7 @@ public class Manager {
     @Column(nullable = false)
     private String mail;
 
+    @Column(length = 1000)
     private String profilePicture;
 
     @Column(nullable = false)
@@ -33,4 +34,7 @@ public class Manager {
 
     @OneToMany(mappedBy = "manager")
     private List<Agent> agent;
+
+    @ManyToOne
+    private Notifications notifications;
 }

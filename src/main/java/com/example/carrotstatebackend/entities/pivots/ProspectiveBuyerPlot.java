@@ -17,9 +17,11 @@ public class ProspectiveBuyerPlot {
     private Long id;
 
     @ManyToOne
-    private ProspectiveBuyer prospectiveBuyer;
+    private Plot plot;
 
     @ManyToOne
-    private Plot plot;
+    private ProspectiveBuyer prospectiveBuyer;
+
+
 
 }
