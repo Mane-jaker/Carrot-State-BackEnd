@@ -1,9 +1,13 @@
 package com.example.carrotstatebackend.entities;
 
+import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPlot;
+import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPremise;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
 @Table(name = "premises")
@@ -26,4 +30,19 @@ public class Premise {
 
     @Column(nullable = false)
     private Float price;
+
+    @ManyToOne
+    private Agent agent;
+
+    @ManyToOne
+    private Owner owner;
+
+    @OneToMany(mappedBy = "premise")
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "premise")
+    private List<Sold> solds;
+
+    @OneToMany(mappedBy = "premise")
+    private List<ProspectiveBuyerPremise> prospectiveBuyerPremises;
 }

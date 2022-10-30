@@ -5,9 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "Owners")
+@Table(name = "Owner")
 @Getter @Setter
 public class Owner {
     @Id
@@ -21,4 +22,19 @@ public class Owner {
 
     @Column(nullable = false)
     private Integer property;
+
+    @ManyToOne
+    private Agent agent;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Premise> premises;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Plot> plots;
+
+    @OneToMany(mappedBy = "owner")
+    private List<House> houses;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Sold> solds;
 }
