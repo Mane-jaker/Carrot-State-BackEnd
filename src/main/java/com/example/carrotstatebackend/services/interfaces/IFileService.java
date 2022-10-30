@@ -12,7 +12,7 @@ public interface IFileService {
 
     String uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent);
 
-    String uploadPlotPicture(MultipartFile multipartFile, Long id);
+    String uploadPlotPicture(MultipartFile multipartFile, Long idPlot, Long idAgent);
 
     String uploadPremisePicture(MultipartFile multipartFile, Long id);
 

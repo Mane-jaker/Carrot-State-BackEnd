@@ -31,6 +31,9 @@ public class FileServiceImpl implements IFileService {
     @Autowired
     IHouseService houseService;
 
+    //@Autowired
+    //IPlotService plotService;
+
     @Autowired
     IAgentService agentService;
 
@@ -117,6 +120,7 @@ public class FileServiceImpl implements IFileService {
             request.setHouse(house);
             request.setUrl(fileUrl);
             imageService.saveHouseImage(request);
+
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -125,7 +129,10 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public String uploadPlotPicture(MultipartFile multipartFile,  Long id) {
+    public String uploadPlotPicture(MultipartFile multipartFile,  Long idPlot, Long idAgent) {
+
+        GetAgentResponse agent = agentService.get(idAgent);
+
         return null;
     }
 
