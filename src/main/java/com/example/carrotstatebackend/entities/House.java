@@ -1,27 +1,35 @@
 package com.example.carrotstatebackend.entities;
 
+import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerHouse;
 import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPlot;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
 import java.util.List;
+import javax.persistence.*;
 
-@Table(name = "plots")
-@Getter @Setter
+@Table(name = "house")
 @Entity
-public class Plot {
+@Getter @Setter
+public class House{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
     private String description;
+
+    private Integer bathroomNum;
+
+    @Column(nullable = false)
+    private Integer rooms;
+
+    private Integer floors;
 
     @Column(nullable = false)
     private Float size;
@@ -35,12 +43,13 @@ public class Plot {
     @ManyToOne
     private Owner owner;
 
-    @OneToMany(mappedBy = "plot")
+    @OneToMany(mappedBy = "house")
     private List<Image> images;
 
-    @OneToMany(mappedBy = "plot")
+    @OneToMany(mappedBy = "house")
     private List<Sold> solds;
 
-    @OneToMany(mappedBy = "plot")
-    private List<ProspectiveBuyerPlot> prospectiveBuyerPlots;
+    @OneToMany(mappedBy = "house")
+    private List<ProspectiveBuyerHouse> prospectiveBuyerHouses;
+
 }
