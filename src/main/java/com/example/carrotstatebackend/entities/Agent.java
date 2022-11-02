@@ -27,9 +27,9 @@ public class Agent{
     @Column(length = 1000)
     private String profilePicture;
 
-    private Long numberOfSales;
+    private Integer numberOfSales;
 
-    private Long numberOfProperties;
+    private Integer numberOfProperties;
 
     @Column(nullable = false)
     private Boolean state;

@@ -5,13 +5,14 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CreateAgentResponse{
+
     private String name;
 
     private String password;
 
-    private String mail;
+    private String email;
 
-    private String profilePhoto;
+    private String profilePicture;
 
     private int numberOfSales;
 

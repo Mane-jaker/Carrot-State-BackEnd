@@ -21,6 +21,6 @@ public interface IAgentService{
 
     void updateAgentProfile(String fileUrl, Long idManager);
 
-    Agent getAgent(Long id);
+    void updateAgentStatus(Boolean state, Long idAgent);
 }
  
