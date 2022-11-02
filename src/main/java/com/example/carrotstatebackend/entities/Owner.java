@@ -18,10 +18,10 @@ public class Owner {
     private String name;
 
     @Column(nullable = false)
-    private Integer contact;
+    private String contact;
 
     @Column(nullable = false)
-    private Integer property;
+    private String property;
 
     @ManyToOne
     private Agent agent;

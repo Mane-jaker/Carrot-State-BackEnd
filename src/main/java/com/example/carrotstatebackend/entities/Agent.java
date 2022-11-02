@@ -27,12 +27,12 @@ public class Agent{
     @Column(length = 1000)
     private String profilePicture;
 
-    private Long numberOfSells;
+    private Integer numberOfSales;
 
-    private Long numberOfProperties;
+    private Integer numberOfProperties;
 
     @Column(nullable = false)
-    private Boolean status;
+    private Boolean state;
 
     @ManyToOne
     private Manager manager;

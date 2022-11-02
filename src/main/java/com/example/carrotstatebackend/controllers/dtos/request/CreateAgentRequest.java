@@ -10,15 +10,13 @@ public class CreateAgentRequest{
 
     private String password;
 
-    private String mail;
-/*
-    private int salesNumber;
+    private String email;
 
-    private int propertiesNumber;
+    private String profilePicture;
 
-    private String profilePhoto;
-    lastPropSold;
-    fk
+    private int numberOfSales;
+
+    private int numberOfPropierties;
+
     private Boolean state;
-*/
 }
