@@ -1,12 +1,9 @@
 package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateHouseRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.CreateManagerRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateManagerRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.GetHouseResponse;
 import com.example.carrotstatebackend.entities.House;
-import com.example.carrotstatebackend.entities.Manager;
 import com.example.carrotstatebackend.repositories.IHouseRepository;
 import com.example.carrotstatebackend.services.interfaces.IHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
