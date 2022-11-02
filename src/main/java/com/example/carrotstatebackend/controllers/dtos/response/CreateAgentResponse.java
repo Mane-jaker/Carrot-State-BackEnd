@@ -7,8 +7,16 @@ import lombok.Setter;
 public class CreateAgentResponse{
     private String name;
 
+    private String password;
+
     private String mail;
 
-    private String password;
+    private String profilePhoto;
+
+    private int numberOfSales;
+
+    private int numberOfPropierties;
+
+    private Boolean state;
 }
  

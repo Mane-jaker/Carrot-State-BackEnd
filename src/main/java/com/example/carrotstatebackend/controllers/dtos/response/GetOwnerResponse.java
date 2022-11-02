@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class GetOwnerResponse {
 
+    private Long id;
+
     private String name;
 
     private String contact;

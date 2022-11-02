@@ -8,17 +8,15 @@ public class UpdateAgentRequest {
 
     private String name;
 
+    private String password;
+
     private String mail;
 
-    private String password;
-    /*
-    private int salesNumber;
-
-    private int propertiesNumber;
-
     private String profilePhoto;
-    lastPropSold;
-    fk
+
+    private int numberOfSales;
+
+    private int numberOfPropierties;
+
     private Boolean state;
-    */
 }

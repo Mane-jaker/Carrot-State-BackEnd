@@ -5,16 +5,17 @@ import lombok.Setter;
 
 @Getter @Setter
 public class GetAgentResponse {
-    private Long id;
-
     private String name;
-
-    private String mail;
-
-    private String profilePicture;
 
     private String password;
 
-    private String status;
+    private String mail;
 
+    private String profilePhoto;
+
+    private int numberOfSales;
+
+    private int numberOfPropierties;
+
+    private Boolean state;
 }
