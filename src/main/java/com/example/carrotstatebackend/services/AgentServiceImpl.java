@@ -72,7 +72,6 @@ public class AgentServiceImpl implements IAgentService{
         agent.setEmail(request.getEmail());
         agent.setNumberOfSales(request.getNumberOfSales());
         agent.setNumberOfProperties(request.getNumberOfPropierties());
-        agent.setState(request.getState());
         return repository.save(agent);
     }
 
@@ -83,7 +82,6 @@ public class AgentServiceImpl implements IAgentService{
         agent.setEmail(request.getEmail());
         agent.setNumberOfSales(request.getNumberOfSales());
         agent.setNumberOfProperties(request.getNumberOfPropierties());
-        agent.setState(request.getState());
         return agent;
     }
 
