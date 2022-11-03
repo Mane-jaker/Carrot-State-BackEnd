@@ -78,7 +78,7 @@ public class FileServiceImpl implements IFileService {
     public String uploadAgentProfilePicture(MultipartFile multipartFile, Long id) {
 
         GetAgentResponse agent = agentService.get(id);
-        String FILE_URI = "persons/agent/" + agent.getMail() + "/profile_picture/";
+        String FILE_URI = "persons/agent/" + agent.getEmail() + "/profile_picture/";
         String fileUrl = "";
 
         try{
@@ -106,7 +106,7 @@ public class FileServiceImpl implements IFileService {
         CreateImageRequest request = new CreateImageRequest();
 
         String FILE_URI = "persons/agent/"
-                + agent.getMail() + "/properties/houses/"
+                + agent.getEmail() + "/properties/houses/"
                 + "house_" + house.getId() + "/pictures/";
         String fileUrl = "";
 
