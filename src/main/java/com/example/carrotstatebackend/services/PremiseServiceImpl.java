@@ -58,7 +58,7 @@ public class PremiseServiceImpl implements IPremiseService {
 
     private Premise findOneAndEnsureExist(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("The user does not exist"));
+                .orElseThrow(() -> new RuntimeException("The Premise does not exist"));
     }
 
     private GetPremiseResponse from(Premise premise){
