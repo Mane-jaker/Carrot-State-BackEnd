@@ -1,6 +1,8 @@
 package com.example.carrotstatebackend.controllers.advices;
 
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
+import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.controllers.exceptions.NotValidFormatException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +18,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class ExeptionHandleFactory extends ResponseEntityExceptionHandler {
+public class ExeptionHandleFactory {
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
-            errors.put(fieldName, message);
-        });
-
-        BaseResponse baseResponse = BaseResponse.builder()
-                .data(errors)
-                .message("Validation failed")
-                .success(Boolean.FALSE)
-                .httpStatus(HttpStatus.BAD_REQUEST).build();
-        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
+    @ExceptionHandler(NotValidFormatException.class)
+    private ResponseEntity<BaseResponse> handleNotValidFormatException(NotValidFormatException exception){
+        BaseResponse errorResponse = BaseResponse.builder()
+                .message(exception.getLocalizedMessage())
+                .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    private ResponseEntity<BaseResponse> handleNotFoundException(NotFoundException exception){
+        BaseResponse errorResponse = BaseResponse.builder()
+                .message(exception.getLocalizedMessage())
+                .success(false)
+                .httpStatus(HttpStatus.NOT_FOUND).build();
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
 }

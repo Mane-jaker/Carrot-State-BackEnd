@@ -31,6 +31,9 @@ public class Premise {
     @Column(nullable = false)
     private Float price;
 
+    @Column(nullable = false)
+    private Boolean soldOut;
+
     @ManyToOne
     private Agent agent;
 

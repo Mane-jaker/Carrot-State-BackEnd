@@ -9,15 +9,23 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateImageRequest;
+import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetManagerResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.UploadImageResponse;
+import com.example.carrotstatebackend.controllers.exceptions.NotValidFormatException;
 import com.example.carrotstatebackend.entities.House;
+import com.example.carrotstatebackend.entities.Plot;
+import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.apache.commons.io.FilenameUtils;
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,19 +34,22 @@ import java.io.IOException;
 public class FileServiceImpl implements IFileService {
 
     @Autowired
-    IManagerService managerService;
+    private IManagerService managerService;
 
     @Autowired
-    IHouseService houseService;
-
-    //@Autowired
-    //IPlotService plotService;
+    private IHouseService houseService;
 
     @Autowired
-    IAgentService agentService;
+    private IPlotService plotService;
 
     @Autowired
-    IImageService imageService;
+    private IPremiseService premiseService;
+
+    @Autowired
+    private IAgentService agentService;
+
+    @Autowired
+    private IImageService imageService;
 
     private AmazonS3 s3client;
 
@@ -51,18 +62,18 @@ public class FileServiceImpl implements IFileService {
     private final String SECRET_KEY = "cwL6L0s/AcxDzvJBuFhi0xLKJuYso7jd/LH7uWBP";
 
     @Override
-    public String uploadManagerProfilePicture(MultipartFile multipartFile, Long id) {
+    public BaseResponse uploadManagerProfilePicture(MultipartFile multipartFile, Long id) {
 
-        GetManagerResponse manager = managerService.get(id);
+        GetManagerResponse manager = managerService.getResponse(id);
         String FILE_URI = "persons/manager/" + manager.getMail() + "/profile_picture/";
         String fileUrl = "";
 
         try{
 
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
 
-            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + "/" + filePath;
+            fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
 
             managerService.updateManagerProfile(fileUrl, id);
@@ -71,22 +82,27 @@ public class FileServiceImpl implements IFileService {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return fileUrl;
+
+        UploadImageResponse imageResponse = UploadImageResponse.builder().url(fileUrl).build();
+        return BaseResponse.builder()
+                .data(imageResponse)
+                .success(true)
+                .httpStatus(HttpStatus.CREATED)
+                .message("The image was uploaded").build();
     }
 
     @Override
-    public String uploadAgentProfilePicture(MultipartFile multipartFile, Long id) {
+    public BaseResponse uploadAgentProfilePicture(MultipartFile multipartFile, Long id) {
 
-        GetAgentResponse agent = agentService.get(id);
+        GetAgentResponse agent = agentService.getResponse(id);
         String FILE_URI = "persons/agent/" + agent.getEmail() + "/profile_picture/";
         String fileUrl = "";
 
         try{
-
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
 
-            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + filePath;
+            fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
 
             agentService.updateAgentProfile(fileUrl, id);
@@ -95,15 +111,20 @@ public class FileServiceImpl implements IFileService {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return fileUrl;
+
+        UploadImageResponse imageResponse = UploadImageResponse.builder().url(fileUrl).build();
+        return BaseResponse.builder()
+                .data(imageResponse)
+                .success(true)
+                .httpStatus(HttpStatus.CREATED)
+                .message("The image was uploaded").build();
     }
 
     @Override
-    public String uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent) {
+    public BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent) {
 
-        GetAgentResponse agent = agentService.get(idAgent);
+        GetAgentResponse agent = agentService.getResponse(idAgent);
         House house = houseService.getHouse(idHouse);
-        CreateImageRequest request = new CreateImageRequest();
 
         String FILE_URI = "persons/agent/"
                 + agent.getEmail() + "/properties/houses/"
@@ -112,33 +133,98 @@ public class FileServiceImpl implements IFileService {
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
-
-            fileUrl = "https://" + BUCKET_NAME + "." + ENDPOINT_URL + filePath;
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
 
-            request.setHouse(house);
-            request.setUrl(fileUrl);
+            CreateImageRequest request = CreateImageRequest.builder().house(house).url(fileUrl).build();
             imageService.saveHouseImage(request);
 
         } catch (Exception e){
             e.printStackTrace();
         }
 
-        return fileUrl;
+        UploadImageResponse imageResponse = UploadImageResponse.builder().url(fileUrl).build();
+        return BaseResponse.builder()
+                .data(imageResponse)
+                .success(true)
+                .httpStatus(HttpStatus.CREATED)
+                .message("The image was uploaded").build();
     }
 
     @Override
-    public String uploadPlotPicture(MultipartFile multipartFile,  Long idPlot, Long idAgent) {
+    public BaseResponse uploadPlotPicture(MultipartFile multipartFile,  Long idPlot, Long idAgent) {
 
-        GetAgentResponse agent = agentService.get(idAgent);
+        GetAgentResponse agent = agentService.getResponse(idAgent);
+        Plot plot = plotService.getPlot(idPlot);
+        String FILE_URI = "persons/agent/"
+                + agent.getEmail() + "/properties/houses/"
+                + "plot_" + plot.getId() + "/pictures/";
+        String fileUrl = "";
 
-        return null;
+        try{
+            File file = convertMultiPartToFile(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            fileUrl = createUrl(filePath);
+            uploadFileToS3Bucket(filePath, file);
+
+            CreateImageRequest request = CreateImageRequest.builder().plot(plot).url(fileUrl).build();
+            imageService.saveHouseImage(request);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        UploadImageResponse imageResponse = UploadImageResponse.builder().url(fileUrl).build();
+        return BaseResponse.builder()
+                .data(imageResponse)
+                .success(true)
+                .httpStatus(HttpStatus.CREATED)
+                .message("The image was uploaded").build();
     }
 
     @Override
-    public String uploadPremisePicture(MultipartFile multipartFile,  Long id) {
-        return null;
+    public BaseResponse uploadPremisePicture(MultipartFile multipartFile,  Long idPremise, Long idAgent) {
+
+        GetAgentResponse agent = agentService.getResponse(idAgent);
+        Premise premise = premiseService.getPremise(idPremise);
+
+        String FILE_URI = "persons/agent/"
+                + agent.getEmail() + "/properties/houses/"
+                + "premise_"+ premise.getId()  + "/pictures/";
+        String fileUrl = "";
+
+        try{
+            File file = convertMultiPartToFile(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            fileUrl = createUrl(filePath);
+            uploadFileToS3Bucket(filePath, file);
+
+            CreateImageRequest request = CreateImageRequest.builder().premise(premise).url(fileUrl).build();
+            imageService.saveHouseImage(request);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        UploadImageResponse imageResponse = UploadImageResponse.builder().url(fileUrl).build();
+        return BaseResponse.builder()
+                .data(imageResponse)
+                .success(true)
+                .httpStatus(HttpStatus.CREATED)
+                .message("The image was uploaded").build();
+    }
+
+    private String createUrl(@Valid String filePath){
+        return  "https://" + BUCKET_NAME + "." + ENDPOINT_URL + filePath;
+    }
+
+    private String validateFormat(String fileName){
+        String Ext = FilenameUtils.getExtension(fileName);
+        if(!Ext.equals("png")){
+            throw new NotValidFormatException(".png");
+        }
+        return fileName;
     }
 
     @PostConstruct

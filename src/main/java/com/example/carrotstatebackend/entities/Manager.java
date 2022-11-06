@@ -17,24 +17,24 @@ public class Manager {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String mail;
 
     @Column(length = 1000)
     private String profilePicture;
 
     @Column(nullable = false)
-    private String managerCode;
-
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private Float commissionAgent;
 
     @OneToMany(mappedBy = "manager")
     private List<Agent> agent;
 
-    @ManyToOne
-    private Notifications notifications;
+    @OneToMany(mappedBy = "manager")
+    private List<Notifications> notifications;
+
+    @OneToOne
+    @JoinColumn(name = "manager_code_id", referencedColumnName = "id")
+    private ManagersCode code;
+
 }

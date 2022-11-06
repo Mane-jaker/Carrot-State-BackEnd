@@ -17,11 +17,11 @@ public class Notifications {
     @Column(nullable = false)
     private String type;
 
-    @OneToMany(mappedBy = "notifications")
-    private List<Agent> agent;
+    @ManyToOne
+    private Agent agent;
 
-    @OneToMany(mappedBy = "notifications")
-    private List<Manager> manager;
+    @ManyToOne
+    private Manager manager;
 
 
 }

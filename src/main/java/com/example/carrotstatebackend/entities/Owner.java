@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.entities;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Table(name = "Owner")
 @Getter @Setter
 public class Owner {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,9 +21,6 @@ public class Owner {
 
     @Column(nullable = false)
     private String contact;
-
-    @Column(nullable = false)
-    private String property;
 
     @ManyToOne
     private Agent agent;

@@ -12,8 +12,9 @@ public class CreatePlotRequest {
 
     private String description;
 
+    private Float price;
+
     private Float size;
 
-    private Float price;
 
 }

@@ -15,4 +15,6 @@ public class UpdateHouseRequest {
     private Integer rooms;
 
     private Integer floors;
+
+    private Boolean SoldOut;
 }

@@ -3,12 +3,14 @@ package com.example.carrotstatebackend.controllers.dtos.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter @Setter
 public class CreateOwnerRequest {
 
-    private String name;
+    @NotNull
+    private Long prospectiveBuyerId;
 
-    private String contact;
-
-    private String propierty;
+    @NotNull
+    private Long idProperty;
 }

@@ -2,12 +2,18 @@ package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
+import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPlotResponse;
+import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.entities.Owner;
 import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.repositories.IPlotRepository;
+import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IPlotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import com.example.carrotstatebackend.entities.Agent;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,47 +24,67 @@ public class PlotServiceImpl implements IPlotService {
     @Autowired
     private IPlotRepository repository;
 
+    @Autowired
+    private IAgentService agentService;
+
     @Override
-    public List<GetPlotResponse> list() {
-        return repository
-                .findAll()
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
+    public BaseResponse listByAgent(Long idAgent) {
+        return BaseResponse.builder()
+                .data(getList(idAgent))
+                .message("List")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND)
+                .build();
     }
 
     @Override
-    public GetPlotResponse get(Long id) {
-        return from(id);
+    public BaseResponse get(Long id) {
+        GetPlotResponse response = from(id);
+        return BaseResponse.builder()
+                .data(response)
+                .message("the plot was find")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND).build();
     }
 
     @Override
-    public void delete(Long id) {repository.deleteById(id);
-
-    }
+    public void delete(Long id) {repository.deleteById(id);}
 
     public Plot getPlot(Long id){
         return findOneAndEnsureExist(id);
     }
 
     @Override
-    public GetPlotResponse create(CreatePlotRequest request) {
+    public BaseResponse create(CreatePlotRequest request, Long idAgent) {
         Plot plot = from(request);
-        return from(repository.save(plot));
+        Agent agent = agentService.getAgent(idAgent);
+        plot.setAgent(agent);
+        GetPlotResponse response = from(repository.save(plot));
+        return BaseResponse.builder()
+                .data(response)
+                .message("the plot was created")
+                .success(true)
+                .httpStatus(HttpStatus.CREATED).build();
     }
 
     @Override
     public GetPlotResponse update(Long id, UpdatePlotRequest request) {
-
         Plot plot = findOneAndEnsureExist(id);
         plot = update(plot, request);
         return from(plot);
+    }
 
+    @Override
+    public GetPlotResponse updateToSoldOut(Long idPlot, Owner owner){
+        Plot plot = findOneAndEnsureExist(idPlot);
+        plot.setOwner(owner);
+        plot.setSoldOut(true);
+        return from(repository.save(plot));
     }
 
     private Plot findOneAndEnsureExist(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("The Plot does not exist"));
+                .orElseThrow(NotFoundException::new);
     }
 
     private GetPlotResponse from(Plot plot){
@@ -69,6 +95,7 @@ public class PlotServiceImpl implements IPlotService {
         response.setPrice(plot.getPrice());
         response.setSize(plot.getSize());
         response.setName(plot.getName());
+        response.setSoldOut(plot.getSoldOut());
         return response;
     }
 
@@ -88,10 +115,22 @@ public class PlotServiceImpl implements IPlotService {
         plot.setSize(request.getSize());
         plot.setName(request.getName());
         plot.setPrice(request.getPrice());
+        plot.setSoldOut(false);
         return plot;
     }
 
     private GetPlotResponse from(Long idPlot){
-        return repository.findById(idPlot).map(this::from).orElseThrow(()-> new RuntimeException("no ta tu plot papito"));
+        return repository.findById(idPlot)
+                .map(this::from)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    private List<GetPlotResponse> getList(Long idAgent){
+        Agent agent = agentService.getAgent(idAgent);
+        return repository
+                .findAllByAgent(agent)
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 }

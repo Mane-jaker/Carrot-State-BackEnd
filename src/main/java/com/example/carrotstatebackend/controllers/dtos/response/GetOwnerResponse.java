@@ -13,5 +13,4 @@ public class GetOwnerResponse {
 
     private String contact;
 
-    private String propierty;
 }

@@ -19,4 +19,6 @@ public class GetPlotResponse {
 
     private Float price;
 
+    private Boolean soldOut;
+
 }
