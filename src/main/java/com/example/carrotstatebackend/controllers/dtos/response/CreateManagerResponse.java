@@ -6,11 +6,11 @@ import lombok.Setter;
 @Getter @Setter
 public class CreateManagerResponse{
 
+     private Long id;
+
      private String name;
 
-     private String mail;
-
-     private String password;
+     private String Email;
 
      private String managerCode;
 

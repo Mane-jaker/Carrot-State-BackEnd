@@ -14,9 +14,9 @@ public class CreateAgentResponse{
 
     private String profilePicture;
 
-    private int numberOfSales;
+    private Integer numberOfSales;
 
-    private int numberOfPropierties;
+    private Integer numberOfPropierties;
 
     private Boolean state;
 }

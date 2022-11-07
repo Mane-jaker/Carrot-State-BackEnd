@@ -10,5 +10,5 @@ public class CreateOwnerResponse {
 
     private String contact;
 
-    private String propierty;
+    private Object property;
 }

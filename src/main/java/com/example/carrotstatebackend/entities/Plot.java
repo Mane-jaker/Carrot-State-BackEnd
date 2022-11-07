@@ -29,6 +29,9 @@ public class Plot {
     @Column(nullable = false)
     private Float price;
 
+    @Column(nullable = false)
+    private Boolean soldOut;
+
     @ManyToOne
     private Agent agent;
 

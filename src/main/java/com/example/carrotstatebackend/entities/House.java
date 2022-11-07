@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 import javax.persistence.*;
 
-@Table(name = "house")
+@Table(name = "houses")
 @Entity
 @Getter @Setter
 public class House{
@@ -24,7 +24,7 @@ public class House{
 
     private String description;
 
-    private Integer bathroomNum;
+    private Integer bathRoomNum;
 
     @Column(nullable = false)
     private Integer rooms;
@@ -36,6 +36,9 @@ public class House{
 
     @Column(nullable = false)
     private Float price;
+
+    @Column(nullable = false)
+    private Boolean soldOut;
 
     @ManyToOne
     private Agent agent;

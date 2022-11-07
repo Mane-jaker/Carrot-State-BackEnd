@@ -9,10 +9,9 @@ import com.example.carrotstatebackend.entities.Premise;
 public interface IImageService{
 
     void saveHouseImage(CreateImageRequest request);
+
     void savePremiseImage(CreateImageRequest request);
+
     void savePlotImage(CreateImageRequest request);
 
-} 
- // si xddd es para las relaciones lo vimos hoy con christian ps
-// Interface Image Service xD
-//iimageservice???
+}

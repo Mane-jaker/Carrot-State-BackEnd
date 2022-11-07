@@ -3,17 +3,23 @@ package com.example.carrotstatebackend.controllers.dtos.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 @Getter @Setter
 public class CreateManagerRequest{
 
+    @NotNull
     private String name;
 
-    private String mail;
+    @NotNull @Email
+    private String email;
 
+    @NotNull
     private String password;
 
-    private String managerCode;
-
+    @NotNull
     private Float commissionAgent;
+
 }
  

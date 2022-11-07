@@ -21,4 +21,6 @@ public class GetAgentResponse {
     private int numberOfPropierties;
 
     private Boolean state;
+
+    private GetManagerResponse manager;
 }

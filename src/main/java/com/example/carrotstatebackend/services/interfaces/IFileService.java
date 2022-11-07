@@ -1,20 +1,19 @@
 package com.example.carrotstatebackend.services.interfaces;
 
+import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface IFileService {
 
-    String uploadManagerProfilePicture(MultipartFile multipartFile, Long id);
+    BaseResponse uploadManagerProfilePicture(MultipartFile multipartFile, Long id);
 
-    String uploadAgentProfilePicture(MultipartFile multipartFile, Long id);
+    BaseResponse uploadAgentProfilePicture(MultipartFile multipartFile, Long id);
 
-    String uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent);
+    BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent);
 
-    String uploadPlotPicture(MultipartFile multipartFile, Long idPlot, Long idAgent);
+    BaseResponse uploadPlotPicture(MultipartFile multipartFile, Long idPlot, Long idAgent);
 
-    String uploadPremisePicture(MultipartFile multipartFile, Long id);
+    BaseResponse uploadPremisePicture(MultipartFile multipartFile, Long idPremise, Long idAgent);
 
 }
 

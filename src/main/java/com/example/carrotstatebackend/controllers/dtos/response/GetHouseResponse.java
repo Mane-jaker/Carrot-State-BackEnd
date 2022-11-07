@@ -14,7 +14,13 @@ public class GetHouseResponse {
 
     private Integer bathroomNum;
 
+    private Float price;
+
     private Integer rooms;
 
     private Integer floors;
+
+    private Boolean SoldOut;
+
+    private GetOwnerResponse owner;
 }

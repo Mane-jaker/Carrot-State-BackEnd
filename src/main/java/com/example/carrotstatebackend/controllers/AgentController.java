@@ -1,37 +1,39 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
-import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 @RestController
-@RequestMapping("Agent")
+@RequestMapping("agent")
 public class AgentController{
 
     @Autowired
     private IAgentService service;
 
-    @GetMapping
-    public List<GetAgentResponse> list(){
-        return service.list();
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<BaseResponse> getByManager(@PathVariable Long managerId){
+        BaseResponse response = service.listByManager(managerId);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @GetMapping("{id}")
-    public GetAgentResponse get(@PathVariable Long id){return service.get(id);}
-
-    @PostMapping
-    public GetAgentResponse create(@RequestBody CreateAgentRequest request){
-        return service.create(request);
+    public ResponseEntity<BaseResponse> getById(@PathVariable Long id){
+        BaseResponse response = service.get(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("{id}")
-    public GetAgentResponse update(@PathVariable Long id, @RequestBody UpdateAgentRequest request){
-        return service.update(id, request);
+    @PostMapping
+    public ResponseEntity<BaseResponse> create(@RequestBody @Valid CreateAgentRequest request){
+        BaseResponse response = service.create(request);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @DeleteMapping("{id}")

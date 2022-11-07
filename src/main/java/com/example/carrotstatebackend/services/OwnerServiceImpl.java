@@ -1,12 +1,19 @@
 package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateOwnerRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.CreateSoldRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateOwnerRequest;
-import com.example.carrotstatebackend.controllers.dtos.response.GetOwnerResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.*;
+import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.entities.Agent;
+import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.Owner;
+import com.example.carrotstatebackend.entities.ProspectiveBuyer;
+import com.example.carrotstatebackend.repositories.IAgentRepository;
 import com.example.carrotstatebackend.repositories.IOwnerRepository;
-import com.example.carrotstatebackend.services.interfaces.IOwnerService;
+import com.example.carrotstatebackend.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,65 +25,131 @@ public class OwnerServiceImpl implements IOwnerService {
     @Autowired
     private IOwnerRepository repository;
 
+    @Autowired
+    private IAgentService agentService;
+
+    @Autowired
+    private ProspectiveBuyerServiceImpl prospectiveBuyerService;
+
+    @Autowired
+    private IHouseService houseService;
+
+    @Autowired
+    private IPlotService plotService;
+
+    @Autowired
+    private IPremiseService premiseService;
+
+    @Autowired
+    private ISoldService soldService;
+
     @Override
-    public List<GetOwnerResponse> list() {
-        return repository
-                .findAll()
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
+    public BaseResponse list() {
+        return BaseResponse.builder()
+                .data(getList())
+                .message("List")
+                .httpStatus(HttpStatus.FOUND)
+                .build();
     }
 
     @Override
-    public GetOwnerResponse get(Long id) { return from(id); }
-
-    @Override
-    public void delete(Long id) { repository.deleteById(id); }
-
-    @Override
-    public GetOwnerResponse create(CreateOwnerRequest request) {
-        Owner owner = from(request);
-        return from(repository.save(owner));
+    public BaseResponse get(Long id) {
+        return BaseResponse.builder()
+                .data(from(findOneAndEnsureExist(id)))
+                .message("found")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND).build();
     }
 
     @Override
-    public GetOwnerResponse update(Long id, UpdateOwnerRequest request) {
-        Owner owner = findOneAndEnsureExist(id);
-        owner = update(owner, request);
-        return from(owner);
+    public BaseResponse createHouseOwner(CreateOwnerRequest request, Long idAgent) {
+        Owner owner = from(request, idAgent);
+        owner = repository.save(owner);
+        GetHouseResponse houseResponse = houseService.updateToSoldOut(request.getIdProperty(), owner);
+        CreateSoldRequest soldRequest = new CreateSoldRequest();
+        soldRequest.setOwner(owner);
+        soldRequest.setAgent(owner.getAgent());
+        soldRequest.setHouse(houseService.getHouse(request.getIdProperty()));
+        soldService.create(soldRequest);
+        return BaseResponse.builder()
+                .data(from(owner, houseResponse))
+                .message("the owner was created")
+                .success(true)
+                .httpStatus(HttpStatus.CREATED).build();
     }
+
+    @Override
+    public BaseResponse createPlotOwner(CreateOwnerRequest request, Long idAgent) {
+        Owner owner = from(request, idAgent);
+        owner = repository.save(owner);
+        GetPlotResponse plotResponse = plotService.updateToSoldOut(request.getIdProperty(), owner);
+        CreateSoldRequest soldRequest = new CreateSoldRequest();
+        soldRequest.setOwner(owner);
+        soldRequest.setAgent(owner.getAgent());
+        soldRequest.setPlot(plotService.getPlot(request.getIdProperty()));
+        soldService.create(soldRequest);
+        return BaseResponse.builder()
+                .data(from(owner, plotResponse))
+                .message("the owner was created")
+                .success(true)
+                .httpStatus(HttpStatus.CREATED).build();
+    }
+
+    @Override
+    public BaseResponse createPremiseOwner(CreateOwnerRequest request, Long idAgent) {
+        Owner owner = from(request, idAgent);
+        owner = repository.save(owner);
+        GetPremiseResponse premiseResponse = premiseService.updateToSoldOut(request.getIdProperty(), owner);
+        CreateSoldRequest soldRequest = new CreateSoldRequest();
+        soldRequest.setOwner(owner);
+        soldRequest.setAgent(owner.getAgent());
+        soldRequest.setPremise(premiseService.getPremise(request.getIdProperty()));
+        return BaseResponse.builder()
+                .data(from(owner, premiseResponse))
+                .message("the owner was created")
+                .success(true)
+                .httpStatus(HttpStatus.CREATED).build();
+    }
+
+    @Override
+    public void delete(Long id) {repository.deleteById(id);}
 
     private Owner findOneAndEnsureExist(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("The user does not exist"));
+                .orElseThrow(NotFoundException::new);
     }
 
-    private Owner update(Owner owner, UpdateOwnerRequest request){
-        owner.setName(request.getName());
-        owner.setContact(request.getContact());
-        owner.setProperty(request.getPropierty());
-        return repository.save(owner);
-    }
-
-    private Owner from(CreateOwnerRequest request){
+    private Owner from(CreateOwnerRequest request, Long idAgent){
+        ProspectiveBuyer pBuyer = prospectiveBuyerService.getProspectiveBuyer(request.getProspectiveBuyerId());
+        Agent agent = agentService.getAgent(idAgent);
         Owner owner = new Owner();
-        owner.setName(request.getName());
-        owner.setContact(request.getContact());
-        owner.setProperty(request.getPropierty());
+        owner.setName(pBuyer.getName());
+        owner.setAgent(agent);
+        owner.setContact(pBuyer.getContact());
         return owner;
     }
+
+    private GetOwnerResponse from(Owner owner, Object property){
+        GetOwnerResponse response = new GetOwnerResponse();
+        response.setId(owner.getId());
+        response.setName(owner.getName());
+        response.setContact(owner.getContact());
+        return response;
+    }
+
     private GetOwnerResponse from(Owner owner){
         GetOwnerResponse response = new GetOwnerResponse();
         response.setId(owner.getId());
         response.setName(owner.getName());
         response.setContact(owner.getContact());
-        response.setPropierty(owner.getProperty());
         return response;
     }
 
-    private GetOwnerResponse from(Long idOwner){
-        return repository.findById(idOwner)
+    private List<GetOwnerResponse> getList(){
+        return repository
+                .findAll()
+                .stream()
                 .map(this::from)
-                .orElseThrow(()-> new  RuntimeException("Owner no encontrado"));
+                .collect(Collectors.toList());
     }
 }

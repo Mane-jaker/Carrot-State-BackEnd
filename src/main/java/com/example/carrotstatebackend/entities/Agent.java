@@ -37,8 +37,8 @@ public class Agent{
     @ManyToOne
     private Manager manager;
 
-    @ManyToOne
-    private Notifications notifications;
+    @OneToMany(mappedBy = "agent")
+    private List<Notifications> notifications;
 
     @OneToMany(mappedBy = "agent")
     private List<Owner> owner;

@@ -1,11 +1,17 @@
 package com.example.carrotstatebackend.services; 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
+import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.GetManagerResponse;
+import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
+import com.example.carrotstatebackend.entities.Manager;
 import com.example.carrotstatebackend.repositories.IAgentRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,18 +23,28 @@ public class AgentServiceImpl implements IAgentService{
     @Autowired
     private IAgentRepository repository;
 
+    @Autowired
+    private IManagerService managerService;
+
+
     @Override
-    public List<GetAgentResponse> list() {
-        return repository
-                .findAll()
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
+    public BaseResponse listByManager(Long managerId) {
+        return BaseResponse.builder()
+                .data(getListByManager(managerId))
+                .message("List")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND)
+                .build();
     }
 
     @Override
-    public GetAgentResponse get(Long id) {
-        return from(id);
+    public BaseResponse get(Long id) {
+        GetAgentResponse response = from(id);
+        return BaseResponse.builder()
+                .data(response)
+                .message("the agent was find")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND).build();
     }
 
     @Override
@@ -41,10 +57,22 @@ public class AgentServiceImpl implements IAgentService{
     @Override
     public void delete(Long id) { repository.deleteById(id); }
 
+    public GetAgentResponse getResponse(Long id){
+
+        return from(id);
+    }
+
     @Override
-    public GetAgentResponse create(CreateAgentRequest request) {
+    public BaseResponse create(CreateAgentRequest request) {
         Agent agent = from(request);
-        return from(repository.save(agent));
+        Manager manager = managerService.getManagerByCode(request.getManagerCode());
+        agent.setManager(manager);
+        GetAgentResponse response = from(repository.save(agent));
+        return BaseResponse.builder()
+                .data(response)
+                .message("the agent was created")
+                .success(true)
+                .httpStatus(HttpStatus.CREATED).build();
     }
 
     @Override
@@ -61,9 +89,12 @@ public class AgentServiceImpl implements IAgentService{
         repository.save(agent);
     }
 
+    @Override
+    public Agent getAgent(Long id){ return findOneAndEnsureExist(id); }
+
     private Agent findOneAndEnsureExist(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("The user does not exist"));
+                .orElseThrow(NotFoundException::new);
     }
 
     private Agent update(Agent agent, UpdateAgentRequest request){
@@ -80,8 +111,7 @@ public class AgentServiceImpl implements IAgentService{
         agent.setName(request.getName());
         agent.setPassword(request.getPassword());
         agent.setEmail(request.getEmail());
-        agent.setNumberOfSales(request.getNumberOfSales());
-        agent.setNumberOfProperties(request.getNumberOfPropierties());
+        agent.setState(true);
         return agent;
     }
 
@@ -91,16 +121,42 @@ public class AgentServiceImpl implements IAgentService{
         response.setName(agent.getName());
         response.setPassword(agent.getPassword());
         response.setEmail(agent.getEmail());
-        response.setNumberOfSales(agent.getNumberOfSales());
-        response.setNumberOfPropierties(agent.getNumberOfProperties());
+        if (agent.getNumberOfSales() != null){
+            response.setNumberOfSales(agent.getNumberOfSales());
+        }
+        if (agent.getNumberOfProperties() != null){
+            response.setNumberOfPropierties(agent.getNumberOfProperties());
+        }
         response.setState(agent.getState());
+        response.setManager(from(agent.getManager()));
+        return response;
+    }
+
+    private GetManagerResponse from(Manager manager){
+        GetManagerResponse response = new GetManagerResponse();
+        response.setId(manager.getId());
+        response.setName(manager.getName());
+        response.setMail(manager.getMail());
+        response.setPassword(manager.getPassword());
+        response.setCommissionAgent(manager.getCommissionAgent());
+        response.setManagerCode(manager.getCode().getCode().toString());
         return response;
     }
 
     private GetAgentResponse from(Long idAgent){
         return repository.findById(idAgent)
                 .map(this::from)
-                .orElseThrow(()-> new RuntimeException("Agent no encontrado"));
+                .orElseThrow(NotFoundException::new);
+    }
+
+    private List<GetAgentResponse> getListByManager(Long idManger){
+        Manager manager = managerService.getManager(idManger);
+        return repository
+                .findAllByManager_Id(idManger)
+                .orElseThrow(NotFoundException::new)
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 }
  

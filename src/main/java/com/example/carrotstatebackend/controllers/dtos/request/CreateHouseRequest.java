@@ -5,13 +5,21 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CreateHouseRequest {
-    private String location;
+
+    private String name;
 
     private String description;
 
-    private Integer bathroomNum;
+    private Float price;
+
+    private Float size;
+
+    private String location;
+
+    private Integer bathRoomNum;
 
     private Integer rooms;
 
     private Integer floors;
+
 }

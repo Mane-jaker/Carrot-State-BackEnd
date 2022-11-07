@@ -2,6 +2,8 @@ package com.example.carrotstatebackend.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
@@ -15,7 +17,7 @@ public class Sold{
     private Long id;
 
     @Column(nullable = false)
-    private Integer date;
+    private Date date;
 
     @Column(nullable = false)
     private Float comission;
