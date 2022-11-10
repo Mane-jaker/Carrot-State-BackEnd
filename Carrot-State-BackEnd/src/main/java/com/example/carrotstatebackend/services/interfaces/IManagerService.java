@@ -11,11 +11,11 @@ import java.util.Optional;
 public interface IManagerService {
     List<GetManagerResponse> list();
     BaseResponse get(Long id);
+    BaseResponse create(CreateManagerRequest request);
     Manager getManagerByCode(Long managersCode);
     Manager getManager(Long id);
     Optional<Manager> getManager(String email);
     void updateManagerProfile(String fileUrl, Long idManager);
     void delete(Long id);
-    BaseResponse create(CreateManagerRequest request);
     GetManagerResponse getResponse(Long id);
 }

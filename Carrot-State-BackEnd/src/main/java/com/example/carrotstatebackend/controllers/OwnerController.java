@@ -29,6 +29,24 @@ public class OwnerController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    @GetMapping("/house/{idOwner}")
+    public ResponseEntity<BaseResponse> listOwnerHouses(@PathVariable Long idOwner){
+        BaseResponse response = service.listOwnerHouses(idOwner);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/plot/{idOwner}")
+    public ResponseEntity<BaseResponse> listOwnerPlots(@PathVariable Long idOwner){
+        BaseResponse response = service.listOwnerPlots(idOwner);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/premise/{idOwner}")
+    public ResponseEntity<BaseResponse> listOwnerPremises(@PathVariable Long idOwner){
+        BaseResponse response = service.listOwnerPremises(idOwner);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @PostMapping("/house/agent/{idAgent}")
     public ResponseEntity<BaseResponse> createHouseOwner(@RequestBody @Valid CreateOwnerRequest request,
                                                          @PathVariable Long idAgent) {

@@ -9,18 +9,11 @@ import com.example.carrotstatebackend.entities.Owner;
 
 
 public interface IHouseService {
-
     BaseResponse get(Long id);
-
     BaseResponse create(CreateHouseRequest request, Long idAgent);
-
-    BaseResponse listByAgent(Long idAgent);
-
     BaseResponse update(Long idHouse, UpdateHouseRequest request);
-
-    House getHouse(Long id);
-
-    void delete(Long id);
-
+    BaseResponse listByAgent(Long idAgent);
     GetHouseResponse updateToSoldOut(Long id, Owner owner);
+    House getHouse(Long id);
+    void delete(Long id);
 }

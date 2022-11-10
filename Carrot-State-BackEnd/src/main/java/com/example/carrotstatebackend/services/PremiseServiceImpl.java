@@ -27,6 +27,7 @@ public class PremiseServiceImpl implements IPremiseService {
     @Autowired
     private IAgentService agentService;
 
+
     @Override
     public  BaseResponse listByAgent(Long idAgent){
         return BaseResponse.builder()
@@ -36,7 +37,6 @@ public class PremiseServiceImpl implements IPremiseService {
                 .httpStatus(HttpStatus.FOUND)
                 .build();
     }
-
 
     @Override
     public BaseResponse get(Long id) {
@@ -89,14 +89,14 @@ public class PremiseServiceImpl implements IPremiseService {
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
     }
-    // agrega que se aumente el numero de propiedades en el create de plot guiate del de house va
+
     private Premise findOneAndEnsureExist(Long id) {
         return repository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }
 
     private GetPremiseResponse from(Premise premise){
-        GetPremiseResponse response = new GetPremiseResponse();
+       GetPremiseResponse response = new GetPremiseResponse();
        response.setId(premise.getId());
        response.setDescription(premise.getDescription());
        response.setLocation(premise.getLocation());
@@ -138,4 +138,6 @@ public class PremiseServiceImpl implements IPremiseService {
                 .map(this::from)
                 .collect(Collectors.toList());
     }
+
+
 }

@@ -10,18 +10,11 @@ import com.example.carrotstatebackend.entities.Premise;
 
 
 public interface IPremiseService {
-
-    BaseResponse listByAgent(Long idAgent);
-
     BaseResponse get(Long id);
-
-    Premise getPremise (Long id);
-
-    void delete(Long id);
-
     BaseResponse create(CreatePremiseRequest request, Long idAgent);
-
     BaseResponse update(Long idPremise, UpdatePremiseRequest request);
-
+    BaseResponse listByAgent(Long idAgent);
+    Premise getPremise (Long id);
+    void delete(Long id);
     GetPremiseResponse updateToSoldOut(Long id, Owner owner);
 }

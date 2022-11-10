@@ -5,6 +5,4 @@ import com.example.carrotstatebackend.entities.ManagersCode;
 
 public interface IManagersCode {
     ManagersCode GenerateManagerCode();
-
-    Long GetManagersCode(Long id);
 }

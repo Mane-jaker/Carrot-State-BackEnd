@@ -28,7 +28,6 @@ public class HouseServiceImpl implements IHouseService{
     @Autowired
     private IAgentService agentService;
 
-
     @Override
     public BaseResponse get(Long id) {
         return BaseResponse.builder()
@@ -36,14 +35,6 @@ public class HouseServiceImpl implements IHouseService{
                 .message("found")
                 .httpStatus(HttpStatus.FOUND).build();
     }
-
-    @Override
-    public void delete(Long id) {repository.deleteById(id);}
-
-    public House getHouse(Long id){
-        return findOneAndEnsureExist(id);
-    }
-
     @Override
     public BaseResponse create(CreateHouseRequest request, Long idAgent) {
         House house = from(request);
@@ -60,15 +51,6 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     @Override
-    public BaseResponse listByAgent(Long idAgent) {
-        return BaseResponse.builder()
-                .data(getList(idAgent))
-                .message("found")
-                .success(true)
-                .httpStatus(HttpStatus.FOUND).build();
-    }
-
-    @Override
     public BaseResponse update(Long idHouse, UpdateHouseRequest request) {
         House house = repository.findById(idHouse).orElseThrow(NotFoundException::new);
         return BaseResponse.builder()
@@ -79,12 +61,28 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     @Override
+    public BaseResponse listByAgent(Long idAgent) {
+        return BaseResponse.builder()
+                .data(getList(idAgent))
+                .message("found")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND).build();
+    }
+
+    @Override
     public GetHouseResponse updateToSoldOut(Long idHouse, Owner owner) {
         House house = findOneAndEnsureExist(idHouse);
         house.setOwner(owner);
         house.setSoldOut(true);
         return from(house);
     }
+
+    public House getHouse(Long id){
+        return findOneAndEnsureExist(id);
+    }
+
+    @Override
+    public void delete(Long id) {repository.deleteById(id);}
 
     private House findOneAndEnsureExist(Long id) {
         return repository.findById(id)
@@ -156,8 +154,6 @@ public class HouseServiceImpl implements IHouseService{
                 .map(this::from)
                 .collect(Collectors.toList());
     }
-
-
 
 
 }

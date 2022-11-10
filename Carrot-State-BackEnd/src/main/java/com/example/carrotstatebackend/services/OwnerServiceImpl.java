@@ -4,9 +4,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreateOwnerReques
 import com.example.carrotstatebackend.controllers.dtos.request.CreateSoldRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.*;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
-import com.example.carrotstatebackend.entities.Agent;
-import com.example.carrotstatebackend.entities.Owner;
-import com.example.carrotstatebackend.entities.ProspectiveBuyer;
+import com.example.carrotstatebackend.entities.*;
 import com.example.carrotstatebackend.repositories.IOwnerRepository;
 import com.example.carrotstatebackend.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,11 +99,36 @@ public class OwnerServiceImpl implements IOwnerService {
         soldRequest.setOwner(owner);
         soldRequest.setAgent(owner.getAgent());
         soldRequest.setPremise(premiseService.getPremise(request.getIdProperty()));
+        soldService.create(soldRequest);
         return BaseResponse.builder()
                 .data(from(owner, premiseResponse))
                 .message("the owner was created")
                 .success(true)
                 .httpStatus(HttpStatus.CREATED).build();
+    }
+
+    @Override
+    public BaseResponse listOwnerHouses(Long idOwner) {
+        return BaseResponse.builder()
+                .data(getHouseList(idOwner))
+                .success(true)
+                .message("houses from owner: " + idOwner)
+                .httpStatus(HttpStatus.FOUND).build();
+    }
+
+    @Override
+    public BaseResponse listOwnerPlots(Long idOwner) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse listOwnerPremises(Long idOwner) {
+        return null;
+    }
+
+    @Override
+    public Owner getOwner(Long idOwner) {
+        return findOneAndEnsureExist(idOwner);
     }
 
     @Override
@@ -131,6 +154,7 @@ public class OwnerServiceImpl implements IOwnerService {
         response.setId(owner.getId());
         response.setName(owner.getName());
         response.setContact(owner.getContact());
+        response.setProperty(property);
         return response;
     }
 
@@ -142,11 +166,72 @@ public class OwnerServiceImpl implements IOwnerService {
         return response;
     }
 
+    private GetHouseResponse from(House house){
+        GetHouseResponse response = new GetHouseResponse();
+        response.setId(house.getId());
+        response.setBathroomNum(house.getBathRoomNum());
+        response.setDescription(house.getDescription());
+        response.setLocation(house.getLocation());
+        response.setFloors(house.getFloors());
+        response.setRooms(house.getRooms());
+        response.setSoldOut(house.getSoldOut());
+        response.setPrice(house.getPrice());
+        if (house.getOwner() != null) response.setOwner(from(house.getOwner()));
+        return response;
+    }
+
+    private GetPlotResponse from(Plot plot){
+        GetPlotResponse response = new GetPlotResponse();
+        response.setId(plot.getId());
+        response.setDescription(plot.getDescription());
+        response.setLocation(plot.getLocation());
+        response.setPrice(plot.getPrice());
+        response.setSize(plot.getSize());
+        response.setName(plot.getName());
+        response.setSoldOut(plot.getSoldOut());
+        return response;
+    }
+
+    private GetPremiseResponse from(Premise premise){
+        GetPremiseResponse response = new GetPremiseResponse();
+        response.setId(premise.getId());
+        response.setDescription(premise.getDescription());
+        response.setLocation(premise.getLocation());
+        response.setName(premise.getName());
+        response.setPrice(premise.getPrice());
+        response.setSize(premise.getSize());
+        return response;
+    }
+
     private List<GetOwnerResponse> getList(){
         return repository
                 .findAll()
                 .stream()
                 .map(this::from)
+                .collect(Collectors.toList());
+    }
+
+    private List<GetHouseResponse> getHouseList(Long idOwner){
+        return findOneAndEnsureExist(idOwner)
+                .getHouses()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+    }
+
+    private List<GetPlotResponse> getPlotList(Long idOwner){
+        return findOneAndEnsureExist(idOwner)
+                .getPlots()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+    }
+
+    private List<GetPremiseResponse> getPremisesList(Long idOwner){
+        return findOneAndEnsureExist(idOwner)//obtiene un owner (yo quiero la lista que tien owner)
+                .getPremises()// extraigo la lista que tiene owner (solita se llena)
+                .stream()// estrimeo la lista que saque
+                .map(this::from) // convierto mi lista de premises a response
                 .collect(Collectors.toList());
     }
 }

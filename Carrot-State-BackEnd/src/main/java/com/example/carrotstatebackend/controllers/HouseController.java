@@ -31,11 +31,6 @@ public class HouseController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @GetMapping("/owner/{idOwner}")
-    public ResponseEntity<BaseResponse> listByOwner(@PathVariable Long idOwner){
-        return null;
-    }
-
     @PostMapping("/agent/{idAgent}")
     public ResponseEntity<BaseResponse> create(@RequestBody @Valid CreateHouseRequest request,
                                                @PathVariable Long idAgent){

@@ -1,6 +1,5 @@
 package com.example.carrotstatebackend.services;
 
-import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.ManagersCode;
 import com.example.carrotstatebackend.repositories.IManagersCodeRepository;
 import com.example.carrotstatebackend.services.interfaces.IManagersCode;
@@ -33,11 +32,6 @@ public class ManagersCodeServiceImpl implements IManagersCode {
             }
         }
         return managersCode;
-    }
-
-    @Override
-    public Long GetManagersCode(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundException::new).getCode();
     }
 
     private ManagersCode from(Long code){
