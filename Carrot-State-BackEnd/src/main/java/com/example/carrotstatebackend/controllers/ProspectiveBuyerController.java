@@ -64,6 +64,22 @@ public class ProspectiveBuyerController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @DeleteMapping("{id}")
-    void delete(@PathVariable Long id) { service.delete(id);}
+    @DeleteMapping("/house/{idProspective}")
+    public ResponseEntity<BaseResponse> deleteHouseProspective(@PathVariable Long idProspective){
+        BaseResponse response = service.deleteHouseProspective(idProspective);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @DeleteMapping("/plot/{idProspective}")
+    public ResponseEntity<BaseResponse> deletePlotProspective(@PathVariable Long idProspective){
+        BaseResponse response = service.deletePlotProspective(idProspective);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @DeleteMapping("/premise/{idProspective}")
+    public ResponseEntity<BaseResponse> deletePremiseProspective(@PathVariable Long idProspective){
+        BaseResponse response = service.deletePremiseProspective(idProspective);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
 }

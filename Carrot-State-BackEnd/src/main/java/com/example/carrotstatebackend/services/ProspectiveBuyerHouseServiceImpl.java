@@ -36,7 +36,9 @@ public class ProspectiveBuyerHouseServiceImpl implements IProspectiveBuyerHouseS
     }
 
     @Override
-    public void delete(Long id) {}
+    public void delete(ProspectiveBuyer prospectiveBuyer) {
+        repository.deleteAllByProspectiveBuyer(prospectiveBuyer);
+    }
 
     private ProspectiveBuyer from(ProspectiveBuyerHouse prospectiveBuyerHouse){
         return prospectiveBuyerHouse.getProspectiveBuyer();

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface IManagerRepository extends JpaRepository<Manager, Long> {
-    Manager findByCodeCode(Long code);
+    Optional<Manager> findByCodeCode(Long code);
     Optional<Manager> findByMail(String email);
 }

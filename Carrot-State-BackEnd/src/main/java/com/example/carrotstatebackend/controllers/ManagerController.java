@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateManagerRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateManagerCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,31 @@ public class ManagerController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    @GetMapping
+    public ResponseEntity<BaseResponse> list(){
+        BaseResponse response = service.list();
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @PostMapping
     public ResponseEntity<BaseResponse> create(@Valid @RequestBody CreateManagerRequest request){
         BaseResponse response = service.create(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
+
+    @PutMapping("/credentials/{idManager}")
+    public ResponseEntity<BaseResponse> updateCrendentials(@RequestBody @Valid UpdateManagerCredentialsRequest request,
+                                               @PathVariable Long idManager){
+        BaseResponse response = service.updateCredentials(request, idManager);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @PutMapping("/commision/{commision}/manager/{idManager}")
+    public ResponseEntity<BaseResponse> updateCommision(@PathVariable Float commision,
+                                               @PathVariable Long idManager){
+        BaseResponse response = service.updateCommision(commision, idManager);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
 
 }

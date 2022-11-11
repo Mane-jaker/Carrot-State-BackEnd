@@ -12,7 +12,7 @@ public class UpdateHouseRequest {
 
     private String description;
 
-    private Integer bathroomNum;
+    private Integer bathRoomNum;
 
     private Integer rooms;
 
@@ -21,6 +21,4 @@ public class UpdateHouseRequest {
     private Float size;
 
     private Float price;
-
-    private Boolean SoldOut;
 }

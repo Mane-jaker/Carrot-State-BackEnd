@@ -8,4 +8,5 @@ import java.util.List;
 public interface IProspectiveBuyerPlotService {
     List<ProspectiveBuyer> list(Long idPlot);
     void create(ProspectiveBuyer prospectiveBuyer, Plot plot);
+    void delete(ProspectiveBuyer prospectiveBuyer);
 }

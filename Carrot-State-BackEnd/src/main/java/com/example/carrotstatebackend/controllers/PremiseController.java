@@ -23,7 +23,7 @@ public class PremiseController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @GetMapping("agent/{idAgent}")
+    @GetMapping("/list/agent/{idAgent}")
     public ResponseEntity<BaseResponse> list(@PathVariable Long idAgent) {
         BaseResponse response = service.listByAgent(idAgent);
         return new ResponseEntity<>(response, response.getHttpStatus());
@@ -36,15 +36,16 @@ public class PremiseController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("idPremise")
+    @PutMapping("{idPremise}")
     public ResponseEntity<BaseResponse> update(@RequestBody @Valid UpdatePremiseRequest request,
                                                @PathVariable Long idPremise){
         BaseResponse response = service.update(idPremise, request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @DeleteMapping("{id}")
-    void delete(@PathVariable Long id){
-        service.delete(id);
+    @DeleteMapping("{idPremise}")
+    public ResponseEntity<BaseResponse> delete(@PathVariable Long idPremise){
+        BaseResponse response = service.delete(idPremise);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }

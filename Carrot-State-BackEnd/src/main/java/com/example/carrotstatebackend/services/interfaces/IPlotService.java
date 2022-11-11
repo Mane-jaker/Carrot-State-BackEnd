@@ -13,7 +13,7 @@ public interface IPlotService {
     BaseResponse create(CreatePlotRequest request, Long idAgent);
     BaseResponse update(Long idPlot, UpdatePlotRequest request);
     BaseResponse listByAgent(Long idAgent);
+    BaseResponse delete(Long id);
     Plot getPlot(Long id);
-    void delete(Long id);
     GetPlotResponse updateToSoldOut( Long idPlot, Owner owner);
 }

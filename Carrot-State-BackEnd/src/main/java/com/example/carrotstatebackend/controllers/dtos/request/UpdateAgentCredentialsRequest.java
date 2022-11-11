@@ -4,15 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class UpdateManagerRequest {
-
-    private String name;
+public class UpdateAgentCredentialsRequest {
 
     private String mail;
 
     private String password;
-
-    private String managerCode;
-
-    private Float commissionAgent;
 }

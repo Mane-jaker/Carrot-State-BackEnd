@@ -2,6 +2,7 @@ package com.example.carrotstatebackend.controllers.advices;
 
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetLoginResponse;
+import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.LoginInvalidException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.controllers.exceptions.NotValidFormatException;
@@ -41,6 +42,16 @@ public class ExceptionHandleFactory {
                 .message(exception.getLocalizedMessage())
                 .success(false)
                 .httpStatus(HttpStatus.PRECONDITION_FAILED)
+                .build();
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
+
+    @ExceptionHandler(InvalidDeleteException.class)
+    private ResponseEntity<BaseResponse> handleInvalidDeleteException(InvalidDeleteException exception){
+        BaseResponse errorResponse = BaseResponse.builder()
+                .message(exception.getLocalizedMessage())
+                .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST)
                 .build();
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }

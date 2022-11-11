@@ -3,6 +3,7 @@ package com.example.carrotstatebackend.services.interfaces;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateProspectiveBuyerRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateProspectiveBuyerRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
+import com.example.carrotstatebackend.entities.ProspectiveBuyer;
 
 
 public interface IProspectiveBuyerService {
@@ -14,5 +15,8 @@ public interface IProspectiveBuyerService {
     BaseResponse createPlotProspectiveBuyer(CreateProspectiveBuyerRequest request, Long idPlot);
     BaseResponse createPremiseProspectiveBuyer(CreateProspectiveBuyerRequest request, Long idPremise);
     BaseResponse update(Long id, UpdateProspectiveBuyerRequest request);
-    void delete(Long id);
+    BaseResponse deleteHouseProspective(Long id);
+    BaseResponse deletePlotProspective(Long id);
+    BaseResponse deletePremiseProspective(Long id);
+    ProspectiveBuyer getProspectiveBuyer(Long id);
 }

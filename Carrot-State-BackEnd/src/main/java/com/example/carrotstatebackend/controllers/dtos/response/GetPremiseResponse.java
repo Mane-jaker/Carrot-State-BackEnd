@@ -18,4 +18,6 @@ public class GetPremiseResponse {
    private Float price;
 
    private Boolean soldOut;
+
+   private GetOwnerResponse owner;
 }

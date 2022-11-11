@@ -43,4 +43,10 @@ public class PlotController {
         BaseResponse response = service.update(idPlot, request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
+
+    @DeleteMapping("/{idPlot}")
+    public ResponseEntity<BaseResponse> delete(@PathVariable Long idPlot){
+        BaseResponse response = service.delete(idPlot);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
 }

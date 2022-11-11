@@ -35,6 +35,11 @@ public class ProspectiveBuyerPlotServiceImpl implements IProspectiveBuyerPlotSer
         repository.save(from(prospectiveBuyer, plot));
     }
 
+    @Override
+    public void delete(ProspectiveBuyer prospectiveBuyer) {
+        repository.deleteAllByProspectiveBuyer(prospectiveBuyer);
+    }
+
     private ProspectiveBuyer from(ProspectiveBuyerPlot prospectiveBuyerPlot){
         return prospectiveBuyerPlot.getProspectiveBuyer();
     }

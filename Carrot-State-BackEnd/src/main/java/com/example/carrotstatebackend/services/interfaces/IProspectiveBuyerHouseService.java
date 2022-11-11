@@ -8,7 +8,7 @@ import java.util.List;
 public interface IProspectiveBuyerHouseService {
     List<ProspectiveBuyer> list(Long idHouse);
     void create(ProspectiveBuyer prospectiveBuyer, House house);
-    void delete(Long id);
+    void delete(ProspectiveBuyer prospectiveBuyer);
 }
 
 

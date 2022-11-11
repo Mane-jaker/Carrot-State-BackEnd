@@ -4,6 +4,8 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPlotResponse;
+import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
+import com.example.carrotstatebackend.controllers.exceptions.LoginInvalidException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Owner;
@@ -48,13 +50,6 @@ public class PlotServiceImpl implements IPlotService {
     }
 
     @Override
-    public void delete(Long id) {repository.deleteById(id);}
-
-    public Plot getPlot(Long id){
-        return findOneAndEnsureExist(id);
-    }
-
-    @Override
     public BaseResponse create(CreatePlotRequest request, Long idAgent) {
         Plot plot = from(request);
         Agent agent = agentService.getAgent(idAgent);
@@ -78,6 +73,21 @@ public class PlotServiceImpl implements IPlotService {
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
     }
+
+    @Override
+    public BaseResponse delete(Long id){
+        Plot plot = repository.findById(id).orElseThrow(NotFoundException::new);
+        if (plot.getOwner() != null) throw new InvalidDeleteException();
+        repository.delete(plot);
+        return BaseResponse.builder()
+                .message("the plot was deleted")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public Plot getPlot(Long id){ return findOneAndEnsureExist(id); }
+
 
     @Override
     public GetPlotResponse updateToSoldOut(Long idPlot, Owner owner){

@@ -88,9 +88,6 @@ public class  ProspectiveBuyerServiceImpl implements IProspectiveBuyerService {
     }
 
     @Override
-    public void delete(Long id) { repository.deleteById(id); }
-
-    @Override
     public BaseResponse createHouseProspectiveBuyer(CreateProspectiveBuyerRequest request, Long houseId) {
         ProspectiveBuyer prospectiveBuyer = from(request);
         prospectiveBuyer = repository.save(prospectiveBuyer);
@@ -129,10 +126,6 @@ public class  ProspectiveBuyerServiceImpl implements IProspectiveBuyerService {
                 .httpStatus(HttpStatus.CREATED).build();
     }
 
-    public ProspectiveBuyer getProspectiveBuyer(Long id){
-        return findOneAndEnsureExist(id);
-    }
-
     @Override
     public BaseResponse update(Long id, UpdateProspectiveBuyerRequest request) {
         ProspectiveBuyer prospectiveBuyer = findOneAndEnsureExist(id);
@@ -142,6 +135,47 @@ public class  ProspectiveBuyerServiceImpl implements IProspectiveBuyerService {
                 .message("the agent was updated")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse deleteHouseProspective(Long id) {
+        ProspectiveBuyer prospectiveBuyer = repository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        prospectiveBuyerHouseService.delete(prospectiveBuyer);
+        repository.delete(prospectiveBuyer);
+        return BaseResponse.builder()
+                .message("the prospective buyer was deleted")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse deletePlotProspective(Long id) {
+        ProspectiveBuyer prospectiveBuyer = repository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        prospectiveBuyerPlotService.delete(prospectiveBuyer);
+        repository.delete(prospectiveBuyer);
+        return BaseResponse.builder()
+                .message("the prospective buyer was deleted")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse deletePremiseProspective(Long id) {
+        ProspectiveBuyer prospectiveBuyer = repository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        prospectiveBuyerPremiseService.delete(prospectiveBuyer);
+        repository.delete(prospectiveBuyer);
+        return BaseResponse.builder()
+                .message("the prospective buyer was deleted")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public ProspectiveBuyer getProspectiveBuyer(Long id){
+        return findOneAndEnsureExist(id);
     }
 
     private ProspectiveBuyer findOneAndEnsureExist(Long id){

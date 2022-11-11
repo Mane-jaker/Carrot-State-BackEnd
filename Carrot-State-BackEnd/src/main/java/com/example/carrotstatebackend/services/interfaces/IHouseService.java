@@ -13,7 +13,7 @@ public interface IHouseService {
     BaseResponse create(CreateHouseRequest request, Long idAgent);
     BaseResponse update(Long idHouse, UpdateHouseRequest request);
     BaseResponse listByAgent(Long idAgent);
+    BaseResponse delete(Long id);
     GetHouseResponse updateToSoldOut(Long id, Owner owner);
     House getHouse(Long id);
-    void delete(Long id);
 }

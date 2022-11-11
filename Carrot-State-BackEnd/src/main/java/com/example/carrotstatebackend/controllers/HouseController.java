@@ -45,6 +45,10 @@ public class HouseController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    //royer xd encargate del put de plot, mientras hago el de house puedes guiarte de este si quieres
+    @DeleteMapping("/{idHouse}")
+    public ResponseEntity<BaseResponse> delete(@PathVariable Long idHouse){
+        BaseResponse response = service.delete(idHouse);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
 
 }

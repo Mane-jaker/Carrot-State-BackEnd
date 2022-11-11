@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateManagerRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateManagerCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetManagerResponse;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
@@ -34,12 +35,12 @@ public class ManagerServiceImpl implements IManagerService {
     }
 
     @Override
-    public List<GetManagerResponse> list() {
-        return repository
-                .findAll()
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
+    public BaseResponse list() {
+        return BaseResponse.builder()
+                .data(getList())
+                .message("managers list")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
     @Override
@@ -58,7 +59,7 @@ public class ManagerServiceImpl implements IManagerService {
 
     @Override
     public Manager getManagerByCode(Long managerCode) {
-        return repository.findByCodeCode(managerCode);
+        return repository.findByCodeCode(managerCode).orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -76,6 +77,29 @@ public class ManagerServiceImpl implements IManagerService {
                 .message("the manager was created")
                 .success(true)
                 .httpStatus(HttpStatus.CREATED).build();
+    }
+
+    @Override
+    public BaseResponse updateCredentials(UpdateManagerCredentialsRequest request, Long idManager) {
+        Manager manager = repository.findById(idManager).orElseThrow(NotFoundException::new);
+        manager.setMail(request.getMail());
+        manager.setPassword(request.getPassword());
+        return BaseResponse.builder()
+                .data(from(repository.save(manager)))
+                .message("the agent was updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse updateCommision(Float commision, Long idManager) {
+        Manager manager = repository.findById(idManager).orElseThrow(NotFoundException::new);
+        manager.setCommissionAgent(commision);
+        return BaseResponse.builder()
+                .data(from(repository.save(manager)))
+                .message("the agent was updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
     public Manager getManager(Long id){
@@ -115,5 +139,13 @@ public class ManagerServiceImpl implements IManagerService {
     private GetManagerResponse from(Long idManger){
         return repository.findById(idManger)
                 .map(this::from).orElseThrow(NotFoundException::new);
+    }
+
+    private List<GetManagerResponse> getList(){
+        return repository
+                .findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 }

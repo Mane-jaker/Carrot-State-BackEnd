@@ -21,4 +21,6 @@ public class GetPlotResponse {
 
     private Boolean soldOut;
 
+    private GetOwnerResponse owner;
+
 }

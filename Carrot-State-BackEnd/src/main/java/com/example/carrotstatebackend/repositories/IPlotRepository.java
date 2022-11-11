@@ -11,5 +11,4 @@ import java.util.List;
 @Repository
 public interface IPlotRepository extends JpaRepository<Plot, Long> {
     List<Plot> findAllByAgent(Agent agent);
-    List<Plot> findAllByOwner(Owner owner);
 }

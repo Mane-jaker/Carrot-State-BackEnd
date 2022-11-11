@@ -35,6 +35,11 @@ public class ProspectiveBuyerPremiseServiceImpl implements IProspectiveBuyerPrem
         repository.save(from(prospectiveBuyer, premise));
     }
 
+    @Override
+    public void delete(ProspectiveBuyer prospectiveBuyer) {
+        repository.deleteAllByProspectiveBuyer(prospectiveBuyer);
+    }
+
     private ProspectiveBuyer from(ProspectiveBuyerPremise prospectiveBuyerPremise){
         return prospectiveBuyerPremise.getProspectiveBuyer();
     }

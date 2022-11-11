@@ -5,6 +5,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseReques
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetHouseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetOwnerResponse;
+import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.House;
@@ -82,7 +83,16 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     @Override
-    public void delete(Long id) {repository.deleteById(id);}
+    public BaseResponse delete(Long id) {
+        House house = repository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        if (house.getOwner() != null) throw new InvalidDeleteException();
+        repository.deleteById(id);
+        return BaseResponse.builder()
+                .message("the house was deleted")
+                .httpStatus(HttpStatus.ACCEPTED)
+                .success(true).build();
+    }
 
     private House findOneAndEnsureExist(Long id) {
         return repository.findById(id)
@@ -113,12 +123,11 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     private House update(House house, UpdateHouseRequest request){
-        house.setBathRoomNum(request.getBathroomNum());
+        house.setBathRoomNum(request.getBathRoomNum());
         house.setDescription(request.getDescription());
         house.setFloors(request.getFloors());
         house.setLocation(request.getLocation());
         house.setRooms(request.getRooms());
-        house.setSoldOut(request.getSoldOut());
         house.setSize(request.getSize());
         house.setName(request.getName());
         house.setPrice(request.getPrice());

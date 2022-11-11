@@ -14,7 +14,7 @@ public interface IPremiseService {
     BaseResponse create(CreatePremiseRequest request, Long idAgent);
     BaseResponse update(Long idPremise, UpdatePremiseRequest request);
     BaseResponse listByAgent(Long idAgent);
+    BaseResponse delete(Long id);
     Premise getPremise (Long id);
-    void delete(Long id);
     GetPremiseResponse updateToSoldOut(Long id, Owner owner);
 }

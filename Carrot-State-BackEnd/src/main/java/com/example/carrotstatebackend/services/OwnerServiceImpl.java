@@ -118,12 +118,20 @@ public class OwnerServiceImpl implements IOwnerService {
 
     @Override
     public BaseResponse listOwnerPlots(Long idOwner) {
-        return null;
+        return BaseResponse.builder()
+                .data(getPlotList(idOwner))
+                .success(true)
+                .httpStatus(HttpStatus.FOUND)
+                .message("Plot from owner: " + idOwner).build();
     }
 
     @Override
     public BaseResponse listOwnerPremises(Long idOwner) {
-        return null;
+        return BaseResponse.builder()
+                .data(getPremisesList(idOwner))
+                .success(true)
+                .httpStatus(HttpStatus.FOUND)
+                .message("Premises from owner: " + idOwner).build();
     }
 
     @Override
@@ -149,8 +157,8 @@ public class OwnerServiceImpl implements IOwnerService {
         return owner;
     }
 
-    private GetOwnerResponse from(Owner owner, Object property){
-        GetOwnerResponse response = new GetOwnerResponse();
+    private CreateOwnerResponse from(Owner owner, Object property){
+        CreateOwnerResponse response = new CreateOwnerResponse();
         response.setId(owner.getId());
         response.setName(owner.getName());
         response.setContact(owner.getContact());
@@ -189,6 +197,7 @@ public class OwnerServiceImpl implements IOwnerService {
         response.setSize(plot.getSize());
         response.setName(plot.getName());
         response.setSoldOut(plot.getSoldOut());
+        if (plot.getOwner() != null) response.setOwner(from(plot.getOwner()));
         return response;
     }
 
@@ -200,6 +209,7 @@ public class OwnerServiceImpl implements IOwnerService {
         response.setName(premise.getName());
         response.setPrice(premise.getPrice());
         response.setSize(premise.getSize());
+        if (premise.getOwner() != null) response.setOwner(from(premise.getOwner()));
         return response;
     }
 
@@ -228,10 +238,10 @@ public class OwnerServiceImpl implements IOwnerService {
     }
 
     private List<GetPremiseResponse> getPremisesList(Long idOwner){
-        return findOneAndEnsureExist(idOwner)//obtiene un owner (yo quiero la lista que tien owner)
-                .getPremises()// extraigo la lista que tiene owner (solita se llena)
-                .stream()// estrimeo la lista que saque
-                .map(this::from) // convierto mi lista de premises a response
+        return findOneAndEnsureExist(idOwner)
+                .getPremises()
+                .stream()
+                .map(this::from)
                 .collect(Collectors.toList());
     }
 }

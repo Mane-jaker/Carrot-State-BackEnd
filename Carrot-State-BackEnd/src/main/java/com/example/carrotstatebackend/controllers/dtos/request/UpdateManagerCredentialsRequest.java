@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class UpdateOwnerRequest {
+public class UpdateManagerCredentialsRequest {
 
-    private String name;
+    private String mail;
 
-    private String contact;
+    private String password;
 
-    private String propierty;
 }

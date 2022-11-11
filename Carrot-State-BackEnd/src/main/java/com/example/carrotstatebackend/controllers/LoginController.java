@@ -23,7 +23,7 @@ public class LoginController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
     
-    @PostMapping("/agent")
+    @GetMapping("/agent")
     public ResponseEntity<BaseResponse> agentLog(@RequestBody @Valid LoginRequest request){
         BaseResponse response = loginService.agentLogin(request);
         return new ResponseEntity<>(response, response.getHttpStatus());

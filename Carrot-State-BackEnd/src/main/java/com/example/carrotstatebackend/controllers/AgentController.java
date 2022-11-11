@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
@@ -37,10 +38,17 @@ public class AgentController{
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("{idAgent}")
-    public ResponseEntity<BaseResponse> update(@RequestBody @Valid UpdateAgentRequest request,
+    @PutMapping("/credentials/{idAgent}")
+    public ResponseEntity<BaseResponse> update(@RequestBody @Valid UpdateAgentCredentialsRequest request,
                                                @PathVariable Long idAgent){
-        BaseResponse response = service.update(idAgent, request);
+        BaseResponse response = service.updateCredentials(request, idAgent);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @PutMapping("/status/{idAgent}/{status}")
+    public ResponseEntity<BaseResponse> updateStatus(@PathVariable Boolean status,
+                                               @PathVariable Long idAgent){
+        BaseResponse response = service.changeStatus(status, idAgent);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 

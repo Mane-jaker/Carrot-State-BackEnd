@@ -1,5 +1,6 @@
 package com.example.carrotstatebackend.services; 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
@@ -48,12 +49,6 @@ public class AgentServiceImpl implements IAgentService{
                 .httpStatus(HttpStatus.FOUND).build();
     }
 
-    @Override
-    public void updateAgentStatus(Boolean state, Long idAgent){
-        Agent agent = findOneAndEnsureExist(idAgent);
-        agent.setState(state);
-        repository.save(agent);
-    }
 
     @Override
     public void delete(Long id) { repository.deleteById(id); }
@@ -87,6 +82,29 @@ public class AgentServiceImpl implements IAgentService{
                 .message("The agent was updated")
                 .httpStatus(HttpStatus.ACCEPTED)
                 .success(true).build();
+    }
+
+    @Override
+    public BaseResponse updateCredentials(UpdateAgentCredentialsRequest request, Long idAgent) {
+        Agent agent = repository.findById(idAgent).orElseThrow(NotFoundException::new);
+        agent.setEmail(request.getMail());
+        agent.setPassword(request.getPassword());
+        return BaseResponse.builder()
+                .data(from(repository.save(agent)))
+                .message("the agent was updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse changeStatus(Boolean status, Long idAgent) {
+        Agent agent = repository.findById(idAgent).orElseThrow(NotFoundException::new);
+        agent.setState(status);
+        return BaseResponse.builder()
+                .data(from(repository.save(agent)))
+                .message("the agent was updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
     @Override

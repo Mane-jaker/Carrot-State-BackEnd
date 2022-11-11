@@ -4,6 +4,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreatePremiseRequ
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePremiseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
+import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Owner;
@@ -49,21 +50,6 @@ public class PremiseServiceImpl implements IPremiseService {
     }
 
     @Override
-    public void delete(Long id) {repository.deleteById(id);}
-
-    @Override
-    public GetPremiseResponse updateToSoldOut(Long idPlot, Owner owner){
-        Premise premise = findOneAndEnsureExist(idPlot);
-        premise.setOwner(owner);
-        premise.setSoldOut(true);
-        return from(repository.save(premise));
-    }
-
-    public Premise getPremise(Long id){
-        return findOneAndEnsureExist(id);
-    }
-
-    @Override
     public BaseResponse create(CreatePremiseRequest request, Long idAgent) {
         Premise premise = from(request);
         Agent agent = agentService.getAgent(idAgent);
@@ -78,7 +64,6 @@ public class PremiseServiceImpl implements IPremiseService {
                 .httpStatus(HttpStatus.CREATED).build();
     }
 
-
     @Override
     public BaseResponse update(Long id, UpdatePremiseRequest request) {
         Premise premise = findOneAndEnsureExist(id);
@@ -88,6 +73,29 @@ public class PremiseServiceImpl implements IPremiseService {
                 .message("the premise was uploaded")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse delete(Long id) {
+        Premise premise = repository.findById(id).orElseThrow(NotFoundException::new);
+        if (premise.getOwner() != null) throw new InvalidDeleteException();
+        repository.delete(premise);
+        return BaseResponse.builder()
+                .message("the premise was deleted")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    public Premise getPremise(Long id){
+        return findOneAndEnsureExist(id);
+    }
+
+    @Override
+    public GetPremiseResponse updateToSoldOut(Long idPlot, Owner owner){
+        Premise premise = findOneAndEnsureExist(idPlot);
+        premise.setOwner(owner);
+        premise.setSoldOut(true);
+        return from(repository.save(premise));
     }
 
     private Premise findOneAndEnsureExist(Long id) {
