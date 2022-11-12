@@ -27,27 +27,24 @@ public class FileController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PostMapping("agent/{idAgent}/house/{idHouse}")
+    @PostMapping("/house/{idHouse}")
     public ResponseEntity<BaseResponse> uploadHousePicture(MultipartFile file,
-                                                         @PathVariable Long idAgent,
                                                          @PathVariable Long idHouse) {
-        BaseResponse response = service.uploadHousePicture(file, idHouse, idAgent);
+        BaseResponse response = service.uploadHousePicture(file, idHouse);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PostMapping("agent/{idAgent}/Plot/{idPlot}")
+    @PostMapping("/Plot/{idPlot}")
     public ResponseEntity<BaseResponse> uploadPlotPicture(MultipartFile file,
-                                                          @PathVariable Long idAgent,
                                                           @PathVariable Long idPlot){
-        BaseResponse response = service.uploadPlotPicture(file, idPlot, idAgent);
+        BaseResponse response = service.uploadPlotPicture(file, idPlot);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PostMapping("agent/{idAgent}/house/{idPremise}")
+    @PostMapping("/premise/{idPremise}")
     public ResponseEntity<BaseResponse> uploadPremisePicture(MultipartFile file,
-                                                             @PathVariable Long idAgent,
                                                              @PathVariable Long idPremise){
-        BaseResponse response = service.uploadPremisePicture(file, idPremise, idAgent);
+        BaseResponse response = service.uploadPremisePicture(file, idPremise);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 

@@ -121,13 +121,12 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent) {
+    public BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse) {
 
-        GetAgentResponse agent = agentService.getResponse(idAgent);
         House house = houseService.getHouse(idHouse);
 
         String FILE_URI = "persons/agent/"
-                + agent.getEmail() + "/properties/houses/"
+                + house.getAgent().getEmail() + "/properties/houses/"
                 + "house_" + house.getId() + "/pictures/";
         String fileUrl = "";
 
@@ -153,12 +152,11 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public BaseResponse uploadPlotPicture(MultipartFile multipartFile,  Long idPlot, Long idAgent) {
+    public BaseResponse uploadPlotPicture(MultipartFile multipartFile,  Long idPlot) {
 
-        GetAgentResponse agent = agentService.getResponse(idAgent);
         Plot plot = plotService.getPlot(idPlot);
         String FILE_URI = "persons/agent/"
-                + agent.getEmail() + "/properties/houses/"
+                + plot.getAgent().getEmail() + "/properties/houses/"
                 + "plot_" + plot.getId() + "/pictures/";
         String fileUrl = "";
 
@@ -184,13 +182,12 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public BaseResponse uploadPremisePicture(MultipartFile multipartFile,  Long idPremise, Long idAgent) {
+    public BaseResponse uploadPremisePicture(MultipartFile multipartFile,  Long idPremise) {
 
-        GetAgentResponse agent = agentService.getResponse(idAgent);
         Premise premise = premiseService.getPremise(idPremise);
 
         String FILE_URI = "persons/agent/"
-                + agent.getEmail() + "/properties/houses/"
+                + premise.getAgent().getEmail() + "/properties/houses/"
                 + "premise_"+ premise.getId()  + "/pictures/";
         String fileUrl = "";
 

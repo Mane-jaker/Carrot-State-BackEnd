@@ -9,11 +9,11 @@ public interface IFileService {
 
     BaseResponse uploadAgentProfilePicture(MultipartFile multipartFile, Long id);
 
-    BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse, Long idAgent);
+    BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse);
 
-    BaseResponse uploadPlotPicture(MultipartFile multipartFile, Long idPlot, Long idAgent);
+    BaseResponse uploadPlotPicture(MultipartFile multipartFile, Long idPlot);
 
-    BaseResponse uploadPremisePicture(MultipartFile multipartFile, Long idPremise, Long idAgent);
+    BaseResponse uploadPremisePicture(MultipartFile multipartFile, Long idPremise);
 
 }
 
