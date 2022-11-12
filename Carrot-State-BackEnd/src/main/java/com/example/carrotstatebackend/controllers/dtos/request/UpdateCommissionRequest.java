@@ -6,14 +6,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 
 @Getter @Setter
-public class CreateProspectiveBuyerRequest {
-
+public class UpdateCommissionRequest {
     @NotNull
-    private String name;
-
-    @NotNull
-    private String contact;
-
-    @NotNull
-    private Float budget;
+    private Float commission;
 }

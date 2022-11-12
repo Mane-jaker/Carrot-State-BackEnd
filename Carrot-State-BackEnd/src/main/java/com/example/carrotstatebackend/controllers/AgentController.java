@@ -45,15 +45,10 @@ public class AgentController{
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("/status/{idAgent}/{status}")
+    @PutMapping("/{idAgent}/status/{status}")
     public ResponseEntity<BaseResponse> updateStatus(@PathVariable Boolean status,
                                                @PathVariable Long idAgent){
         BaseResponse response = service.changeStatus(status, idAgent);
         return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-    @DeleteMapping("{id}")
-    void delete(@PathVariable Long id){
-        service.delete(id);
     }
 }

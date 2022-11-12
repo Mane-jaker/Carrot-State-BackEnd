@@ -6,12 +6,20 @@ import com.example.carrotstatebackend.entities.Premise;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
+
 @Builder @Getter
 public class CreateImageRequest {
-    
+    @NotNull
     private House house;
+
+    @NotNull
     private Plot plot;
+
+    @NotNull
     private Premise premise;
+
+    @NotNull
     private String url;
 
 }

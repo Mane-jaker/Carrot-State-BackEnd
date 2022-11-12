@@ -1,8 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "security.basic.disable",
-      "type": "java.lang.String",
-      "description": "Description for security.basic.enabled."
-  }
-] }

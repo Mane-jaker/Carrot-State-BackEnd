@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateManagerRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateCommissionRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateManagerCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IManagerService;
@@ -43,12 +44,10 @@ public class ManagerController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("/commision/{commision}/manager/{idManager}")
-    public ResponseEntity<BaseResponse> updateCommision(@PathVariable Float commision,
+    @PutMapping("/commission/{idManager}")
+    public ResponseEntity<BaseResponse> updateCommision(@RequestBody @Valid UpdateCommissionRequest commission,
                                                @PathVariable Long idManager){
-        BaseResponse response = service.updateCommision(commision, idManager);
+        BaseResponse response = service.updateCommision(commission.getCommission(), idManager);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
-
-
 }
