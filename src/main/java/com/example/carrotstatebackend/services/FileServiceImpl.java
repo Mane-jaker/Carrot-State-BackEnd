@@ -55,11 +55,20 @@ public class FileServiceImpl implements IFileService {
 
     private String ENDPOINT_URL = "s3.us-east-2.amazonaws.com";
 
-    private String BUCKET_NAME = "realstatebucket01";
+    private String BUCKET_NAME = "conejobucket";
 
-    private final String ACCESS_KEY = "AKIA57FUC7G7ZD63OHNA";
+    private final String ACCESS_KEY = "AKIAQUVISYWUMTPJ5WZP";
 
-    private final String SECRET_KEY = "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";
+    private final String SECRET_KEY = "TEI5QGb3qPwA3vnOfWuxHWr8qkO0uxAoN8R8+AwT";
+
+    @Override
+    public BaseResponse list() {
+        return BaseResponse.builder()
+                .data(imageService.list())
+                .message("list")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND).build();
+    }
 
     @Override
     public BaseResponse uploadManagerProfilePicture(MultipartFile multipartFile, Long id) {
@@ -71,7 +80,7 @@ public class FileServiceImpl implements IFileService {
         try{
 
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            String filePath = FILE_URI + generateFileName(multipartFile);
 
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
@@ -100,7 +109,7 @@ public class FileServiceImpl implements IFileService {
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            String filePath = FILE_URI + generateFileName(multipartFile);
 
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
@@ -132,10 +141,10 @@ public class FileServiceImpl implements IFileService {
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            String filePath = FILE_URI + generateFileName(multipartFile);
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
-
+            file.delete();
             CreateImageRequest request = CreateImageRequest.builder().house(house).url(fileUrl).build();
             imageService.saveHouseImage(request);
 
@@ -156,18 +165,18 @@ public class FileServiceImpl implements IFileService {
 
         Plot plot = plotService.getPlot(idPlot);
         String FILE_URI = "persons/agent/"
-                + plot.getAgent().getEmail() + "/properties/houses/"
+                + plot.getAgent().getEmail() + "/properties/plot/"
                 + "plot_" + plot.getId() + "/pictures/";
         String fileUrl = "";
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            String filePath = FILE_URI + generateFileName(multipartFile);
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
-
+            file.delete();
             CreateImageRequest request = CreateImageRequest.builder().plot(plot).url(fileUrl).build();
-            imageService.saveHouseImage(request);
+            imageService.savePlotImage(request);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -187,18 +196,18 @@ public class FileServiceImpl implements IFileService {
         Premise premise = premiseService.getPremise(idPremise);
 
         String FILE_URI = "persons/agent/"
-                + premise.getAgent().getEmail() + "/properties/houses/"
+                + premise.getAgent().getEmail() + "/properties/premise/"
                 + "premise_"+ premise.getId()  + "/pictures/";
         String fileUrl = "";
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
+            String filePath = FILE_URI + generateFileName(multipartFile);
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
-
+            file.delete();
             CreateImageRequest request = CreateImageRequest.builder().premise(premise).url(fileUrl).build();
-            imageService.saveHouseImage(request);
+            imageService.savePremiseImage(request);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -213,7 +222,7 @@ public class FileServiceImpl implements IFileService {
     }
 
     private String createUrl(@Valid String filePath){
-        return  "https://" + BUCKET_NAME + "." + ENDPOINT_URL + filePath;
+        return  "https://" + BUCKET_NAME + "." + ENDPOINT_URL + "/" + filePath;
     }
 
     private String validateFormat(String fileName){

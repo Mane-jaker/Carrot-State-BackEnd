@@ -25,7 +25,7 @@ public class HouseController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @GetMapping("/agent/{idAgent}")
+    @GetMapping("/list/agent/{idAgent}")
     public ResponseEntity<BaseResponse> listByAgent(@PathVariable Long idAgent){
         BaseResponse response = service.listByAgent(idAgent);
         return new ResponseEntity<>(response, response.getHttpStatus());

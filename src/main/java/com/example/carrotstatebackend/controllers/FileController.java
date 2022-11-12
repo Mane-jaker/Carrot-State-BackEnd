@@ -15,6 +15,12 @@ public class FileController {
     @Autowired
     IFileService service;
 
+    @GetMapping
+    public ResponseEntity<BaseResponse> list(){
+        BaseResponse response = service.list();
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @PostMapping("manager/{id}/profile")
     public ResponseEntity<BaseResponse> uploadManagerProfilePicture(MultipartFile file, @PathVariable Long id){
         BaseResponse response = service.uploadManagerProfilePicture(file, id);
@@ -34,7 +40,7 @@ public class FileController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PostMapping("/Plot/{idPlot}")
+    @PostMapping("/plot/{idPlot}")
     public ResponseEntity<BaseResponse> uploadPlotPicture(MultipartFile file,
                                                           @PathVariable Long idPlot){
         BaseResponse response = service.uploadPlotPicture(file, idPlot);

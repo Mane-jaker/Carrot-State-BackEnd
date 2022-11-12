@@ -4,6 +4,7 @@ import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IFileService {
+    BaseResponse list();
 
     BaseResponse uploadManagerProfilePicture(MultipartFile multipartFile, Long id);
 
