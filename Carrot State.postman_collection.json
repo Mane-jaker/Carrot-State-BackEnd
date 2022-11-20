@@ -1,0 +1,1311 @@
+{
+	"info": {
+		"_postman_id": "58cf7c99-9235-4cec-9110-79a84193339a",
+		"name": "Carrot State",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21602342"
+	},
+	"item": [
+		{
+			"name": "manager",
+			"item": [
+				{
+					"name": "Get manager by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/manager/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manager",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all managers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/manager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post manager",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Juan Ramirez\",\r\n    \"password\": \"contra123\",\r\n    \"email\": \"manager@gmail.com\",\r\n    \"commissionAgent\": 22.5 \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/manager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change  Email/Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mail\": \"emailChido@gmail.com\",\r\n    \"password\": \"contraNueva\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/manager/credentials/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manager",
+								"credentials",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change commission",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"commission\": 12.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/manager/commission/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manager",
+								"commission",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "agent",
+			"item": [
+				{
+					"name": "Get agent by manager id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/agent/manager/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"agent",
+								"manager",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get agent by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post agent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Predro lopez2\",\r\n    \"password\": \"contraChida123\",\r\n    \"email\": \"Agent@gmail.com\",\r\n    \"managerCode\": 3981646593246583162\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/agent",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"agent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Email/Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mail\": \"emailChido@gmail.com\",\r\n    \"password\": \"contraNueva\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/agent/credentials/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"agent",
+								"credentials",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change agent status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/agent/1/status/true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"agent",
+								"1",
+								"status",
+								"true"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login Agent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "f88423c2-195e-4257-bf01-568113ed3509",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"Agent@gmail.com\",\r\n    \"password\": \"contraChida123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/agent",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"agent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login manager",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"manager@gmail.com\",\r\n    \"password\": \"contra123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/manager",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"manager"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "House",
+			"item": [
+				{
+					"name": "Get house by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/house/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"house",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get house by agent id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/house/list/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"house",
+								"list",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post house",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Casa prueba\",\r\n    \"description\": \"descricion de prueba \",\r\n    \"price\": 20000,\r\n    \"size\": 20,\r\n    \"location\": \"direccion prueba\",\r\n    \"bathRoomNum\": 2,\r\n    \"rooms\": 2,\r\n    \"floors\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/house/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"house",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update house",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Casa prueba\",\r\n    \"description\": \"descricion de prueba \",\r\n    \"price\": 20000,\r\n    \"size\": 20,\r\n    \"location\": \"direccion prueba\",\r\n    \"bathRoomNum\": 2,\r\n    \"rooms\": 2,\r\n    \"floors\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/house/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"house",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete house",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/house/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"house",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plot",
+			"item": [
+				{
+					"name": "Get plot by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/plot/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"plot",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get plot by agent id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/plot/list/agent/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"plot",
+								"list",
+								"agent",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Terreno prueba\",\r\n    \"description\": \"descricion de prueba \",\r\n    \"price\": 20000,\r\n    \"size\": 20,\r\n    \"location\": \"direccion prueba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/plot/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"plot",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update plot",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Terreno prueba\",\r\n    \"description\": \"descricion de prueba \",\r\n    \"price\": 20000,\r\n    \"size\": 20,\r\n    \"location\": \"direccion prueba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/plot/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"plot",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete plot",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/plot/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"plot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Premise",
+			"item": [
+				{
+					"name": "Get premise by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/premise/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"premise",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get premise by agent id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/premise/list/agent/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"premise",
+								"list",
+								"agent",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post premise",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"local prueba\",\r\n    \"description\": \"descricion de prueba \",\r\n    \"price\": 20000,\r\n    \"size\": 20,\r\n    \"location\": \"direccion prueba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/premise/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"premise",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update premise",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Terreno prueba\",\r\n    \"description\": \"descricion de prueba \",\r\n    \"price\": 20000,\r\n    \"size\": 20,\r\n    \"location\": \"direccion prueba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/premise/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"premise",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete premise",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/premise/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"premise",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Post house images",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/SrConejoUwU/Desktop/proxy.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/image/house/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"image",
+								"house",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post premise images",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/SrConejoUwU/Desktop/proxy.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/image/premise/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"image",
+								"premise",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post plots Images",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/SrConejoUwU/Desktop/WhatsApp Image 2022-11-04 at 17.29.28.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/image/plot/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"image",
+								"plot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post agent profile picture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/SrConejoUwU/Desktop/WhatsApp Image 2022-11-04 at 17.29.28.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/image/agent/1/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"image",
+								"agent",
+								"1",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post manager profile picture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/image/manager/2/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"image",
+								"manager",
+								"2",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"image"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prospective buyer",
+			"item": [
+				{
+					"name": "Get prospective buyer house",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/house/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"house",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get prospective buyer premise",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/premise/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"premise",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get prospective buyer plot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/plot/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"plot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post prospective buyer house",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"nombre chido\",\r\n    \"contact\": \"9614106069\",\r\n    \"budget\": 20000000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/house/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"house",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post prospective buyer premise",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"nombre chidrhdsgfo\",\r\n    \"contact\": \"9614106069\",\r\n    \"budget\": 20000000\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/premise/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"premise",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post prospective buyer plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"nombre chidrhdsgfo\",\r\n    \"contact\": \"9614106069\",\r\n    \"budget\": 20000000\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/plot/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"plot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update prospective buyer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"nombre raro\",\r\n    \"contact\": \"9614106069\",\r\n    \"budget\": 20000000\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/prospective_buyer/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prospective_buyer",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Owner",
+			"item": [
+				{
+					"name": "Get all owners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/owner",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get owner",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/owner/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get owner houses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/owner/house/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"house",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get owner plots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/owner/plot/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"plot",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get owner premises",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/owner/premise/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"premise",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prospectiveBuyerId\": 4,\r\n    \"idProperty\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/owner/house/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"house",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post owner plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prospectiveBuyerId\": 3,\r\n    \"idProperty\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/owner/plot/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"plot",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post owner premise",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prospectiveBuyerId\": 2,\r\n    \"idProperty\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/owner/premise/agent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"owner",
+								"premise",
+								"agent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sold",
+			"item": [
+				{
+					"name": "Get solds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sold",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sold"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

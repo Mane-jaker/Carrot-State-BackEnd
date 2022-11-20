@@ -5,11 +5,12 @@ import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPlotResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
-import com.example.carrotstatebackend.controllers.exceptions.LoginInvalidException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
 import com.example.carrotstatebackend.entities.Agent;
-import com.example.carrotstatebackend.entities.Owner;
+import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Plot;
+import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.repositories.IPlotRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IPlotService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PlotServiceImpl implements IPlotService {
@@ -77,7 +79,7 @@ public class PlotServiceImpl implements IPlotService {
     @Override
     public BaseResponse delete(Long id){
         Plot plot = repository.findById(id).orElseThrow(NotFoundException::new);
-        if (plot.getOwner() != null) throw new InvalidDeleteException();
+        if (plot.getClient() != null) throw new InvalidDeleteException();
         repository.delete(plot);
         return BaseResponse.builder()
                 .message("the plot was deleted")
@@ -90,9 +92,9 @@ public class PlotServiceImpl implements IPlotService {
 
 
     @Override
-    public GetPlotResponse updateToSoldOut(Long idPlot, Owner owner){
+    public GetPlotResponse updateToSoldOut(Long idPlot, Client owner){
         Plot plot = findOneAndEnsureExist(idPlot);
-        plot.setOwner(owner);
+        plot.setClient(owner);
         plot.setSoldOut(true);
         return from(repository.save(plot));
     }
@@ -111,6 +113,7 @@ public class PlotServiceImpl implements IPlotService {
         response.setSize(plot.getSize());
         response.setName(plot.getName());
         response.setSoldOut(plot.getSoldOut());
+        response.setCityState(plot.getCityState());
         return response;
     }
 
@@ -130,8 +133,15 @@ public class PlotServiceImpl implements IPlotService {
         plot.setSize(request.getSize());
         plot.setName(request.getName());
         plot.setPrice(request.getPrice());
+        plot.setCityState(from(request.getCityCode()));
         plot.setSoldOut(false);
         return plot;
+    }
+
+    private CityState from(String cityCode){
+        return Stream.of(CityState.values())
+                .filter(c -> c.getLocationCode().equals(cityCode))
+                .findFirst().orElseThrow(() -> new NotValidCityCodeException(cityCode));
     }
 
     private GetPlotResponse from(Long idPlot){

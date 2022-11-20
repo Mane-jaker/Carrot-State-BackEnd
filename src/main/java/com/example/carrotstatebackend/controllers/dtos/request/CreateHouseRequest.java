@@ -24,6 +24,9 @@ public class CreateHouseRequest {
     private String location;
 
     @NotNull
+    private String cityCode;
+
+    @NotNull
     private Integer bathRoomNum;
 
     @NotNull

@@ -15,6 +15,9 @@ public class CreatePlotRequest {
     private String location;
 
     @NotNull
+    private String cityCode;
+
+    @NotNull
     private String description;
 
     @NotNull

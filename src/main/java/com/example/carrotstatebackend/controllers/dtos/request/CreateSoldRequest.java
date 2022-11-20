@@ -12,12 +12,11 @@ public class CreateSoldRequest {
     @NotNull
     private Agent agent;
 
-    @NotNull
-    private Owner owner;
-
     private House house;
 
     private Plot plot;
 
     private Premise premise;
+
+    private Client client;
 }

@@ -9,9 +9,9 @@ public class GetSoldResponse {
     private Long id;
     private String date;
     private Float commission;
-    private GetOwnerResponse owner;
     private GetAgentResponse agent;
     private GetHouseResponse house;
     private GetPlotResponse plot;
     private GetPremiseResponse premise;
+    private GetClientResponse client;
 }

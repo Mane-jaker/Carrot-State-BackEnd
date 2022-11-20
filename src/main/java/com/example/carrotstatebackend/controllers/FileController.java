@@ -21,9 +21,9 @@ public class FileController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PostMapping("manager/{id}/profile")
-    public ResponseEntity<BaseResponse> uploadManagerProfilePicture(MultipartFile file, @PathVariable Long id){
-        BaseResponse response = service.uploadManagerProfilePicture(file, id);
+    @PostMapping("real_state/{id}/profile")
+    public ResponseEntity<BaseResponse> uploadRealStateProfilePicture(MultipartFile file, @PathVariable Long id){
+        BaseResponse response = service.uploadRealStateProfilePicture(file, id);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
@@ -31,6 +31,12 @@ public class FileController {
     public ResponseEntity<BaseResponse> uploadAgentProfilePicture(MultipartFile file, @PathVariable Long id){
         BaseResponse response = service.uploadAgentProfilePicture(file, id);
         return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @PostMapping("client/{id}/profile")
+    public ResponseEntity<BaseResponse> uploadClientProfilePicture(MultipartFile file,
+                                                                   @PathVariable Long id){
+        return null;
     }
 
     @PostMapping("/house/{idHouse}")

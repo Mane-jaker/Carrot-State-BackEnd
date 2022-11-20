@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name = "sales")
 @Getter @Setter
 public class Sold{
 
@@ -21,15 +21,21 @@ public class Sold{
     @Column(nullable = false)
     private Float comission;
 
-    @ManyToOne Owner owner;
+    @ManyToOne private Agent agent;
 
-    @ManyToOne Agent agent;
+    @ManyToOne private Client client;
 
-    @ManyToOne Premise premise;
+    @OneToOne
+    @JoinColumn(name = "premise_id", referencedColumnName = "id")
+    private Premise premise;
 
-    @ManyToOne Plot plot;
+    @OneToOne
+    @JoinColumn(name = "plot_id", referencedColumnName = "id")
+    private Plot plot;
 
-    @ManyToOne House house;
+    @OneToOne
+    @JoinColumn(name = "house_id", referencedColumnName = "id")
+    private House house;
 
 
 }

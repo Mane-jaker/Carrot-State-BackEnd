@@ -28,4 +28,10 @@ public class LoginController {
         BaseResponse response = loginService.agentLogin(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
+
+    @GetMapping("/client")
+    public ResponseEntity<BaseResponse> clientLogin(@RequestParam @Valid LoginRequest request){
+        //BaseResponse response = loginService
+        return null;
+    }
 }

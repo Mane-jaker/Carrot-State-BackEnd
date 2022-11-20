@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface IFileService {
     BaseResponse list();
 
-    BaseResponse uploadManagerProfilePicture(MultipartFile multipartFile, Long id);
+    BaseResponse uploadRealStateProfilePicture(MultipartFile multipartFile, Long id);
 
     BaseResponse uploadAgentProfilePicture(MultipartFile multipartFile, Long id);
 

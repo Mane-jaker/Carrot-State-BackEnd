@@ -44,23 +44,23 @@ public class SoldServiceImpl implements ISoldService {
         Date date = new Date();
         Sold sold = new Sold();
         sold.setAgent(request.getAgent());
-        sold.setOwner(request.getOwner());
+        sold.setClient(request.getClient());
         sold.setDate(date);
         if (request.getHouse() != null){
             sold.setHouse(request.getHouse());
-            float commission = request.getAgent().getManager().getCommissionAgent();
+            float commission = request.getAgent().getRealState().getCommissionAgent();
             float price = request.getHouse().getPrice();
             sold.setComission((commission * price) / 100);
         }
         if (request.getPlot() != null){
             sold.setPlot(request.getPlot());
-            float commission = request.getAgent().getManager().getCommissionAgent();
+            float commission = request.getAgent().getRealState().getCommissionAgent();
             float price = request.getPlot().getPrice();
             sold.setComission((commission * price) / 100);
         }
         if (request.getPremise() != null){
             sold.setPremise(request.getPremise());
-            float commission = request.getAgent().getManager().getCommissionAgent();
+            float commission = request.getAgent().getRealState().getCommissionAgent();
             float price = request.getPlot().getPrice();
             sold.setComission((commission * price) / 100);
         }
@@ -78,14 +78,14 @@ public class SoldServiceImpl implements ISoldService {
                 .date(date)
                 .commission(sold.getComission())
                 .agent(from(sold.getAgent()))
-                .owner(from(sold.getOwner()))
+                .client(from(sold.getClient()))
                 .house(from(sold.getHouse()))
                 .plot(from(sold.getPlot()))
                 .premise(from(sold.getPremise())).build();
     }
 
-    private GetOwnerResponse from(Owner owner){
-        GetOwnerResponse response = new GetOwnerResponse();
+    private GetClientResponse from(Client owner){
+        GetClientResponse response = new GetClientResponse();
         response.setId(owner.getId());
         response.setName(owner.getName());
         response.setContact(owner.getContact());
@@ -102,21 +102,21 @@ public class SoldServiceImpl implements ISoldService {
             response.setNumberOfSales(agent.getNumberOfSales());
         }
         if (agent.getNumberOfProperties() != null){
-            response.setNumberOfPropierties(agent.getNumberOfProperties());
+            response.setNumberOfProperties(agent.getNumberOfProperties());
         }
         response.setState(agent.getState());
-        response.setManager(from(agent.getManager()));
+        response.setRealState(from(agent.getRealState()));
         return response;
     }
 
-    private GetManagerResponse from(Manager manager){
-        GetManagerResponse response = new GetManagerResponse();
-        response.setId(manager.getId());
-        response.setName(manager.getName());
-        response.setMail(manager.getMail());
-        response.setPassword(manager.getPassword());
-        response.setCommissionAgent(manager.getCommissionAgent());
-        response.setManagerCode(manager.getCode().getCode().toString());
+    private GetRealStateResponse from(RealState realState){
+        GetRealStateResponse response = new GetRealStateResponse();
+        response.setId(realState.getId());
+        response.setName(realState.getName());
+        response.setEmail(realState.getEmail());
+        response.setPassword(realState.getPassword());
+        response.setCommissionAgent(realState.getCommissionAgent());
+        response.setRealStateCode(realState.getCode().getCode().toString());
         return response;
     }
 

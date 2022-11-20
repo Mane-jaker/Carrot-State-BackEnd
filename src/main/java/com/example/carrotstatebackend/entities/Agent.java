@@ -35,13 +35,7 @@ public class Agent{
     private Boolean state;
 
     @ManyToOne
-    private Manager manager;
-
-    @OneToMany(mappedBy = "agent")
-    private List<Notifications> notifications;
-
-    @OneToMany(mappedBy = "agent")
-    private List<Owner> owner;
+    private RealState realState;
 
     @OneToMany(mappedBy = "agent")
     private List<Plot> plot;

@@ -1,6 +1,8 @@
 package com.example.carrotstatebackend.entities;
 
-import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPremise;
+import com.example.carrotstatebackend.entities.enums.CityState;
+import com.example.carrotstatebackend.entities.pivots.ClientPremise;
+import com.example.carrotstatebackend.entities.pivots.ImagePremise;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +23,8 @@ public class Premise {
     @Column(nullable = false)
     private String location;
 
+    private CityState cityState;
+
     @Column(nullable = false)
     private String description;
 
@@ -37,14 +41,14 @@ public class Premise {
     private Agent agent;
 
     @ManyToOne
-    private Owner owner;
+    private Client client;
 
     @OneToMany(mappedBy = "premise")
-    private List<Image> images;
+    private List<ImagePremise> imagePremises;
 
     @OneToMany(mappedBy = "premise")
-    private List<Sold> solds;
+    private List<ClientPremise> clientPremises;
 
-    @OneToMany(mappedBy = "premise")
-    private List<ProspectiveBuyerPremise> prospectiveBuyerPremises;
+    @OneToOne(mappedBy = "premise")
+    private Sold sold;
 }

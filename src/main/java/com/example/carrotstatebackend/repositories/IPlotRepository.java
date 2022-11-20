@@ -1,7 +1,6 @@
 package com.example.carrotstatebackend.repositories;
 
 import com.example.carrotstatebackend.entities.Agent;
-import com.example.carrotstatebackend.entities.Owner;
 import com.example.carrotstatebackend.entities.Plot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface IAgentRepository extends JpaRepository<Agent, Long> {
-    Optional<List<Agent>> findAllByManager_Id(Long manager);
+    Optional<List<Agent>> findAllByRealState_Id(Long manager);
     Optional<Agent> findByEmail(String email);
 }

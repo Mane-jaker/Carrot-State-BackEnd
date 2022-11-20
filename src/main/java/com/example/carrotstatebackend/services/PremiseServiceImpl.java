@@ -6,9 +6,11 @@ import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
 import com.example.carrotstatebackend.entities.Agent;
-import com.example.carrotstatebackend.entities.Owner;
+import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Premise;
+import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.repositories.IPremiseRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IPremiseService;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PremiseServiceImpl implements IPremiseService {
@@ -78,7 +81,7 @@ public class PremiseServiceImpl implements IPremiseService {
     @Override
     public BaseResponse delete(Long id) {
         Premise premise = repository.findById(id).orElseThrow(NotFoundException::new);
-        if (premise.getOwner() != null) throw new InvalidDeleteException();
+        if (premise.getClient() != null) throw new InvalidDeleteException();
         repository.delete(premise);
         return BaseResponse.builder()
                 .message("the premise was deleted")
@@ -91,9 +94,9 @@ public class PremiseServiceImpl implements IPremiseService {
     }
 
     @Override
-    public GetPremiseResponse updateToSoldOut(Long idPlot, Owner owner){
+    public GetPremiseResponse updateToSoldOut(Long idPlot, Client owner){
         Premise premise = findOneAndEnsureExist(idPlot);
-        premise.setOwner(owner);
+        premise.setClient(owner);
         premise.setSoldOut(true);
         return from(repository.save(premise));
     }
@@ -111,7 +114,8 @@ public class PremiseServiceImpl implements IPremiseService {
        response.setName(premise.getName());
        response.setPrice(premise.getPrice());
        response.setSize(premise.getSize());
-        return response;
+       response.setCityState(premise.getCityState());
+       return response;
     }
 
     private  Premise update(Premise premise, UpdatePremiseRequest request){
@@ -131,7 +135,14 @@ public class PremiseServiceImpl implements IPremiseService {
         premise.setLocation(request.getLocation());
         premise.setSize(request.getSize());
         premise.setSoldOut(false);
+        premise.setCityState(from(request.getCityCode()));
         return premise;
+    }
+
+    private CityState from(String cityCode){
+        return Stream.of(CityState.values())
+                .filter(c -> c.getLocationCode().equals(cityCode))
+                .findFirst().orElseThrow(() -> new NotValidCityCodeException(cityCode));
     }
 
     private GetPremiseResponse from(Long idPremise){

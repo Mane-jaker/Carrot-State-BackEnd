@@ -5,7 +5,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreatePremiseRequ
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePremiseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
-import com.example.carrotstatebackend.entities.Owner;
+import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Premise;
 
 
@@ -16,5 +16,5 @@ public interface IPremiseService {
     BaseResponse listByAgent(Long idAgent);
     BaseResponse delete(Long id);
     Premise getPremise (Long id);
-    GetPremiseResponse updateToSoldOut(Long id, Owner owner);
+    GetPremiseResponse updateToSoldOut(Long id, Client owner);
 }

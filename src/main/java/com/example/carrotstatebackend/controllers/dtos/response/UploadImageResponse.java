@@ -5,5 +5,6 @@ import lombok.Getter;
 
 @Builder @Getter
 public class UploadImageResponse {
-    String url;
+    private Object property;
+    private String url;
 }

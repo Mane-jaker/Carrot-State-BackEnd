@@ -1,6 +1,8 @@
 package com.example.carrotstatebackend.entities;
 
-import com.example.carrotstatebackend.entities.pivots.ProspectiveBuyerPlot;
+import com.example.carrotstatebackend.entities.enums.CityState;
+import com.example.carrotstatebackend.entities.pivots.ClientPlot;
+import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +22,8 @@ public class Plot {
     @Column(nullable = false)
     private String location;
 
+    private CityState cityState;
+
     @Column(nullable = false)
     private String description;
 
@@ -36,14 +40,15 @@ public class Plot {
     private Agent agent;
 
     @ManyToOne
-    private Owner owner;
+    private Client client;
 
     @OneToMany(mappedBy = "plot")
-    private List<Image> images;
+    private List<ImagePlot> imagesPlot;
 
     @OneToMany(mappedBy = "plot")
-    private List<Sold> solds;
+    private List<ClientPlot> ClientPlots;
 
-    @OneToMany(mappedBy = "plot")
-    private List<ProspectiveBuyerPlot> prospectiveBuyerPlots;
+    @OneToOne(mappedBy = "plot")
+    private Sold sold;
+
 }

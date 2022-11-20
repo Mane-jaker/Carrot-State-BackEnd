@@ -2,9 +2,11 @@ package com.example.carrotstatebackend.controllers;
 
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateHouseRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IHouseService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,27 @@ public class HouseController {
     public ResponseEntity<BaseResponse> get(@PathVariable Long id ){
         BaseResponse response = service.get(id);
         return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/search/{keyWord}")
+    public ResponseEntity<BaseResponse> search(@PathVariable String keyWord,
+                                               @RequestBody @Valid RequestFilters filters){
+        return null;
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<BaseResponse> list(){
+        return null;
+    }
+
+    @GetMapping("/listByPrice/{price}")
+    public ResponseEntity<BaseResponse> listByPrice(@PathVariable Float price){
+        return null;
+    }
+
+    @GetMapping("/listByLocation/{locationCode}")
+    public ResponseEntity<BaseResponse> listByLocation(@PathVariable String locationCode){
+        return null;
     }
 
     @GetMapping("/list/agent/{idAgent}")

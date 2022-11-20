@@ -1,8 +1,7 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentCredentialsRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,9 @@ public class AgentController{
     @Autowired
     private IAgentService service;
 
-    @GetMapping("/manager/{managerId}")
-    public ResponseEntity<BaseResponse> getByManager(@PathVariable Long managerId){
-        BaseResponse response = service.listByManager(managerId);
+    @GetMapping("/real_state/{realStateId}")
+    public ResponseEntity<BaseResponse> getByRealState(@PathVariable Long realStateId){
+        BaseResponse response = service.listByRealState(realStateId);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
@@ -39,7 +38,7 @@ public class AgentController{
     }
 
     @PutMapping("/credentials/{idAgent}")
-    public ResponseEntity<BaseResponse> update(@RequestBody @Valid UpdateAgentCredentialsRequest request,
+    public ResponseEntity<BaseResponse> update(@RequestBody @Valid UpdateCredentialsRequest request,
                                                @PathVariable Long idAgent){
         BaseResponse response = service.updateCredentials(request, idAgent);
         return new ResponseEntity<>(response, response.getHttpStatus());
