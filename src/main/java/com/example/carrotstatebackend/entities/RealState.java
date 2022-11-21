@@ -33,6 +33,9 @@ public class RealState {
 
     private Float commissionAgent;
 
+    @ManyToOne
+    private Admin admin;
+
     @OneToMany(mappedBy = "realState")
     private List<Agent> agent;
 

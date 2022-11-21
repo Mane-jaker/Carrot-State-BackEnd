@@ -30,21 +30,12 @@ public class HouseController {
     @GetMapping("/search/{keyWord}")
     public ResponseEntity<BaseResponse> search(@PathVariable String keyWord,
                                                @RequestBody @Valid RequestFilters filters){
-        return null;
+        BaseResponse response = service.search(keyWord, filters);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @GetMapping("/list")
     public ResponseEntity<BaseResponse> list(){
-        return null;
-    }
-
-    @GetMapping("/listByPrice/{price}")
-    public ResponseEntity<BaseResponse> listByPrice(@PathVariable Float price){
-        return null;
-    }
-
-    @GetMapping("/listByLocation/{locationCode}")
-    public ResponseEntity<BaseResponse> listByLocation(@PathVariable String locationCode){
         return null;
     }
 

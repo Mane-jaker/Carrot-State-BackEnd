@@ -1,13 +1,13 @@
 package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.LoginRequest;
-import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetLoginResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetRealStateResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.*;
 import com.example.carrotstatebackend.controllers.exceptions.LoginInvalidException;
+import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.entities.Admin;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.RealState;
+import com.example.carrotstatebackend.services.interfaces.IAdminService;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.ILoginService;
 import com.example.carrotstatebackend.services.interfaces.IRealStateService;
@@ -24,14 +24,33 @@ public class LoginServiceImpl implements ILoginService {
     @Autowired
     private IRealStateService managerService;
 
+    @Autowired
+    private IAdminService adminService;
+
+
+    @Override
+    public BaseResponse adminLogin(LoginRequest loginRequest) {
+        Admin admin = adminService.getAdmin(loginRequest.getEmail());
+        if (admin.getPassword().equals(loginRequest.getPassword())){
+            GetLoginResponse response = GetLoginResponse.builder()
+                    .success(true)
+                    .logged(from(admin)).build();
+            return BaseResponse.builder()
+                    .data(response)
+                    .message("logged")
+                    .success(true)
+                    .httpStatus(HttpStatus.FOUND).build();
+        }
+        throw new LoginInvalidException();
+    }
+
     @Override
     public BaseResponse managerLogin(LoginRequest loginRequest) {
-        RealState realState = managerService.getManager(loginRequest.getEmail())
-                .orElseThrow(LoginInvalidException::new);
+        RealState realState = managerService.getRealState(loginRequest.getEmail());
         if (realState.getPassword().equals(loginRequest.getPassword())) {
-            GetLoginResponse response = new GetLoginResponse();
-            response.setSuccess(true);
-            response.setLogged(from(realState));
+            GetLoginResponse response = GetLoginResponse.builder()
+                    .success(true)
+                    .logged(from(realState)).build();
             return BaseResponse.builder()
                     .data(response)
                     .message("logged")
@@ -43,12 +62,11 @@ public class LoginServiceImpl implements ILoginService {
 
     @Override
     public BaseResponse agentLogin(LoginRequest loginRequest) {
-        Agent agent = agentService.getAgent(loginRequest.getEmail())
-                .orElseThrow(LoginInvalidException::new);
+        Agent agent = agentService.getAgent(loginRequest.getEmail());
         if (agent.getPassword().equals(loginRequest.getPassword())){
-            GetLoginResponse response = new GetLoginResponse();
-            response.setSuccess(true);
-            response.setLogged(from(agent));
+            GetLoginResponse response = GetLoginResponse.builder()
+                    .success(true)
+                    .logged(from(agent)).build();
             return BaseResponse.builder()
                     .data(response)
                     .message("logged")
@@ -58,17 +76,23 @@ public class LoginServiceImpl implements ILoginService {
         throw new LoginInvalidException();
     }
 
+    private GetAdminResponse from(Admin admin){
+        return GetAdminResponse.builder()
+                .id(admin.getId())
+                .name(admin.getName())
+                .email(admin.getEmail()).build();
+    }
+
     private GetAgentResponse from(Agent agent){
-        GetAgentResponse response = new GetAgentResponse();
-        response.setId(agent.getId());
-        response.setName(agent.getName());
-        response.setPassword(agent.getPassword());
-        response.setEmail(agent.getEmail());
-        response.setNumberOfSales(agent.getNumberOfSales());
-        response.setNumberOfProperties(agent.getNumberOfProperties());
-        response.setState(agent.getState());
-        response.setRealState(from(agent.getRealState()));
-        return response;
+        return GetAgentResponse.builder()
+                .id(agent.getId())
+                .name(agent.getName())
+                .state(agent.getState())
+                .email(agent.getEmail())
+                .password(agent.getPassword())
+                .realState(from(agent.getRealState()))
+                .numberOfProperties(agent.getNumberOfProperties())
+                .numberOfSales(agent.getNumberOfSales()).build();
     }
 
     private GetRealStateResponse from(RealState realState){

@@ -6,6 +6,7 @@ import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetRealStateResponse;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.RealState;
+import com.example.carrotstatebackend.entities.RealStateCode;
 import com.example.carrotstatebackend.repositories.IRealStateRepository;
 import com.example.carrotstatebackend.services.interfaces.IRealStateService;
 import com.example.carrotstatebackend.services.interfaces.IRealStateCodeService;
@@ -22,9 +23,6 @@ public class RealStateServiceImpl implements IRealStateService {
 
     @Autowired
     private IRealStateRepository repository;
-
-    @Autowired
-    private IRealStateCodeService managersCodeService;
 
     @Override
     public void updateManagerProfile(String fileUrl, Long idManager) {
@@ -57,7 +55,7 @@ public class RealStateServiceImpl implements IRealStateService {
     }
 
     @Override
-    public RealState getManagerByCode(Integer managerCode) {
+    public RealState getManagerByCode(String managerCode) {
         return repository.findByCode_Code(managerCode).orElseThrow(NotFoundException::new);
     }
 
@@ -78,7 +76,8 @@ public class RealStateServiceImpl implements IRealStateService {
 
     @Override
     public BaseResponse updateCredentials(UpdateCredentialsRequest request, Long idManager) {
-        RealState realState = repository.findById(idManager).orElseThrow(NotFoundException::new);
+        RealState realState = repository.findById(idManager)
+                .orElseThrow(NotFoundException::new);
         realState.setEmail(request.getMail());
         realState.setPassword(request.getPassword());
         return BaseResponse.builder()
@@ -86,6 +85,18 @@ public class RealStateServiceImpl implements IRealStateService {
                 .message("the agent was updated")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public BaseResponse updateStatus(Boolean status, Long id) {
+        RealState realState = findOneAndEnsureExist(id);
+        realState.setStatus(status);
+        return BaseResponse.builder()
+                .data(from(repository.save(realState)))
+                .message("the real state was updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED)
+                .build();
     }
 
     @Override
@@ -101,13 +112,26 @@ public class RealStateServiceImpl implements IRealStateService {
                 .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
+    @Override
+    public BaseResponse activate(Long idRealState, RealStateCode code) {
+        RealState realState = findOneAndEnsureExist(idRealState);
+        if (realState.getStatus()) throw new NotFoundException();
+        realState.setStatus(true);
+        realState.setCode(code);
+        return BaseResponse.builder()
+                .data(from(realState))
+                .message("the realState was activated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
     public RealState getManager(Long id){
         return findOneAndEnsureExist(id);
     }
 
     @Override
-    public Optional<RealState> getManager(String email) {
-        return repository.findByEmail(email);
+    public RealState getRealState(String email) {
+        return repository.findByEmail(email).orElseThrow(NotFoundException::new);
     }
 
     private RealState findOneAndEnsureExist(Long id) {

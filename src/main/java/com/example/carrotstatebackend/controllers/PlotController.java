@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IPlotService;
@@ -21,6 +22,13 @@ public class PlotController {
     @GetMapping("{id}")
     public ResponseEntity<BaseResponse> get(@PathVariable Long id ){
         BaseResponse response = service.get(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/search/{keyWord}")
+    public ResponseEntity<BaseResponse> search(@PathVariable String keyWord,
+                                               @RequestBody @Valid RequestFilters filters){
+        BaseResponse response = service.search(keyWord, filters);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 

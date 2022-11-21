@@ -48,15 +48,6 @@ public class AgentServiceImpl implements IAgentService{
                 .httpStatus(HttpStatus.FOUND).build();
     }
 
-
-    @Override
-    public void delete(Long id) { repository.deleteById(id); }
-
-    public GetAgentResponse getResponse(Long id){
-
-        return from(id);
-    }
-
     @Override
     public BaseResponse create(CreateAgentRequest request) {
         Agent agent = from(request);
@@ -107,9 +98,15 @@ public class AgentServiceImpl implements IAgentService{
     }
 
     @Override
-    public Optional<Agent> getAgent(String email) {
-        return repository.findByEmail(email);
+    public GetAgentResponse getResponse(Long id){return from(id);}
+
+    @Override
+    public Agent getAgent(String email) {
+        return repository.findByEmail(email).orElseThrow(NotFoundException::new);
     }
+
+    @Override
+    public Agent getAgent(Long id){ return findOneAndEnsureExist(id); }
 
     @Override
     public void updateAgentProfile(String fileUrl, Long idAgent) {
@@ -124,7 +121,7 @@ public class AgentServiceImpl implements IAgentService{
     }
 
     @Override
-    public Agent getAgent(Long id){ return findOneAndEnsureExist(id); }
+    public void delete(Long id) { repository.deleteById(id); }
 
     private Agent findOneAndEnsureExist(Long id){
         return repository.findById(id)
@@ -148,16 +145,16 @@ public class AgentServiceImpl implements IAgentService{
     }
 
     private GetAgentResponse from(Agent agent){
-        GetAgentResponse response = new GetAgentResponse();
-        response.setId(agent.getId());
-        response.setName(agent.getName());
-        response.setPassword(agent.getPassword());
-        response.setEmail(agent.getEmail());
-        response.setNumberOfSales(agent.getNumberOfSales());
-        response.setNumberOfProperties(agent.getNumberOfProperties());
-        response.setState(agent.getState());
-        response.setRealState(from(agent.getRealState()));
-        return response;
+        return GetAgentResponse.builder()
+                .id(agent.getId())
+                .name(agent.getName())
+                .state(agent.getState())
+                .email(agent.getEmail())
+                .password(agent.getPassword())
+                .realState(from(agent.getRealState()))
+                .numberOfSales(agent.getNumberOfSales())
+                .numberOfProperties(agent.getNumberOfProperties())
+                .build();
     }
 
     private GetRealStateResponse from(RealState realState){
@@ -167,7 +164,7 @@ public class AgentServiceImpl implements IAgentService{
         response.setEmail(realState.getEmail());
         response.setPassword(realState.getPassword());
         response.setCommissionAgent(realState.getCommissionAgent());
-        response.setRealStateCode(realState.getCode().getCode().toString());
+        response.setRealStateCode(realState.getCode().getCode());
         return response;
     }
 

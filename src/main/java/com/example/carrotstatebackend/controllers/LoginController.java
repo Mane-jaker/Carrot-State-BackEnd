@@ -17,6 +17,12 @@ public class LoginController {
     @Autowired
     private ILoginService loginService;
 
+    @GetMapping("/admin")
+    public ResponseEntity<BaseResponse> adminLogin(@RequestBody @Valid LoginRequest request){
+        BaseResponse response = loginService.adminLogin(request);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @GetMapping("/manager")
     public ResponseEntity<BaseResponse> managerLogin(@RequestBody @Valid LoginRequest request){
         BaseResponse response = loginService.managerLogin(request);

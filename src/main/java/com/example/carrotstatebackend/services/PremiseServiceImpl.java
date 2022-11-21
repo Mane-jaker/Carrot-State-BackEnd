@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreatePremiseRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePremiseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
@@ -50,6 +51,27 @@ public class PremiseServiceImpl implements IPremiseService {
                 .message("the premise was find")
                 .success(true)
                 .httpStatus(HttpStatus.FOUND).build();
+    }
+
+    @Override
+    public BaseResponse search(String keyWord, RequestFilters filters) {
+        if (filters.getUseKeyWord()){
+            List<GetPremiseResponse> finalList = filter(filters).stream()
+                    .filter(getPremiseResponse -> evaluate(getPremiseResponse, keyWord))
+                    .collect(Collectors.toList());
+            BaseResponse.builder()
+                    .data(finalList)
+                    .message("filter")
+                    .success(true)
+                    .httpStatus(HttpStatus.FOUND)
+                    .build();
+        }
+        return BaseResponse.builder()
+                .data(filter(filters))
+                .message("filter")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND)
+                .build();
     }
 
     @Override
@@ -156,6 +178,30 @@ public class PremiseServiceImpl implements IPremiseService {
                 .stream()
                 .map(this::from)
                 .collect(Collectors.toList());
+    }
+
+    private List<GetPremiseResponse> filter(RequestFilters filters) {
+        if (filters.getBudget() != null && filters.getCityCode() != null){
+            return repository.findAllByPriceIsLessThanEqualAndCityState(
+                            filters.getBudget(), from(filters.getCityCode()))
+                    .stream()
+                    .map(this::from)
+                    .collect(Collectors.toList());
+        }
+        if (filters.getBudget() != null){
+            return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
+                    .stream().map(this::from).collect(Collectors.toList());
+        }
+        return repository.findAllByCityState(from(filters.getCityCode()))
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+    }
+
+    private Boolean evaluate(GetPremiseResponse premise, String keyWord){
+        return premise
+                .getName()
+                .contains(keyWord) || premise.getDescription().contains(keyWord);
     }
 
 

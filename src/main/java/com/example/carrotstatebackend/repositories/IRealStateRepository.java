@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface IRealStateRepository extends JpaRepository<RealState, Long> {
-    Optional<RealState> findByCode_Code(Integer code);
+    Optional<RealState> findByCode_Code(String code_code);
     Optional<RealState> findByEmail(String email);
 }

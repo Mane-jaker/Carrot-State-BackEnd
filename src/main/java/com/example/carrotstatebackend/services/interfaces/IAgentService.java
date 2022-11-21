@@ -17,9 +17,9 @@ public interface IAgentService{
     BaseResponse update(Long idAgent, UpdateAgentRequest request);
     BaseResponse updateCredentials(UpdateCredentialsRequest request, Long idAgent);
     BaseResponse changeStatus(Boolean status, Long idAgent);
-    Agent getAgent(Long id);
     GetAgentResponse getResponse(Long id);
-    Optional<Agent> getAgent(String email);
+    Agent getAgent(Long id);
+    Agent getAgent(String email);
     void delete(Long id);
     void updateAgentProfile(String fileUrl, Long idManager);
     void update(Agent agent);

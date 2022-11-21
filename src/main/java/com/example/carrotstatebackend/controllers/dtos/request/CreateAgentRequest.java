@@ -19,5 +19,5 @@ public class CreateAgentRequest{
     private String email;
 
     @NotNull
-    private Integer managerCode;
+    private String managerCode;
 }

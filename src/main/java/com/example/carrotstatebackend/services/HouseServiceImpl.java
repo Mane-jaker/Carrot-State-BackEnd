@@ -77,7 +77,6 @@ public class HouseServiceImpl implements IHouseService{
                 .build();
     }
 
-
     @Override
     public BaseResponse create(CreateHouseRequest request, Long idAgent) {
         House house = from(request);
@@ -95,7 +94,8 @@ public class HouseServiceImpl implements IHouseService{
 
     @Override
     public BaseResponse update(Long idHouse, UpdateHouseRequest request) {
-        House house = repository.findById(idHouse).orElseThrow(NotFoundException::new);
+        House house = repository.findById(idHouse)
+                .orElseThrow(NotFoundException::new);
         return BaseResponse.builder()
                 .data(from(update(house, request)))
                 .message("the house was updated")
@@ -186,7 +186,8 @@ public class HouseServiceImpl implements IHouseService{
     private CityState from(String cityCode){
         return Stream.of(CityState.values())
                 .filter(c -> c.getLocationCode().equals(cityCode))
-                .findFirst().orElseThrow(() -> new NotValidCityCodeException(cityCode));
+                .findFirst()
+                .orElseThrow(() -> new NotValidCityCodeException(cityCode));
     }
 
     private GetHouseResponse from(Long idHouse){
@@ -209,13 +210,12 @@ public class HouseServiceImpl implements IHouseService{
             return repository.findAllByPriceIsLessThanEqualAndCityState(
                     filters.getBudget(), from(filters.getCityCode()))
                     .stream()
-                    .map(this::from).collect(Collectors.toList());
-
+                    .map(this::from)
+                    .collect(Collectors.toList());
         }
         if (filters.getBudget() != null){
             return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
                     .stream().map(this::from).collect(Collectors.toList());
-
         }
         return repository.findAllByCityState(from(filters.getCityCode()))
                 .stream()
@@ -228,7 +228,6 @@ public class HouseServiceImpl implements IHouseService{
                 .getName()
                 .contains(keyWord) || house.getDescription().contains(keyWord);
     }
-
 }
 
 //base response,

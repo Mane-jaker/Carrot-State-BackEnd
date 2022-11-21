@@ -1,9 +1,10 @@
 package com.example.carrotstatebackend.controllers.dtos.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter @Builder
 public class GetAgentResponse {
 
     private Long id;

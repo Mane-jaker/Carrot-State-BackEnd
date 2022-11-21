@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.services.interfaces;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPlotResponse;
@@ -10,6 +11,7 @@ import com.example.carrotstatebackend.entities.Plot;
 
 public interface IPlotService {
     BaseResponse get(Long id);
+    BaseResponse search(String keyWord, RequestFilters filters);
     BaseResponse create(CreatePlotRequest request, Long idAgent);
     BaseResponse update(Long idPlot, UpdatePlotRequest request);
     BaseResponse listByAgent(Long idAgent);

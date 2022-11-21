@@ -93,20 +93,15 @@ public class SoldServiceImpl implements ISoldService {
     }
 
     private GetAgentResponse from(Agent agent){
-        GetAgentResponse response = new GetAgentResponse();
-        response.setId(agent.getId());
-        response.setName(agent.getName());
-        response.setPassword(agent.getPassword());
-        response.setEmail(agent.getEmail());
-        if (agent.getNumberOfSales() != null){
-            response.setNumberOfSales(agent.getNumberOfSales());
-        }
-        if (agent.getNumberOfProperties() != null){
-            response.setNumberOfProperties(agent.getNumberOfProperties());
-        }
-        response.setState(agent.getState());
-        response.setRealState(from(agent.getRealState()));
-        return response;
+        return GetAgentResponse.builder()
+                .id(agent.getId())
+                .name(agent.getName())
+                .state(agent.getState())
+                .email(agent.getEmail())
+                .password(agent.getPassword())
+                .realState(from(agent.getRealState()))
+                .numberOfProperties(agent.getNumberOfProperties())
+                .numberOfSales(agent.getNumberOfSales()).build();
     }
 
     private GetRealStateResponse from(RealState realState){

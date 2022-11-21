@@ -2,10 +2,7 @@ package com.example.carrotstatebackend.controllers.advices;
 
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetLoginResponse;
-import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
-import com.example.carrotstatebackend.controllers.exceptions.LoginInvalidException;
-import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
-import com.example.carrotstatebackend.controllers.exceptions.NotValidFormatException;
+import com.example.carrotstatebackend.controllers.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,8 +32,7 @@ public class ExceptionHandleFactory {
 
     @ExceptionHandler(LoginInvalidException.class)
     private ResponseEntity<BaseResponse> handleLoginInvalidException(LoginInvalidException exception){
-        GetLoginResponse response = new GetLoginResponse();
-        response.setSuccess(false);
+        GetLoginResponse response = GetLoginResponse.builder().success(false).build();
         BaseResponse errorResponse = BaseResponse.builder()
                 .data(response)
                 .message(exception.getLocalizedMessage())
@@ -48,6 +44,26 @@ public class ExceptionHandleFactory {
 
     @ExceptionHandler(InvalidDeleteException.class)
     private ResponseEntity<BaseResponse> handleInvalidDeleteException(InvalidDeleteException exception){
+        BaseResponse errorResponse = BaseResponse.builder()
+                .message(exception.getLocalizedMessage())
+                .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
+
+    @ExceptionHandler(InvalidActivationException.class)
+    private ResponseEntity<BaseResponse> handleInvalidActivationException(InvalidActivationException exception){
+        BaseResponse errorResponse = BaseResponse.builder()
+                .message(exception.getLocalizedMessage())
+                .success(false)
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
+
+    @ExceptionHandler(NotValidCityCodeException.class)
+    private ResponseEntity<BaseResponse> handleNotValidCityCodeException(NotValidCityCodeException exception){
         BaseResponse errorResponse = BaseResponse.builder()
                 .message(exception.getLocalizedMessage())
                 .success(false)

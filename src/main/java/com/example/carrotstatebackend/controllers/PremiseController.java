@@ -1,5 +1,6 @@
 package com.example.carrotstatebackend.controllers;
 import com.example.carrotstatebackend.controllers.dtos.request.CreatePremiseRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePremiseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.services.interfaces.IPremiseService;
@@ -20,6 +21,13 @@ public class PremiseController {
     @GetMapping("{id}")
     public ResponseEntity<BaseResponse> get(@PathVariable Long id){
         BaseResponse response = service.get(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/search/{keyWord}")
+    public ResponseEntity<BaseResponse> search(@PathVariable String keyWord,
+                                               @RequestBody @Valid RequestFilters filters){
+        BaseResponse response = service.search(keyWord, filters);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
