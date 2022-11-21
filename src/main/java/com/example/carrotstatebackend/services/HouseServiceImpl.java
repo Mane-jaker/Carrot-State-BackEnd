@@ -5,6 +5,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetHouseResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
@@ -12,6 +13,8 @@ import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.enums.CityState;
+import com.example.carrotstatebackend.entities.pivots.ImageHouse;
+import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.IHouseRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IHouseService;
@@ -141,7 +144,6 @@ public class HouseServiceImpl implements IHouseService{
                 .orElseThrow(NotFoundException::new);
     }
 
-
     private GetHouseResponse from(House house){
         GetHouseResponse response = new GetHouseResponse();
         response.setId(house.getId());
@@ -153,6 +155,7 @@ public class HouseServiceImpl implements IHouseService{
         response.setSoldOut(house.getSoldOut());
         response.setPrice(house.getPrice());
         response.setCityState(house.getCityState());
+        response.setImages(from(house.getImageHouses()));
         return response;
     }
 
@@ -181,6 +184,12 @@ public class HouseServiceImpl implements IHouseService{
         house.setRooms(request.getRooms());
         house.setSoldOut(false);
         return house;
+    }
+
+    private List<GetImageResponse> from(List<ImageHouse> image){
+        return image.stream()
+                .map(imageHouse -> GetImageResponse.builder().url(imageHouse.getUrl()).build())
+                .collect(Collectors.toList());
     }
 
     private CityState from(String cityCode){

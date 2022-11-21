@@ -5,6 +5,8 @@ import com.example.carrotstatebackend.entities.enums.CityState;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter
 public class GetPlotResponse {
     private Long id;
@@ -15,4 +17,5 @@ public class GetPlotResponse {
     private Float price;
     private Boolean soldOut;
     private CityState cityState;
+    private List<GetImageResponse> images;
 }

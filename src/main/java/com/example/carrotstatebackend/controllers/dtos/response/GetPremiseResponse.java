@@ -4,14 +4,17 @@ import com.example.carrotstatebackend.entities.enums.CityState;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter
 public class GetPremiseResponse {
    private Long id;
    private String name;
-   private String Location;
+   private String location;
    private String description;
    private Float size;
    private Float price;
    private Boolean soldOut;
    private CityState cityState;
+   private List<GetImageResponse> images;
 }

@@ -20,12 +20,6 @@ public class AdminServiceImpl implements IAdminService {
     @Autowired
     private IAdminRepository repository;
 
-    @Autowired
-    private IRealStateService realStateService;
-
-    @Autowired
-    private IRealStateCodeService managersCodeService;
-
     @Override
     public BaseResponse getById(Integer id) {
         return BaseResponse.builder()
@@ -36,13 +30,8 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
-    public BaseResponse activateRealState(Long idRealState) {
-        return realStateService.activate(idRealState, managersCodeService.GenerateManagerCode());
-    }
-
-    @Override
-    public BaseResponse updateRealStateStatus(Long idRealState, Boolean status) {
-        return realStateService.updateStatus(status, idRealState);
+    public Admin getAdmin(Integer id) {
+        return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override

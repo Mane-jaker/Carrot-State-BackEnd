@@ -4,10 +4,13 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreateRealStateRe
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetRealStateResponse;
+import com.example.carrotstatebackend.controllers.exceptions.InvalidActivationException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.entities.Admin;
 import com.example.carrotstatebackend.entities.RealState;
 import com.example.carrotstatebackend.entities.RealStateCode;
 import com.example.carrotstatebackend.repositories.IRealStateRepository;
+import com.example.carrotstatebackend.services.interfaces.IAdminService;
 import com.example.carrotstatebackend.services.interfaces.IRealStateService;
 import com.example.carrotstatebackend.services.interfaces.IRealStateCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,12 @@ public class RealStateServiceImpl implements IRealStateService {
 
     @Autowired
     private IRealStateRepository repository;
+
+    @Autowired
+    private IAdminService adminService;
+
+    @Autowired
+    private IRealStateCodeService realStateCodeService;
 
     @Override
     public void updateManagerProfile(String fileUrl, Long idManager) {
@@ -113,20 +122,16 @@ public class RealStateServiceImpl implements IRealStateService {
     }
 
     @Override
-    public BaseResponse activate(Long idRealState, RealStateCode code) {
+    public BaseResponse activate(Long idRealState) {
         RealState realState = findOneAndEnsureExist(idRealState);
-        if (realState.getStatus()) throw new NotFoundException();
+        if (realState.getStatus()) throw new InvalidActivationException();
         realState.setStatus(true);
-        realState.setCode(code);
+        realState.setCode(realStateCodeService.GenerateManagerCode());
         return BaseResponse.builder()
-                .data(from(realState))
+                .data(from(repository.save(realState)))
                 .message("the realState was activated")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
-    }
-
-    public RealState getManager(Long id){
-        return findOneAndEnsureExist(id);
     }
 
     @Override
@@ -140,12 +145,15 @@ public class RealStateServiceImpl implements IRealStateService {
     }
 
     private RealState from(CreateRealStateRequest request){
+        Admin admin = adminService.getAdmin(1);
         RealState realState = new RealState();
         realState.setName(request.getName());
         realState.setEmail(request.getEmail());
         realState.setPassword(request.getPassword());
         realState.setCommissionAgent(request.getCommissionAgent());
+        realState.setProfilePicture("https://conejobucket.s3.us-east-2.amazonaws.com/persons/default/profile/images.jpeg");
         realState.setStatus(false);
+        realState.setAdmin(admin);
         return realState;
     }
 
@@ -154,10 +162,10 @@ public class RealStateServiceImpl implements IRealStateService {
         response.setId(realState.getId());
         response.setName(realState.getName());
         response.setEmail(realState.getEmail());
-        response.setPassword(realState.getPassword());
         response.setCommissionAgent(realState.getCommissionAgent());
         response.setStatus(realState.getStatus());
-        response.setRealStateCode(realState.getCode().getCode());
+        if (realState.getCode() != null) response.setRealStateCode(realState.getCode().getCode());
+        response.setProfilePicture(realState.getProfilePicture());
         return response;
     }
 

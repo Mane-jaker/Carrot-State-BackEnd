@@ -3,10 +3,7 @@ package com.example.carrotstatebackend.services;
 import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
-import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetHouseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetPlotResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.*;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
@@ -14,6 +11,7 @@ import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.enums.CityState;
+import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.IPlotRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IPlotService;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -128,6 +127,12 @@ public class PlotServiceImpl implements IPlotService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    private List<GetImageResponse> from(List<ImagePlot> image){
+        return image.stream()
+                .map(imagePlot -> GetImageResponse.builder().url(imagePlot.getUrl()).build())
+                .collect(Collectors.toList());
+    }
+
     private GetPlotResponse from(Plot plot){
         GetPlotResponse response = new GetPlotResponse();
         response.setId(plot.getId());
@@ -138,6 +143,7 @@ public class PlotServiceImpl implements IPlotService {
         response.setName(plot.getName());
         response.setSoldOut(plot.getSoldOut());
         response.setCityState(plot.getCityState());
+        response.setImages(from(plot.getImagesPlot()));
         return response;
     }
 

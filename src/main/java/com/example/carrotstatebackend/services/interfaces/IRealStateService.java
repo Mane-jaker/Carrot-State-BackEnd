@@ -14,7 +14,7 @@ public interface IRealStateService {
     BaseResponse updateCredentials(UpdateCredentialsRequest request, Long idManager);
     BaseResponse updateStatus(Boolean status, Long id);
     BaseResponse updateCommision(Float commision, Long idManager);
-    BaseResponse activate(Long idRealState, RealStateCode code);
+    BaseResponse activate(Long idRealState);
     RealState getManagerByCode(String managersCode);
     RealState getRealState(String email);
     void updateManagerProfile(String fileUrl, Long idManager);

@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface IAdminService {
     BaseResponse getById(Integer id);
-    BaseResponse activateRealState(Long idRealState);
-    BaseResponse updateRealStateStatus(Long idRealState, Boolean status);
+    Admin getAdmin(Integer id);
     Admin getAdmin(String email);
 }

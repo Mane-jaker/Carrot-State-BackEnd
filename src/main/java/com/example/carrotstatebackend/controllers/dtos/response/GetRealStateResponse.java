@@ -11,6 +11,5 @@ public class GetRealStateResponse {
     private Boolean status;
     private String profilePicture;
     private String realStateCode;
-    private String password;
     private Float commissionAgent;
 }

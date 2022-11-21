@@ -98,8 +98,7 @@ public class SoldServiceImpl implements ISoldService {
                 .name(agent.getName())
                 .state(agent.getState())
                 .email(agent.getEmail())
-                .password(agent.getPassword())
-                .realState(from(agent.getRealState()))
+                .profilePicture(agent.getProfilePicture())
                 .numberOfProperties(agent.getNumberOfProperties())
                 .numberOfSales(agent.getNumberOfSales()).build();
     }
@@ -109,7 +108,6 @@ public class SoldServiceImpl implements ISoldService {
         response.setId(realState.getId());
         response.setName(realState.getName());
         response.setEmail(realState.getEmail());
-        response.setPassword(realState.getPassword());
         response.setCommissionAgent(realState.getCommissionAgent());
         response.setRealStateCode(realState.getCode().getCode().toString());
         return response;

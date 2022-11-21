@@ -89,8 +89,7 @@ public class LoginServiceImpl implements ILoginService {
                 .name(agent.getName())
                 .state(agent.getState())
                 .email(agent.getEmail())
-                .password(agent.getPassword())
-                .realState(from(agent.getRealState()))
+                .profilePicture(agent.getProfilePicture())
                 .numberOfProperties(agent.getNumberOfProperties())
                 .numberOfSales(agent.getNumberOfSales()).build();
     }
@@ -100,9 +99,10 @@ public class LoginServiceImpl implements ILoginService {
         response.setId(realState.getId());
         response.setName(realState.getName());
         response.setEmail(realState.getEmail());
-        response.setPassword(realState.getPassword());
         response.setCommissionAgent(realState.getCommissionAgent());
-        response.setRealStateCode(realState.getCode().getCode().toString());
+        if (realState.getStatus()) response.setRealStateCode(realState.getCode().getCode());
+        response.setStatus(realState.getStatus());
+        response.setProfilePicture(realState.getProfilePicture());
         return response;
     }
 }

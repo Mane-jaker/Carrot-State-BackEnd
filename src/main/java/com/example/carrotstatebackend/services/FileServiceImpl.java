@@ -240,7 +240,7 @@ public class FileServiceImpl implements IFileService {
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        File convFile = new File(file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();

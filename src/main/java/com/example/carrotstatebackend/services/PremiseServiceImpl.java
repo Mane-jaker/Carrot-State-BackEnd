@@ -4,6 +4,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreatePremiseRequ
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdatePremiseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
@@ -12,6 +13,8 @@ import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.entities.enums.CityState;
+import com.example.carrotstatebackend.entities.pivots.ImagePlot;
+import com.example.carrotstatebackend.entities.pivots.ImagePremise;
 import com.example.carrotstatebackend.repositories.IPremiseRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IPremiseService;
@@ -137,6 +140,7 @@ public class PremiseServiceImpl implements IPremiseService {
        response.setPrice(premise.getPrice());
        response.setSize(premise.getSize());
        response.setCityState(premise.getCityState());
+       response.setImages(from(premise.getImagePremises()));
        return response;
     }
 
@@ -159,6 +163,12 @@ public class PremiseServiceImpl implements IPremiseService {
         premise.setSoldOut(false);
         premise.setCityState(from(request.getCityCode()));
         return premise;
+    }
+
+    private List<GetImageResponse> from(List<ImagePremise> image){
+        return image.stream()
+                .map(imagePremise -> GetImageResponse.builder().url(imagePremise.getUrl()).build())
+                .collect(Collectors.toList());
     }
 
     private CityState from(String cityCode){

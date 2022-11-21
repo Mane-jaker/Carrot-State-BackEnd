@@ -37,6 +37,12 @@ public class RealStateController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    @PutMapping("/activate/{idRealState}")
+    public ResponseEntity<BaseResponse> activate(@PathVariable Long idRealState){
+        BaseResponse response = service.activate(idRealState);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @PutMapping("/credentials/{idManager}")
     public ResponseEntity<BaseResponse> updateCrendentials(@RequestBody @Valid UpdateCredentialsRequest request,
                                                @PathVariable Long idManager){

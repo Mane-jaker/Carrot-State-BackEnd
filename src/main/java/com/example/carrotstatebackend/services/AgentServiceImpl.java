@@ -27,6 +27,8 @@ public class AgentServiceImpl implements IAgentService{
     @Autowired
     private IRealStateService realStateService;
 
+    private final String DEFAULT_PICTURE = "https://conejobucket.s3.us-east-2.amazonaws.com/persons/default/profile/images.jpeg";
+
 
     @Override
     public BaseResponse listByRealState(Long idRealState) {
@@ -140,6 +142,7 @@ public class AgentServiceImpl implements IAgentService{
         agent.setName(request.getName());
         agent.setPassword(request.getPassword());
         agent.setEmail(request.getEmail());
+        agent.setProfilePicture(DEFAULT_PICTURE);
         agent.setState(true);
         return agent;
     }
@@ -150,22 +153,10 @@ public class AgentServiceImpl implements IAgentService{
                 .name(agent.getName())
                 .state(agent.getState())
                 .email(agent.getEmail())
-                .password(agent.getPassword())
-                .realState(from(agent.getRealState()))
                 .numberOfSales(agent.getNumberOfSales())
+                .profilePicture(agent.getProfilePicture())
                 .numberOfProperties(agent.getNumberOfProperties())
                 .build();
-    }
-
-    private GetRealStateResponse from(RealState realState){
-        GetRealStateResponse response = new GetRealStateResponse();
-        response.setId(realState.getId());
-        response.setName(realState.getName());
-        response.setEmail(realState.getEmail());
-        response.setPassword(realState.getPassword());
-        response.setCommissionAgent(realState.getCommissionAgent());
-        response.setRealStateCode(realState.getCode().getCode());
-        return response;
     }
 
     private GetAgentResponse from(Long idAgent){

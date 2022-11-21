@@ -23,7 +23,7 @@ public class LoginController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @GetMapping("/manager")
+    @GetMapping("/real_state")
     public ResponseEntity<BaseResponse> managerLogin(@RequestBody @Valid LoginRequest request){
         BaseResponse response = loginService.managerLogin(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
