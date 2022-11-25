@@ -54,6 +54,19 @@ public class PlotServiceImpl implements IPlotService {
     }
 
     @Override
+    public BaseResponse list() {
+        List<GetPlotResponse> list = repository.findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+        return BaseResponse.builder()
+                .data(list)
+                .message("plots")
+                .httpStatus(HttpStatus.FOUND)
+                .success(true).build();
+    }
+
+    @Override
     public BaseResponse search(String keyWord, RequestFilters filters) {
         if (filters.getUseKeyWord()){
             List<GetPlotResponse> finalList = filter(filters).stream()

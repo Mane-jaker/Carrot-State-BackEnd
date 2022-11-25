@@ -19,7 +19,7 @@ public interface IAgentService{
     BaseResponse changeStatus(Boolean status, Long idAgent);
     GetAgentResponse getResponse(Long id);
     Agent getAgent(Long id);
-    Agent getAgent(String email);
+    Optional<Agent> getAgent(String email);
     void delete(Long id);
     void updateAgentProfile(String fileUrl, Long idManager);
     void update(Agent agent);

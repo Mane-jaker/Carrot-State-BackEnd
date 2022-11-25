@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin("http://localhost:5173/")
 @RequestMapping("plot")
 public class PlotController {
 
@@ -22,6 +21,12 @@ public class PlotController {
     @GetMapping("{id}")
     public ResponseEntity<BaseResponse> get(@PathVariable Long id ){
         BaseResponse response = service.get(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<BaseResponse> list(){
+        BaseResponse response = service.list();
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 

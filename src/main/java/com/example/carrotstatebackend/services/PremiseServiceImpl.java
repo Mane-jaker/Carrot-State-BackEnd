@@ -57,6 +57,17 @@ public class PremiseServiceImpl implements IPremiseService {
     }
 
     @Override
+    public BaseResponse list() {
+        List<GetPremiseResponse> list = repository.findAll()
+                .stream().map(this::from).collect(Collectors.toList());
+        return BaseResponse.builder()
+                .data(list)
+                .success(true)
+                .message("list")
+                .httpStatus(HttpStatus.FOUND).build();
+    }
+
+    @Override
     public BaseResponse search(String keyWord, RequestFilters filters) {
         if (filters.getUseKeyWord()){
             List<GetPremiseResponse> finalList = filter(filters).stream()

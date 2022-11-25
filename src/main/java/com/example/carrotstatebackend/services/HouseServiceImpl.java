@@ -1,6 +1,7 @@
 package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateHouseRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.CreateImageRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
@@ -18,6 +19,7 @@ import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.IHouseRepository;
 import com.example.carrotstatebackend.services.interfaces.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.IHouseService;
+import com.example.carrotstatebackend.services.interfaces.IImageHouseService;
 import org.apache.commons.collections4.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,11 @@ public class HouseServiceImpl implements IHouseService{
 
     @Autowired
     private IAgentService agentService;
+
+    @Autowired
+    private IImageHouseService imageHouseService;
+
+    private final String DEFAULT_IMAGE = "https://conejobucket.s3.us-east-2.amazonaws.com/persons/default/property/house/casas-ecolo%CC%81gicas_apertura-hogar-sostenibilidad-certificado--1024x629.jpg";
 
     @Override
     public BaseResponse get(Long id) {
@@ -85,7 +92,8 @@ public class HouseServiceImpl implements IHouseService{
         House house = from(request);
         Agent agent = agentService.getAgent(idAgent);
         house.setAgent(agent);
-        GetHouseResponse response = from(repository.save(house));
+        house = repository.save(house);
+        GetHouseResponse response = from(house);
         agent.setNumberOfProperties(agent.getNumberOfProperties() + 1);
         agentService.update(agent);
         return BaseResponse.builder()
@@ -146,6 +154,7 @@ public class HouseServiceImpl implements IHouseService{
 
     private GetHouseResponse from(House house){
         GetHouseResponse response = new GetHouseResponse();
+        response.setName(house.getName());
         response.setId(house.getId());
         response.setBathroomNum(house.getBathRoomNum());
         response.setDescription(house.getDescription());
@@ -155,7 +164,7 @@ public class HouseServiceImpl implements IHouseService{
         response.setSoldOut(house.getSoldOut());
         response.setPrice(house.getPrice());
         response.setCityState(house.getCityState());
-        response.setImages(from(house.getImageHouses()));
+        if(house.getImageHouses() != null ) response.setImages(from(house.getImageHouses()));
         return response;
     }
 

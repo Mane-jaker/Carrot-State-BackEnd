@@ -103,8 +103,8 @@ public class AgentServiceImpl implements IAgentService{
     public GetAgentResponse getResponse(Long id){return from(id);}
 
     @Override
-    public Agent getAgent(String email) {
-        return repository.findByEmail(email).orElseThrow(NotFoundException::new);
+    public Optional<Agent> getAgent(String email) {
+        return repository.findByEmail(email);
     }
 
     @Override

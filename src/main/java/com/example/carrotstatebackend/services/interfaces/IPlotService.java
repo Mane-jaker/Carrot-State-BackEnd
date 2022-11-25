@@ -11,6 +11,7 @@ import com.example.carrotstatebackend.entities.Plot;
 
 public interface IPlotService {
     BaseResponse get(Long id);
+    BaseResponse list();
     BaseResponse search(String keyWord, RequestFilters filters);
     BaseResponse create(CreatePlotRequest request, Long idAgent);
     BaseResponse update(Long idPlot, UpdatePlotRequest request);

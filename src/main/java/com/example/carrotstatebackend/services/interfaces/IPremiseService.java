@@ -12,6 +12,7 @@ import com.example.carrotstatebackend.entities.Premise;
 
 public interface IPremiseService {
     BaseResponse get(Long id);
+    BaseResponse list();
     BaseResponse search(String keyWord, RequestFilters filters);
     BaseResponse create(CreatePremiseRequest request, Long idAgent);
     BaseResponse update(Long idPremise, UpdatePremiseRequest request);

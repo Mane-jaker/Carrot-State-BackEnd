@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin("http://localhost:5173/")
 @RequestMapping("house")
 public class HouseController {
 
@@ -36,7 +35,8 @@ public class HouseController {
 
     @GetMapping("/list")
     public ResponseEntity<BaseResponse> list(){
-        return null;
+        BaseResponse response = service.list();
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @GetMapping("/list/agent/{idAgent}")

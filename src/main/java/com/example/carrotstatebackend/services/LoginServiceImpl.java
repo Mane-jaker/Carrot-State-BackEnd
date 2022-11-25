@@ -62,7 +62,8 @@ public class LoginServiceImpl implements ILoginService {
 
     @Override
     public BaseResponse agentLogin(LoginRequest loginRequest) {
-        Agent agent = agentService.getAgent(loginRequest.getEmail());
+        Agent agent = agentService.getAgent(loginRequest.getEmail())
+                .orElseThrow(LoginInvalidException::new);
         if (agent.getPassword().equals(loginRequest.getPassword())){
             GetLoginResponse response = GetLoginResponse.builder()
                     .success(true)
