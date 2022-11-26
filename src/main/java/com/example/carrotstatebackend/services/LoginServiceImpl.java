@@ -4,7 +4,9 @@ import com.example.carrotstatebackend.controllers.dtos.request.LoginRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.*;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAdminResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetClientResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
+import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.exceptions.LoginInvalidException;
 import com.example.carrotstatebackend.entities.Admin;
 import com.example.carrotstatebackend.entities.Agent;
@@ -12,6 +14,7 @@ import com.example.carrotstatebackend.entities.RealState;
 import com.example.carrotstatebackend.services.interfaces.persons.IAdminService;
 import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.ILoginService;
+import com.example.carrotstatebackend.services.interfaces.persons.IClientService;
 import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,9 @@ public class LoginServiceImpl implements ILoginService {
 
     @Autowired
     private IAdminService adminService;
+
+    @Autowired
+    private IClientService clientService;
 
 
     @Override
@@ -79,6 +85,23 @@ public class LoginServiceImpl implements ILoginService {
         throw new LoginInvalidException();
     }
 
+    @Override
+    public BaseResponse clientLogin(LoginRequest loginRequest) {
+        Client client = clientService.getClient(loginRequest.getEmail())
+                .orElseThrow(LoginInvalidException::new);
+        if (client.getPassword().equals(loginRequest.getPassword())){
+            GetLoginResponse response = GetLoginResponse.builder()
+                    .success(true)
+                    .logged(from(client)).build();
+            return BaseResponse.builder()
+                    .data(response)
+                    .message("logged")
+                    .success(true)
+                    .httpStatus(HttpStatus.FOUND).build();
+        }
+        throw new LoginInvalidException();
+    }
+
     private GetAdminResponse from(Admin admin){
         return GetAdminResponse.builder()
                 .id(admin.getId())
@@ -106,6 +129,15 @@ public class LoginServiceImpl implements ILoginService {
         if (realState.getStatus()) response.setRealStateCode(realState.getCode().getCode());
         response.setStatus(realState.getStatus());
         response.setProfilePicture(realState.getProfilePicture());
+        return response;
+    }
+
+    private GetClientResponse from(Client client){
+        GetClientResponse response = new GetClientResponse();
+        response.setId(client.getId());
+        response.setName(client.getName());
+        response.setContact(client.getContact());
+        response.setBudget(client.getBudget());
         return response;
     }
 }

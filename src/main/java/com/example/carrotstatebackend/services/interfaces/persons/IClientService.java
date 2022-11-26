@@ -4,12 +4,15 @@ import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseClien
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.entities.Client;
 
+import java.util.Optional;
+
 
 public interface IClientService {
     BaseResponse listByHouse(Long idHouse);
     BaseResponse listByPlot(Long idPlot);
     BaseResponse listByPremise(Long idPremise);
     BaseResponse get(Long id);
+    BaseResponse createClient(BaseClientRequest request);
     BaseResponse createHouseClient(BaseClientRequest request, Long idHouse);
     BaseResponse createPlotClient(BaseClientRequest request, Long idPlot);
     BaseResponse createPremiseClient(BaseClientRequest request, Long idPremise);
@@ -18,4 +21,5 @@ public interface IClientService {
     BaseResponse deletePlotClient(Long id);
     BaseResponse deletePremiseClient(Long id);
     Client getClient(Long id);
+    Optional<Client> getClient(String email);
 }

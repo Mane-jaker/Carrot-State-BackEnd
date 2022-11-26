@@ -36,7 +36,7 @@ public class LoginController {
 
     @GetMapping("/client")
     public ResponseEntity<BaseResponse> clientLogin(@RequestParam @Valid LoginRequest request){
-        //BaseResponse response = loginService
-        return null;
+        BaseResponse response = loginService.clientLogin(request);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }

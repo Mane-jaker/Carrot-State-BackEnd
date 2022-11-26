@@ -15,6 +15,8 @@ import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.entities.pivots.ImagePremise;
 import com.example.carrotstatebackend.repositories.properties.IPremiseRepository;
+import com.example.carrotstatebackend.services.evaluators.FiltersUtilityImpl;
+import com.example.carrotstatebackend.services.evaluators.IFilterUtility;
 import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,11 @@ public class PremiseServiceImpl implements IBasePropertyService<Premise> {
     @Autowired
     private IAgentService agentService;
 
+    @Autowired
+    private FiltersUtilityImpl filtersUtilityImpl;
+
+    @Autowired
+    private IFilterUtility filtersUtility;
 
     @Override
     public  BaseResponse listByAgent(Long idAgent){
@@ -206,21 +213,24 @@ public class PremiseServiceImpl implements IBasePropertyService<Premise> {
     }
 
     private List<GetPremiseResponse> filter(RequestFilters filters) {
-        if (filters.getBudget() != null && filters.getCityCode() != null){
-            return repository.findAllByPriceIsLessThanEqualAndCityState(
-                            filters.getBudget(), from(filters.getCityCode()))
-                    .stream()
-                    .map(this::from)
-                    .collect(Collectors.toList());
+        switch (filtersUtility.filter(filters)){
+            case BY_CITY_CODE:
+                return repository.findAllByCityState(from(filters.getCityCode()))
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
+            case BY_PRICE:
+                return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
+                        .stream().map(this::from).collect(Collectors.toList());
+            case BY_ALL_FILTERS:
+                return repository.findAllByPriceIsLessThanEqualAndCityState(
+                                filters.getBudget(), from(filters.getCityCode()))
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
+            default:
+                throw new RuntimeException();
         }
-        if (filters.getBudget() != null){
-            return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
-                    .stream().map(this::from).collect(Collectors.toList());
-        }
-        return repository.findAllByCityState(from(filters.getCityCode()))
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
     }
 
     private Boolean evaluate(GetPremiseResponse premise, String keyWord){

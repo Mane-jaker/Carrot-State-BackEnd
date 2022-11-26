@@ -14,6 +14,8 @@ import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.properties.IPlotRepository;
+import com.example.carrotstatebackend.services.evaluators.FiltersUtilityImpl;
+import com.example.carrotstatebackend.services.evaluators.IFilterUtility;
 import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class PlotServiceImpl implements IBasePropertyService<Plot> {
 
     @Autowired
     private IAgentService agentService;
+
+    @Autowired
+    private IFilterUtility filtersUtility;
 
     @Override
     public BaseResponse listByAgent(Long idAgent) {
@@ -207,21 +212,25 @@ public class PlotServiceImpl implements IBasePropertyService<Plot> {
     }
 
     private List<GetPlotResponse> filter(RequestFilters filters) {
-        if (filters.getBudget() != null && filters.getCityCode() != null){
-            return repository.findAllByPriceIsLessThanEqualAndCityState(
-                            filters.getBudget(), from(filters.getCityCode()))
-                    .stream()
-                    .map(this::from)
-                    .collect(Collectors.toList());
+
+        switch (filtersUtility.filter(filters)){
+            case BY_CITY_CODE:
+                return repository.findAllByCityState(from(filters.getCityCode()))
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
+            case BY_PRICE:
+                return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
+                        .stream().map(this::from).collect(Collectors.toList());
+            case BY_ALL_FILTERS:
+                return repository.findAllByPriceIsLessThanEqualAndCityState(
+                                filters.getBudget(), from(filters.getCityCode()))
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
+            default:
+                throw new RuntimeException();
         }
-        if (filters.getBudget() != null){
-            return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
-                    .stream().map(this::from).collect(Collectors.toList());
-        }
-        return repository.findAllByCityState(from(filters.getCityCode()))
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
     }
 
     private Boolean evaluate(GetPlotResponse premise, String keyWord){

@@ -2,7 +2,6 @@ package com.example.carrotstatebackend.controllers.advices;
 
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetLoginResponse;
-import com.example.carrotstatebackend.controllers.exceptions.*;
 import com.example.carrotstatebackend.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

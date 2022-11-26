@@ -17,6 +17,7 @@ public class ClientController {
     @Autowired
     private IClientService service;
 
+
     @GetMapping("/house/{idHouse}")
     public ResponseEntity<BaseResponse> listHouseClient(@PathVariable Long idHouse){
         BaseResponse response = service.listByHouse(idHouse);
@@ -35,25 +36,10 @@ public class ClientController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PostMapping("house/{idHouse}")
-    public ResponseEntity<BaseResponse> createHouseClient(
-            @RequestBody @Valid BaseClientRequest request, @PathVariable Long idHouse){
-        BaseResponse baseResponse = service.createHouseClient(request, idHouse);
-        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
-    }
-
-    @PostMapping("plot/{idPlot}")
-    public ResponseEntity<BaseResponse> createPlotClient(
-            @RequestBody @Valid BaseClientRequest request, @PathVariable Long idPlot){
-        BaseResponse baseResponse = service.createPlotClient(request, idPlot);
-        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
-    }
-
-    @PostMapping("premise/{idPremise}")
-    public ResponseEntity<BaseResponse> createPremiseClient(
-            @RequestBody @Valid BaseClientRequest request, @PathVariable Long idPremise){
-        BaseResponse baseResponse = service.createPremiseClient(request, idPremise);
-        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
+    @PostMapping
+    public ResponseEntity<BaseResponse> create(@RequestBody @Valid BaseClientRequest request){
+        BaseResponse response = service.createClient(request);
+        return null;
     }
 
     @PutMapping("{id}")

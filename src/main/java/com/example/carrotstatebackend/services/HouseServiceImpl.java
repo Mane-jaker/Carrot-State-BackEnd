@@ -15,6 +15,7 @@ import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.entities.pivots.ImageHouse;
 import com.example.carrotstatebackend.repositories.properties.IHouseRepository;
+import com.example.carrotstatebackend.services.evaluators.IFilterUtility;
 import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseImageService;
 import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
@@ -40,7 +41,8 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
     @Qualifier("imgHouse")
     private IBaseImageService imageHouseService;
 
-    private final String DEFAULT_IMAGE = "https://conejobucket.s3.us-east-2.amazonaws.com/persons/default/property/house/casas-ecolo%CC%81gicas_apertura-hogar-sostenibilidad-certificado--1024x629.jpg";
+    @Autowired
+    private IFilterUtility filtersUtility;
 
     @Override
     public BaseResponse get(Long id) {
@@ -227,21 +229,24 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
     }
 
     private List<GetHouseResponse> filter(RequestFilters filters) {
-        if (filters.getBudget() != null && filters.getCityCode() != null){
-            return repository.findAllByPriceIsLessThanEqualAndCityState(
-                    filters.getBudget(), from(filters.getCityCode()))
-                    .stream()
-                    .map(this::from)
-                    .collect(Collectors.toList());
+        switch (filtersUtility.filter(filters)){
+            case BY_CITY_CODE:
+                return repository.findAllByCityState(from(filters.getCityCode()))
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
+            case BY_PRICE:
+                return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
+                        .stream().map(this::from).collect(Collectors.toList());
+            case BY_ALL_FILTERS:
+                return repository.findAllByPriceIsLessThanEqualAndCityState(
+                                filters.getBudget(), from(filters.getCityCode()))
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
+            default:
+                throw new RuntimeException();
         }
-        if (filters.getBudget() != null){
-            return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
-                    .stream().map(this::from).collect(Collectors.toList());
-        }
-        return repository.findAllByCityState(from(filters.getCityCode()))
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
     }
 
     private Boolean evaluate(GetHouseResponse house, String keyWord){

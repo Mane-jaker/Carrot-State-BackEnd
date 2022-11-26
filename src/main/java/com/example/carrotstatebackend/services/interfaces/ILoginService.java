@@ -7,4 +7,5 @@ public interface ILoginService {
     BaseResponse adminLogin(LoginRequest loginRequest);
     BaseResponse managerLogin(LoginRequest loginRequest);
     BaseResponse agentLogin(LoginRequest loginRequest);
+    BaseResponse clientLogin(LoginRequest loginRequest);
 }

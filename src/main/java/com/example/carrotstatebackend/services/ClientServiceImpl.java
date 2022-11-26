@@ -89,6 +89,17 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
+    public BaseResponse createClient(BaseClientRequest request) {
+        GetClientResponse response = from(repository.save(from(request)));
+        return BaseResponse.builder()
+                .data(response)
+                .message("client saved")
+                .success(true)
+                .httpStatus(HttpStatus.CREATED)
+                .build();
+    }
+
+    @Override
     public BaseResponse createHouseClient(BaseClientRequest request, Long houseId) {
         Client client = from(request);
         client = repository.save(client);
@@ -193,6 +204,8 @@ public class ClientServiceImpl implements IClientService {
 
     private Client from(BaseClientRequest request){
         Client client = new Client();
+        client.setEmail(request.getEmail());
+        client.setPassword(request.getPassword());
         client.setName(request.getName());
         client.setContact(request.getContact());
         client.setBudget(request.getBudget());
