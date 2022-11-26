@@ -1,11 +1,11 @@
 package com.example.carrotstatebackend.services;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreatePremiseRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BasePremiseRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdatePremiseRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BasePropertyRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetPremiseResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.properties.GetPremiseResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
@@ -13,11 +13,10 @@ import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.entities.enums.CityState;
-import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.entities.pivots.ImagePremise;
 import com.example.carrotstatebackend.repositories.IPremiseRepository;
-import com.example.carrotstatebackend.services.interfaces.IAgentService;
-import com.example.carrotstatebackend.services.interfaces.IPremiseService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class PremiseServiceImpl implements IPremiseService {
+public class PremiseServiceImpl implements IBasePropertyService<Premise> {
 
     @Autowired
     private IPremiseRepository repository;
@@ -89,8 +88,8 @@ public class PremiseServiceImpl implements IPremiseService {
     }
 
     @Override
-    public BaseResponse create(CreatePremiseRequest request, Long idAgent) {
-        Premise premise = from(request);
+    public BaseResponse create(BasePropertyRequest request, Long idAgent) {
+        Premise premise = from((BasePremiseRequest) request);
         Agent agent = agentService.getAgent(idAgent);
         premise.setAgent(agent);
         GetPremiseResponse response = from(repository.save(premise));
@@ -104,9 +103,9 @@ public class PremiseServiceImpl implements IPremiseService {
     }
 
     @Override
-    public BaseResponse update(Long id, UpdatePremiseRequest request) {
+    public BaseResponse update(Long id, BasePropertyRequest request) {
         Premise premise = findOneAndEnsureExist(id);
-        premise = update(premise, request);
+        premise = update(premise, (BasePremiseRequest) request);
         return BaseResponse.builder()
                 .data(from(premise))
                 .message("the premise was uploaded")
@@ -125,16 +124,21 @@ public class PremiseServiceImpl implements IPremiseService {
                 .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
-    public Premise getPremise(Long id){
+    @Override
+    public Premise getPropertyE(Long id){
         return findOneAndEnsureExist(id);
     }
 
     @Override
-    public GetPremiseResponse updateToSoldOut(Long idPlot, Client owner){
+    public BaseResponse updateToSoldOut(Long idPlot, Client owner){
         Premise premise = findOneAndEnsureExist(idPlot);
         premise.setClient(owner);
         premise.setSoldOut(true);
-        return from(repository.save(premise));
+        return BaseResponse.builder()
+                .data(from(repository.save(premise)))
+                .message("updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
     private Premise findOneAndEnsureExist(Long id) {
@@ -155,7 +159,7 @@ public class PremiseServiceImpl implements IPremiseService {
        return response;
     }
 
-    private  Premise update(Premise premise, UpdatePremiseRequest request){
+    private  Premise update(Premise premise, BasePremiseRequest request){
         premise.setDescription(request.getDescription());
         premise.setPrice(request.getPrice());
         premise.setName(request.getName());
@@ -164,7 +168,7 @@ public class PremiseServiceImpl implements IPremiseService {
         return repository.save(premise);
     }
 
-    private  Premise from(CreatePremiseRequest request){
+    private  Premise from(BasePremiseRequest request){
         Premise premise = new Premise();
         premise.setDescription(request.getDescription());
         premise.setPrice(request.getPrice());

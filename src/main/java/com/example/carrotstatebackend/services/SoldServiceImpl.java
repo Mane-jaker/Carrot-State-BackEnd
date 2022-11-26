@@ -2,9 +2,15 @@ package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.controllers.dtos.request.CreateSoldRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.*;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetClientResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.properties.GetHouseResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.properties.GetPlotResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.properties.GetPremiseResponse;
 import com.example.carrotstatebackend.entities.*;
 import com.example.carrotstatebackend.repositories.ISoldRepository;
-import com.example.carrotstatebackend.services.interfaces.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.ISoldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

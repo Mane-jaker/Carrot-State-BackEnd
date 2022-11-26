@@ -1,16 +1,14 @@
 package com.example.carrotstatebackend.services; 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateAgentRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateCredentialsRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseAgentRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetRealStateResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.RealState;
 import com.example.carrotstatebackend.repositories.IAgentRepository;
-import com.example.carrotstatebackend.services.interfaces.IAgentService;
-import com.example.carrotstatebackend.services.interfaces.IRealStateService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -51,7 +49,7 @@ public class AgentServiceImpl implements IAgentService{
     }
 
     @Override
-    public BaseResponse create(CreateAgentRequest request) {
+    public BaseResponse create(BaseAgentRequest request) {
         Agent agent = from(request);
         RealState realState = realStateService.getManagerByCode(request.getManagerCode());
         agent.setRealState(realState);
@@ -66,7 +64,7 @@ public class AgentServiceImpl implements IAgentService{
     }
 
     @Override
-    public BaseResponse update(Long id, UpdateAgentRequest request) {
+    public BaseResponse update(Long id, BaseAgentRequest request) {
         Agent agent = findOneAndEnsureExist(id);
         agent = update(agent, request);
         return BaseResponse.builder()
@@ -130,14 +128,14 @@ public class AgentServiceImpl implements IAgentService{
                 .orElseThrow(NotFoundException::new);
     }
 
-    private Agent update(Agent agent, UpdateAgentRequest request){
+    private Agent update(Agent agent, BaseAgentRequest request){
         agent.setName(request.getName());
         agent.setPassword(request.getPassword());
         agent.setEmail(request.getEmail());
         return repository.save(agent);
     }
 
-    private Agent from(CreateAgentRequest request){
+    private Agent from(BaseAgentRequest request){
         Agent agent = new Agent();
         agent.setName(request.getName());
         agent.setPassword(request.getPassword());

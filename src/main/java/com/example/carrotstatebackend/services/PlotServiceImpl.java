@@ -1,9 +1,10 @@
 package com.example.carrotstatebackend.services;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BasePlotRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BasePropertyRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.*;
+import com.example.carrotstatebackend.controllers.dtos.response.properties.GetPlotResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
@@ -13,19 +14,18 @@ import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.IPlotRepository;
-import com.example.carrotstatebackend.services.interfaces.IAgentService;
-import com.example.carrotstatebackend.services.interfaces.IPlotService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class PlotServiceImpl implements IPlotService {
+public class PlotServiceImpl implements IBasePropertyService<Plot> {
 
     @Autowired
     private IPlotRepository repository;
@@ -88,8 +88,8 @@ public class PlotServiceImpl implements IPlotService {
     }
 
     @Override
-    public BaseResponse create(CreatePlotRequest request, Long idAgent) {
-        Plot plot = from(request);
+    public BaseResponse create(BasePropertyRequest request, Long idAgent) {
+        Plot plot = from((BasePlotRequest) request);
         Agent agent = agentService.getAgent(idAgent);
         plot.setAgent(agent);
         GetPlotResponse response = from(repository.save(plot));
@@ -103,10 +103,10 @@ public class PlotServiceImpl implements IPlotService {
     }
 
     @Override
-    public BaseResponse update(Long idPlot, UpdatePlotRequest request) {
+    public BaseResponse update(Long idPlot, BasePropertyRequest request) {
         Plot plot = repository.findById(idPlot).orElseThrow(NotFoundException::new);
         return BaseResponse.builder()
-                .data(from(update(plot, request)))
+                .data(from(update(plot, (BasePlotRequest) request)))
                 .message("the plot was updated")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
@@ -124,15 +124,19 @@ public class PlotServiceImpl implements IPlotService {
     }
 
     @Override
-    public Plot getPlot(Long id){ return findOneAndEnsureExist(id); }
+    public Plot getPropertyE(Long id){ return findOneAndEnsureExist(id); }
 
 
     @Override
-    public GetPlotResponse updateToSoldOut(Long idPlot, Client owner){
+    public BaseResponse updateToSoldOut(Long idPlot, Client owner){
         Plot plot = findOneAndEnsureExist(idPlot);
         plot.setClient(owner);
         plot.setSoldOut(true);
-        return from(repository.save(plot));
+        return BaseResponse.builder()
+                .data(from(repository.save(plot)))
+                .message("updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
     private Plot findOneAndEnsureExist(Long id) {
@@ -160,7 +164,7 @@ public class PlotServiceImpl implements IPlotService {
         return response;
     }
 
-    private  Plot update(Plot plot, UpdatePlotRequest request){
+    private  Plot update(Plot plot, BasePlotRequest request){
         plot.setDescription(request.getDescription());
         plot.setLocation(request.getLocation());
         plot.setName(request.getName());
@@ -169,7 +173,7 @@ public class PlotServiceImpl implements IPlotService {
         return repository.save(plot);
     }
 
-    private  Plot from(CreatePlotRequest request){
+    private  Plot from(BasePlotRequest request){
         Plot plot = new Plot();
         plot.setDescription(request.getDescription());
         plot.setLocation(request.getLocation());

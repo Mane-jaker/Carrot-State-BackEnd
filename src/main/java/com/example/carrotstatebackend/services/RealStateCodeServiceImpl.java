@@ -2,7 +2,7 @@ package com.example.carrotstatebackend.services;
 
 import com.example.carrotstatebackend.entities.RealStateCode;
 import com.example.carrotstatebackend.repositories.IRealStateCodeRepository;
-import com.example.carrotstatebackend.services.interfaces.IRealStateCodeService;
+import com.example.carrotstatebackend.services.interfaces.persons.IRealStateCodeService;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

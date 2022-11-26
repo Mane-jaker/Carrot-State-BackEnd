@@ -1,16 +1,17 @@
 package com.example.carrotstatebackend.services;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateClientRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateClientRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseClientRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetClientResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetClientResponse;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.repositories.IClientRepository;
-import com.example.carrotstatebackend.services.interfaces.*;
+import com.example.carrotstatebackend.services.interfaces.persons.IClientService;
+import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseClientPropertyService;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,26 +26,26 @@ public class ClientServiceImpl implements IClientService {
     private IClientRepository repository;
     
     @Autowired 
-    private IHouseService houseService;
+    private IBasePropertyService<House> houseService;
 
     @Autowired
-    private IPlotService plotService;
+    private IBasePropertyService<Plot> plotService;
 
     @Autowired
-    private IPremiseService premiseService;
+    private IBasePropertyService<Premise> premiseService;
 
     @Autowired
-    private IClientHouseService prospectiveBuyerHouseService;
+    private IBaseClientPropertyService<House> clientHouseService;
 
     @Autowired
-    private IClientPremiseService prospectiveBuyerPremiseService;
+    private IBaseClientPropertyService<Premise> clientPremiseService;
 
     @Autowired
-    private IClientPlotService prospectiveBuyerPlotService;
+    private IBaseClientPropertyService<Plot> clientPlotService;
 
     @Override
     public BaseResponse listByHouse(Long idHouse) {
-        List<GetClientResponse> list = prospectiveBuyerHouseService.list(idHouse)
+        List<GetClientResponse> list = clientHouseService.list(idHouse)
                 .stream().map(this::from).collect(Collectors.toList());
         return BaseResponse.builder()
                 .data(list)
@@ -56,7 +57,7 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public BaseResponse listByPlot(Long idPlot) {
-        List<GetClientResponse> list = prospectiveBuyerPlotService.list(idPlot)
+        List<GetClientResponse> list = clientPlotService.list(idPlot)
                 .stream().map(this::from).collect(Collectors.toList());
         return BaseResponse.builder()
                 .data(list)
@@ -68,7 +69,7 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public BaseResponse listByPremise(Long idPremise) {
-        List<GetClientResponse> list = prospectiveBuyerPremiseService.list(idPremise)
+        List<GetClientResponse> list = clientPremiseService.list(idPremise)
                 .stream().map(this::from).collect(Collectors.toList());
         return BaseResponse.builder()
                 .data(list)
@@ -88,11 +89,11 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public BaseResponse createHouseClient(CreateClientRequest request, Long houseId) {
+    public BaseResponse createHouseClient(BaseClientRequest request, Long houseId) {
         Client client = from(request);
         client = repository.save(client);
-        House house = houseService.getHouse(houseId);
-        prospectiveBuyerHouseService.create(client, house);
+        House house = houseService.getPropertyE(houseId);
+        clientHouseService.create(client, house);
         return BaseResponse.builder()
                 .data(from(client))
                 .message("The prospective buyer was created")
@@ -101,11 +102,11 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public BaseResponse createPlotClient(CreateClientRequest request, Long idPlot) {
+    public BaseResponse createPlotClient(BaseClientRequest request, Long idPlot) {
         Client client = from(request);
         client = repository.save(client);
-        Plot plot = plotService.getPlot(idPlot);
-        prospectiveBuyerPlotService.create(client, plot);
+        Plot plot = plotService.getPropertyE(idPlot);
+        clientPlotService.create(client, plot);
         return BaseResponse.builder()
                 .data(from(client))
                 .message("The prospective buyer was created")
@@ -114,11 +115,11 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public BaseResponse createPremiseClient(CreateClientRequest request, Long idPremise) {
+    public BaseResponse createPremiseClient(BaseClientRequest request, Long idPremise) {
         Client client = from(request);
         client = repository.save(client);
-        Premise premise = premiseService.getPremise(idPremise);
-        prospectiveBuyerPremiseService.create(client, premise);
+        Premise premise = premiseService.getPropertyE(idPremise);
+        clientPremiseService.create(client, premise);
         return BaseResponse.builder()
                 .data(from(client))
                 .message("The prospective buyer was created")
@@ -127,7 +128,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public BaseResponse update(Long id, UpdateClientRequest request) {
+    public BaseResponse update(Long id, BaseClientRequest request) {
         Client client = findOneAndEnsureExist(id);
         client = update(client, request);
         return BaseResponse.builder()
@@ -141,7 +142,7 @@ public class ClientServiceImpl implements IClientService {
     public BaseResponse deleteHouseClient(Long id) {
         Client client = repository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        prospectiveBuyerHouseService.delete(client);
+        clientHouseService.delete(client);
         repository.delete(client);
         return BaseResponse.builder()
                 .message("the prospective buyer was deleted")
@@ -153,7 +154,7 @@ public class ClientServiceImpl implements IClientService {
     public BaseResponse deletePlotClient(Long id) {
         Client client = repository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        prospectiveBuyerPlotService.delete(client);
+        clientPlotService.delete(client);
         repository.delete(client);
         return BaseResponse.builder()
                 .message("the prospective buyer was deleted")
@@ -165,7 +166,7 @@ public class ClientServiceImpl implements IClientService {
     public BaseResponse deletePremiseClient(Long id) {
         Client client = repository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        prospectiveBuyerPremiseService.delete(client);
+        clientPremiseService.delete(client);
         repository.delete(client);
         return BaseResponse.builder()
                 .message("the prospective buyer was deleted")
@@ -183,14 +184,14 @@ public class ClientServiceImpl implements IClientService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    private Client update(Client client, UpdateClientRequest request){
+    private Client update(Client client, BaseClientRequest request){
         client.setName(request.getName());
         client.setContact(request.getContact());
         client.setBudget(request.getBudget());
         return repository.save(client);
     }
 
-    private Client from(CreateClientRequest request){
+    private Client from(BaseClientRequest request){
         Client client = new Client();
         client.setName(request.getName());
         client.setContact(request.getContact());

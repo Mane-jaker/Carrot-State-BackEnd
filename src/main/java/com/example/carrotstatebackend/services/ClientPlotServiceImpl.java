@@ -4,8 +4,8 @@ import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.pivots.ClientPlot;
 import com.example.carrotstatebackend.repositories.IClientPlotRepository;
-import com.example.carrotstatebackend.services.interfaces.IPlotService;
-import com.example.carrotstatebackend.services.interfaces.IClientPlotService;
+import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseClientPropertyService;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +13,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientPlotServiceImpl implements IClientPlotService {
+public class ClientPlotServiceImpl implements IBaseClientPropertyService<Plot> {
 
     @Autowired
     private IClientPlotRepository repository;
 
     @Autowired
-    private IPlotService plotService;
+    private IBasePropertyService<Plot> plotService;
 
     @Override
     public List<Client> list(Long idPlot) {
-        Plot plot = plotService.getPlot(idPlot);
+        Plot plot = plotService.getPropertyE(idPlot);
         return repository.findAllByPlot(plot)
                 .stream()
                 .map(this::from)

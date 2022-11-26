@@ -1,10 +1,10 @@
 package com.example.carrotstatebackend.controllers;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateRealStateRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateCommissionRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateCredentialsRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseRealStateRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCommissionRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.services.interfaces.IRealStateService;
+import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class RealStateController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse> create(@Valid @RequestBody CreateRealStateRequest request){
+    public ResponseEntity<BaseResponse> create(@Valid @RequestBody BaseRealStateRequest request){
         BaseResponse response = service.create(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }

@@ -3,15 +3,15 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreateImageReques
 import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
 import com.example.carrotstatebackend.entities.pivots.ImageHouse;
 import com.example.carrotstatebackend.repositories.IImageHouseRepository;
-import com.example.carrotstatebackend.services.interfaces.IImageHouseService;
+import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class ImageHouseServiceImpl implements IImageHouseService {
+@Service("imgHouse")
+public class ImageHouseServiceImpl implements IBaseImageService {
 
     @Autowired
     IImageHouseRepository repository;

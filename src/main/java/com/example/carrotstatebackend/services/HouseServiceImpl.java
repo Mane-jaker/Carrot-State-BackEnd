@@ -1,11 +1,10 @@
 package com.example.carrotstatebackend.services;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateHouseRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.CreateImageRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BasePropertyRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BaseHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateHouseRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetHouseResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.properties.GetHouseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
@@ -15,13 +14,12 @@ import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.enums.CityState;
 import com.example.carrotstatebackend.entities.pivots.ImageHouse;
-import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.IHouseRepository;
-import com.example.carrotstatebackend.services.interfaces.IAgentService;
-import com.example.carrotstatebackend.services.interfaces.IHouseService;
-import com.example.carrotstatebackend.services.interfaces.IImageHouseService;
-import org.apache.commons.collections4.Get;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseImageService;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class HouseServiceImpl implements IHouseService{
+public class HouseServiceImpl implements IBasePropertyService<House> {
 
     @Autowired
     private IHouseRepository repository;
@@ -39,7 +37,8 @@ public class HouseServiceImpl implements IHouseService{
     private IAgentService agentService;
 
     @Autowired
-    private IImageHouseService imageHouseService;
+    @Qualifier("imgHouse")
+    private IBaseImageService imageHouseService;
 
     private final String DEFAULT_IMAGE = "https://conejobucket.s3.us-east-2.amazonaws.com/persons/default/property/house/casas-ecolo%CC%81gicas_apertura-hogar-sostenibilidad-certificado--1024x629.jpg";
 
@@ -88,8 +87,8 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     @Override
-    public BaseResponse create(CreateHouseRequest request, Long idAgent) {
-        House house = from(request);
+    public BaseResponse create(BasePropertyRequest request, Long idAgent) {
+        House house = from((BaseHouseRequest) request);
         Agent agent = agentService.getAgent(idAgent);
         house.setAgent(agent);
         house = repository.save(house);
@@ -104,11 +103,11 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     @Override
-    public BaseResponse update(Long idHouse, UpdateHouseRequest request) {
+    public BaseResponse update(Long idHouse, BasePropertyRequest request) {
         House house = repository.findById(idHouse)
                 .orElseThrow(NotFoundException::new);
         return BaseResponse.builder()
-                .data(from(update(house, request)))
+                .data(from(update(house, (BaseHouseRequest) request)))
                 .message("the house was updated")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
@@ -124,14 +123,18 @@ public class HouseServiceImpl implements IHouseService{
     }
 
     @Override
-    public GetHouseResponse updateToSoldOut(Long idHouse, Client client) {
+    public BaseResponse updateToSoldOut(Long idHouse, Client client) {
         House house = findOneAndEnsureExist(idHouse);
         house.setClient(client);
         house.setSoldOut(true);
-        return from(house);
+        return BaseResponse.builder()
+                .data(from(house))
+                .message("updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
     }
 
-    public House getHouse(Long id){
+    public House getPropertyE(Long id){
         return findOneAndEnsureExist(id);
     }
 
@@ -168,7 +171,7 @@ public class HouseServiceImpl implements IHouseService{
         return response;
     }
 
-    private House update(House house, UpdateHouseRequest request){
+    private House update(House house, BaseHouseRequest request){
         house.setBathRoomNum(request.getBathRoomNum());
         house.setDescription(request.getDescription());
         house.setFloors(request.getFloors());
@@ -180,7 +183,7 @@ public class HouseServiceImpl implements IHouseService{
         return repository.save(house);
     }
 
-    private  House from(CreateHouseRequest request){
+    private  House from(BaseHouseRequest request){
         House house = new House();
         house.setName(request.getName());
         house.setBathRoomNum(request.getBathRoomNum());

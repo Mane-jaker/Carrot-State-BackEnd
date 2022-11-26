@@ -1,24 +1,22 @@
 package com.example.carrotstatebackend.services;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateRealStateRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateCredentialsRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseRealStateRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetRealStateResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
 import com.example.carrotstatebackend.controllers.exceptions.InvalidActivationException;
 import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Admin;
 import com.example.carrotstatebackend.entities.RealState;
-import com.example.carrotstatebackend.entities.RealStateCode;
 import com.example.carrotstatebackend.repositories.IRealStateRepository;
-import com.example.carrotstatebackend.services.interfaces.IAdminService;
-import com.example.carrotstatebackend.services.interfaces.IRealStateService;
-import com.example.carrotstatebackend.services.interfaces.IRealStateCodeService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAdminService;
+import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
+import com.example.carrotstatebackend.services.interfaces.persons.IRealStateCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,7 +72,7 @@ public class RealStateServiceImpl implements IRealStateService {
     }
 
     @Override
-    public BaseResponse create(CreateRealStateRequest request) {
+    public BaseResponse create(BaseRealStateRequest request) {
         RealState realState = from(request);
         return BaseResponse.builder()
                 .data(from(repository.save(realState)))
@@ -144,7 +142,7 @@ public class RealStateServiceImpl implements IRealStateService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    private RealState from(CreateRealStateRequest request){
+    private RealState from(BaseRealStateRequest request){
         Admin admin = adminService.getAdmin(1);
         RealState realState = new RealState();
         realState.setName(request.getName());

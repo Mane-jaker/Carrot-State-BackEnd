@@ -1,9 +1,8 @@
 package com.example.carrotstatebackend.controllers;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateClientRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateClientRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseClientRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.services.interfaces.IClientService;
+import com.example.carrotstatebackend.services.interfaces.persons.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,27 +37,27 @@ public class ClientController {
 
     @PostMapping("house/{idHouse}")
     public ResponseEntity<BaseResponse> createHouseClient(
-            @RequestBody @Valid CreateClientRequest request, @PathVariable Long idHouse){
+            @RequestBody @Valid BaseClientRequest request, @PathVariable Long idHouse){
         BaseResponse baseResponse = service.createHouseClient(request, idHouse);
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
     @PostMapping("plot/{idPlot}")
     public ResponseEntity<BaseResponse> createPlotClient(
-            @RequestBody @Valid CreateClientRequest request, @PathVariable Long idPlot){
+            @RequestBody @Valid BaseClientRequest request, @PathVariable Long idPlot){
         BaseResponse baseResponse = service.createPlotClient(request, idPlot);
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
     @PostMapping("premise/{idPremise}")
     public ResponseEntity<BaseResponse> createPremiseClient(
-            @RequestBody @Valid CreateClientRequest request, @PathVariable Long idPremise){
+            @RequestBody @Valid BaseClientRequest request, @PathVariable Long idPremise){
         BaseResponse baseResponse = service.createPremiseClient(request, idPremise);
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<BaseResponse> updateClient(@RequestBody @Valid UpdateClientRequest request,
+    public ResponseEntity<BaseResponse> updateClient(@RequestBody @Valid BaseClientRequest request,
                                                @PathVariable Long id){
         BaseResponse response = service.update(id, request);
         return new ResponseEntity<>(response, response.getHttpStatus());

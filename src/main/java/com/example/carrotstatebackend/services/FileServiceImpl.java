@@ -10,17 +10,21 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateImageRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetAgentResponse;
-import com.example.carrotstatebackend.controllers.dtos.response.GetRealStateResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
+import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.UploadImageResponse;
 import com.example.carrotstatebackend.controllers.exceptions.NotValidFormatException;
 import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.services.interfaces.*;
-import com.sun.istack.Nullable;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
+import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseImageService;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +34,6 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 
 @Service
 public class FileServiceImpl implements IFileService {
@@ -39,25 +42,28 @@ public class FileServiceImpl implements IFileService {
     private IRealStateService managerService;
 
     @Autowired
-    private IHouseService houseService;
+    private IBasePropertyService<House> houseService;
 
     @Autowired
-    private IPlotService plotService;
+    private IBasePropertyService<Plot> plotService;
 
     @Autowired
-    private IPremiseService premiseService;
+    private IBasePropertyService<Premise> premiseService;
 
     @Autowired
     private IAgentService agentService;
 
     @Autowired
-    private IImageHouseService imageHouseService;
+    @Qualifier("imgHouse")
+    private IBaseImageService imageHouseService;
 
     @Autowired
-    private IImagePremiseService imagePremiseService;
+    @Qualifier("imgPremise")
+    private IBaseImageService imagePremiseService;
 
     @Autowired
-    private IImagePlotService imagePlotService;
+    @Qualifier("imgPlot")
+    private IBaseImageService imagePlotService;
 
     private AmazonS3 s3client;
     private String ENDPOINT_URL = "s3.us-east-2.amazonaws.com";
@@ -81,7 +87,7 @@ public class FileServiceImpl implements IFileService {
         String fileUrl = "";
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
             managerService.updateManagerProfile(fileUrl, id);
@@ -103,7 +109,7 @@ public class FileServiceImpl implements IFileService {
         String fileUrl = "";
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
             agentService.updateAgentProfile(fileUrl, id);
@@ -120,12 +126,12 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public BaseResponse uploadHousePicture(MultipartFile multipartFile, Long idHouse) {
-        House house = houseService.getHouse(idHouse);
+        House house = houseService.getPropertyE(idHouse);
         String FILE_URI = generateURI(house);
         String fileUrl = "";
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
             imageHouseService.saveImage(from(house, fileUrl));
@@ -143,13 +149,13 @@ public class FileServiceImpl implements IFileService {
     @Override
     public BaseResponse uploadPlotPicture(MultipartFile multipartFile,  Long idPlot) {
 
-        Plot plot = plotService.getPlot(idPlot);
+        Plot plot = plotService.getPropertyE(idPlot);
         String FILE_URI = generateURI(plot);
         String fileUrl = "";
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
             imagePlotService.saveImage(from(plot, fileUrl));
@@ -169,13 +175,13 @@ public class FileServiceImpl implements IFileService {
     @Override
     public BaseResponse uploadPremisePicture(MultipartFile multipartFile,  Long idPremise) {
 
-        Premise premise = premiseService.getPremise(idPremise);
+        Premise premise = premiseService.getPropertyE(idPremise);
         String FILE_URI = generateURI(premise);
         String fileUrl = "";
 
         try{
             File file = convertMultiPartToFile(multipartFile);
-            String filePath = FILE_URI + generateFileName(multipartFile);
+            String filePath = FILE_URI + validateFormat(generateFileName(multipartFile));
             fileUrl = createUrl(filePath);
             uploadFileToS3Bucket(filePath, file);
             file.delete();

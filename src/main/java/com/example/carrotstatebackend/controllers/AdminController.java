@@ -1,7 +1,7 @@
 package com.example.carrotstatebackend.controllers;
 
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.services.interfaces.IAdminService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

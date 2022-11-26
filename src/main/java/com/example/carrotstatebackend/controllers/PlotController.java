@@ -1,10 +1,10 @@
 package com.example.carrotstatebackend.controllers;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreatePlotRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.properties.BasePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdatePlotRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.services.interfaces.IPlotService;
+import com.example.carrotstatebackend.entities.Plot;
+import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import javax.validation.Valid;
 public class PlotController {
 
     @Autowired
-    private IPlotService service;
+    private IBasePropertyService<Plot> service;
 
     @GetMapping("{id}")
     public ResponseEntity<BaseResponse> get(@PathVariable Long id ){
@@ -44,14 +44,14 @@ public class PlotController {
     }
 
     @PostMapping("/agent/{idAgent}")
-    public ResponseEntity<BaseResponse> create(@RequestBody @Valid CreatePlotRequest request,
+    public ResponseEntity<BaseResponse> create(@RequestBody @Valid BasePlotRequest request,
                                                @PathVariable Long idAgent){
         BaseResponse response = service.create(request, idAgent);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PutMapping("{idPlot}")
-    public ResponseEntity<BaseResponse> update(@RequestBody @Valid UpdatePlotRequest request,
+    public ResponseEntity<BaseResponse> update(@RequestBody @Valid BasePlotRequest request,
                                                @PathVariable Long idPlot){
         BaseResponse response = service.update(idPlot, request);
         return new ResponseEntity<>(response, response.getHttpStatus());

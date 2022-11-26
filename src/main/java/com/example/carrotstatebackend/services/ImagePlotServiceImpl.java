@@ -4,15 +4,15 @@ import com.example.carrotstatebackend.controllers.dtos.request.CreateImageReques
 import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
 import com.example.carrotstatebackend.entities.pivots.ImagePlot;
 import com.example.carrotstatebackend.repositories.IImagePlotRepository;
-import com.example.carrotstatebackend.services.interfaces.IImagePlotService;
+import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class ImagePlotServiceImpl implements IImagePlotService {
+@Service("imgPlot")
+public class ImagePlotServiceImpl implements IBaseImageService {
 
     @Autowired
     private IImagePlotRepository repository;

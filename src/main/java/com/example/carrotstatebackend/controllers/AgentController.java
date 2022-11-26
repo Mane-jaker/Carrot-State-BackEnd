@@ -1,9 +1,9 @@
 package com.example.carrotstatebackend.controllers;
 
-import com.example.carrotstatebackend.controllers.dtos.request.CreateAgentRequest;
-import com.example.carrotstatebackend.controllers.dtos.request.UpdateCredentialsRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseAgentRequest;
+import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
-import com.example.carrotstatebackend.services.interfaces.IAgentService;
+import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class AgentController{
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponse> create(@RequestBody @Valid CreateAgentRequest request){
+    public ResponseEntity<BaseResponse> create(@RequestBody @Valid BaseAgentRequest request){
         BaseResponse response = service.create(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
