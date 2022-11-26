@@ -3,7 +3,7 @@ package com.example.carrotstatebackend.services;
 import com.example.carrotstatebackend.controllers.dtos.request.CreateImageRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
 import com.example.carrotstatebackend.entities.pivots.ImagePremise;
-import com.example.carrotstatebackend.repositories.IImagePremiseRepository;
+import com.example.carrotstatebackend.repositories.pivots.IImagePremiseRepository;
 import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

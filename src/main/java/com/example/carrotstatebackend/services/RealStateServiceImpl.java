@@ -4,11 +4,11 @@ import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseRealS
 import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
-import com.example.carrotstatebackend.controllers.exceptions.InvalidActivationException;
-import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.exceptions.InvalidActivationException;
+import com.example.carrotstatebackend.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Admin;
 import com.example.carrotstatebackend.entities.RealState;
-import com.example.carrotstatebackend.repositories.IRealStateRepository;
+import com.example.carrotstatebackend.repositories.persons.IRealStateRepository;
 import com.example.carrotstatebackend.services.interfaces.persons.IAdminService;
 import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
 import com.example.carrotstatebackend.services.interfaces.persons.IRealStateCodeService;

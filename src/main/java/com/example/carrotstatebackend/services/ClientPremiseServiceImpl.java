@@ -3,7 +3,7 @@ package com.example.carrotstatebackend.services;
 import com.example.carrotstatebackend.entities.Client;
 import com.example.carrotstatebackend.entities.Premise;
 import com.example.carrotstatebackend.entities.pivots.ClientPremise;
-import com.example.carrotstatebackend.repositories.IClientPremiseRepository;
+import com.example.carrotstatebackend.repositories.pivots.IClientPremiseRepository;
 import com.example.carrotstatebackend.services.interfaces.pivtos.IBaseClientPropertyService;
 import com.example.carrotstatebackend.services.interfaces.properties.IBasePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,7 +13,7 @@ import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.UploadImageResponse;
-import com.example.carrotstatebackend.controllers.exceptions.NotValidFormatException;
+import com.example.carrotstatebackend.exceptions.NotValidFormatException;
 import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.Plot;
 import com.example.carrotstatebackend.entities.Premise;

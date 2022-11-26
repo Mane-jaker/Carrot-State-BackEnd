@@ -1,4 +1,4 @@
-package com.example.carrotstatebackend.repositories;
+package com.example.carrotstatebackend.repositories.persons;
 
 import com.example.carrotstatebackend.entities.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;

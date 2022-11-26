@@ -1,4 +1,4 @@
-package com.example.carrotstatebackend.controllers.exceptions;
+package com.example.carrotstatebackend.exceptions;
 
 public class InvalidDeleteException extends RuntimeException{
     public InvalidDeleteException(){

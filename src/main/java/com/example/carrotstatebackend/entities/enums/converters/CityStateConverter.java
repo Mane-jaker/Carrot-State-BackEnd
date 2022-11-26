@@ -1,6 +1,6 @@
-package com.example.carrotstatebackend.entities.converters;
+package com.example.carrotstatebackend.entities.enums.converters;
 
-import com.example.carrotstatebackend.controllers.exceptions.NotValidCityCodeException;
+import com.example.carrotstatebackend.exceptions.NotValidCityCodeException;
 import com.example.carrotstatebackend.entities.enums.CityState;
 
 import javax.persistence.AttributeConverter;

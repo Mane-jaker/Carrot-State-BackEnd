@@ -1,4 +1,4 @@
-package com.example.carrotstatebackend.repositories;
+package com.example.carrotstatebackend.repositories.properties;
 
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.Plot;

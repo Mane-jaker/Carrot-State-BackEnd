@@ -3,10 +3,10 @@ import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseAgent
 import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
-import com.example.carrotstatebackend.controllers.exceptions.NotFoundException;
+import com.example.carrotstatebackend.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.RealState;
-import com.example.carrotstatebackend.repositories.IAgentRepository;
+import com.example.carrotstatebackend.repositories.persons.IAgentRepository;
 import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
 import org.springframework.beans.factory.annotation.Autowired;

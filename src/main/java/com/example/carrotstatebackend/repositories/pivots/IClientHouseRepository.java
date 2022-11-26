@@ -1,4 +1,4 @@
-package com.example.carrotstatebackend.repositories;
+package com.example.carrotstatebackend.repositories.pivots;
 
 import com.example.carrotstatebackend.entities.House;
 import com.example.carrotstatebackend.entities.Client;

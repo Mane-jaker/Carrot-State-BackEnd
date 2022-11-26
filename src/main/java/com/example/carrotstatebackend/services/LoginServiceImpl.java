@@ -5,7 +5,7 @@ import com.example.carrotstatebackend.controllers.dtos.response.*;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAdminResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetRealStateResponse;
-import com.example.carrotstatebackend.controllers.exceptions.LoginInvalidException;
+import com.example.carrotstatebackend.exceptions.LoginInvalidException;
 import com.example.carrotstatebackend.entities.Admin;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.RealState;

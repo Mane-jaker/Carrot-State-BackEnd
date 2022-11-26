@@ -1,4 +1,4 @@
-package com.example.carrotstatebackend.controllers.exceptions;
+package com.example.carrotstatebackend.exceptions;
 
 public class NotValidCityCodeException extends RuntimeException{
     public NotValidCityCodeException(String code){

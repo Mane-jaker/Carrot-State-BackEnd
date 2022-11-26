@@ -1,4 +1,4 @@
-package com.example.carrotstatebackend.repositories;
+package com.example.carrotstatebackend.repositories.pivots;
 
 import com.example.carrotstatebackend.entities.pivots.ImageHouse;
 import org.springframework.data.jpa.repository.JpaRepository;
