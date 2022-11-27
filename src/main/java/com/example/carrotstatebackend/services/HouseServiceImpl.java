@@ -6,6 +6,7 @@ import com.example.carrotstatebackend.controllers.dtos.request.RequestFilters;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.properties.GetHouseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.GetImageResponse;
+import com.example.carrotstatebackend.entities.enums.converters.CityStateConverter;
 import com.example.carrotstatebackend.exceptions.InvalidDeleteException;
 import com.example.carrotstatebackend.exceptions.NotFoundException;
 import com.example.carrotstatebackend.exceptions.NotValidCityCodeException;
@@ -38,11 +39,38 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
     private IAgentService agentService;
 
     @Autowired
+    private CityStateConverter cityStateConverter;
+
+    @Autowired
     @Qualifier("imgHouse")
     private IBaseImageService imageHouseService;
 
     @Autowired
     private IFilterUtility filtersUtility;
+
+    @Override
+    public BaseResponse list() {
+        List<GetHouseResponse> list = repository
+                .findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+        return BaseResponse.builder()
+                .data(list)
+                .message("houses")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND)
+                .build();
+    }
+
+    @Override
+    public BaseResponse listByAgent(Long idAgent) {
+        return BaseResponse.builder()
+                .data(getList(idAgent))
+                .message("found")
+                .success(true)
+                .httpStatus(HttpStatus.FOUND).build();
+    }
 
     @Override
     public BaseResponse get(Long id) {
@@ -74,31 +102,9 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
     }
 
     @Override
-    public BaseResponse list() {
-        List<GetHouseResponse> list = repository
-                .findAll()
-                .stream()
-                .map(this::from)
-                .collect(Collectors.toList());
-        return BaseResponse.builder()
-                .data(list)
-                .message("houses")
-                .success(true)
-                .httpStatus(HttpStatus.FOUND)
-                .build();
-    }
-
-    @Override
     public BaseResponse create(BasePropertyRequest request, Long idAgent) {
-        House house = from((BaseHouseRequest) request);
-        Agent agent = agentService.getAgent(idAgent);
-        house.setAgent(agent);
-        house = repository.save(house);
-        GetHouseResponse response = from(house);
-        agent.setNumberOfProperties(agent.getNumberOfProperties() + 1);
-        agentService.update(agent);
         return BaseResponse.builder()
-                .data(response)
+                .data(from((BaseHouseRequest) request, idAgent))
                 .message("the house was created")
                 .success(true)
                 .httpStatus(HttpStatus.CREATED).build();
@@ -109,35 +115,10 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
         House house = repository.findById(idHouse)
                 .orElseThrow(NotFoundException::new);
         return BaseResponse.builder()
-                .data(from(update(house, (BaseHouseRequest) request)))
+                .data(from(house, (BaseHouseRequest) request))
                 .message("the house was updated")
                 .success(true)
                 .httpStatus(HttpStatus.ACCEPTED).build();
-    }
-
-    @Override
-    public BaseResponse listByAgent(Long idAgent) {
-        return BaseResponse.builder()
-                .data(getList(idAgent))
-                .message("found")
-                .success(true)
-                .httpStatus(HttpStatus.FOUND).build();
-    }
-
-    @Override
-    public BaseResponse updateToSoldOut(Long idHouse, Client client) {
-        House house = findOneAndEnsureExist(idHouse);
-        house.setClient(client);
-        house.setSoldOut(true);
-        return BaseResponse.builder()
-                .data(from(house))
-                .message("updated")
-                .success(true)
-                .httpStatus(HttpStatus.ACCEPTED).build();
-    }
-
-    public House getPropertyE(Long id){
-        return findOneAndEnsureExist(id);
     }
 
     @Override
@@ -152,9 +133,36 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
                 .success(true).build();
     }
 
+    @Override
+    public BaseResponse updateToSoldOut(Long idHouse, Client client) {
+        House house = findOneAndEnsureExist(idHouse);
+        house.setClient(client);
+        house.setSoldOut(true);
+        return BaseResponse.builder()
+                .data(from(house))
+                .message("updated")
+                .success(true)
+                .httpStatus(HttpStatus.ACCEPTED).build();
+    }
+
+    @Override
+    public House getPropertyE(Long id){
+        return findOneAndEnsureExist(id);
+    }
+
     private House findOneAndEnsureExist(Long id) {
         return repository.findById(id)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    private GetHouseResponse from(BaseHouseRequest request, Long idAgent){
+        House house = from(request);
+        Agent agent = agentService.getAgent(idAgent);
+        house.setAgent(agent);
+        house = repository.save(house);
+        agent.setNumberOfProperties(agent.getNumberOfProperties() + 1);
+        agentService.update(agent);
+        return from(house);
     }
 
     private GetHouseResponse from(House house){
@@ -173,7 +181,7 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
         return response;
     }
 
-    private House update(House house, BaseHouseRequest request){
+    private GetHouseResponse from(House house, BaseHouseRequest request){
         house.setBathRoomNum(request.getBathRoomNum());
         house.setDescription(request.getDescription());
         house.setFloors(request.getFloors());
@@ -182,7 +190,7 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
         house.setSize(request.getSize());
         house.setName(request.getName());
         house.setPrice(request.getPrice());
-        return repository.save(house);
+        return from(repository.save(house));
     }
 
     private  House from(BaseHouseRequest request){
@@ -202,15 +210,16 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
 
     private List<GetImageResponse> from(List<ImageHouse> image){
         return image.stream()
-                .map(imageHouse -> GetImageResponse.builder().url(imageHouse.getUrl()).build())
+                .map(this::from)
                 .collect(Collectors.toList());
     }
 
+    private GetImageResponse from(ImageHouse imageHouse){
+        return GetImageResponse.builder().url(imageHouse.getUrl()).build();
+    }
+
     private CityState from(String cityCode){
-        return Stream.of(CityState.values())
-                .filter(c -> c.getLocationCode().equals(cityCode))
-                .findFirst()
-                .orElseThrow(() -> new NotValidCityCodeException(cityCode));
+        return cityStateConverter.convertToEntityAttribute(cityCode);
     }
 
     private GetHouseResponse from(Long idHouse){
@@ -252,7 +261,8 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
     private Boolean evaluate(GetHouseResponse house, String keyWord){
         return house
                 .getName()
-                .contains(keyWord) || house.getDescription().contains(keyWord);
+                .contains(keyWord) || house.getDescription()
+                .contains(keyWord);
     }
 }
 

@@ -133,11 +133,11 @@ public class LoginServiceImpl implements ILoginService {
     }
 
     private GetClientResponse from(Client client){
-        GetClientResponse response = new GetClientResponse();
-        response.setId(client.getId());
-        response.setName(client.getName());
-        response.setContact(client.getContact());
-        response.setBudget(client.getBudget());
-        return response;
+        return GetClientResponse.builder()
+                .id(client.getId())
+                .name(client.getName())
+                .email(client.getEmail())
+                .contact(client.getContact())
+                .budget(client.getBudget()).build();
     }
 }

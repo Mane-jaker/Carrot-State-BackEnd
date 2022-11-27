@@ -7,11 +7,11 @@ import com.example.carrotstatebackend.entities.Client;
 
 public interface IBasePropertyService <E>{
     BaseResponse list();
+    BaseResponse listByAgent(Long idAgent);
     BaseResponse get(Long id);
     BaseResponse search(String keyWord, RequestFilters filters);
     BaseResponse create(BasePropertyRequest request, Long idAgent);
     BaseResponse update(Long idProperty, BasePropertyRequest request);
-    BaseResponse listByAgent(Long idAgent);
     BaseResponse delete(Long id);
     BaseResponse updateToSoldOut(Long id, Client owner);
     E getPropertyE(Long id);

@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum State {
-    ACTIVE("OK"),
-    INACTIVE("IN");
+    ACTIVE(true),
+    INACTIVE(false);
 
-    private final String statusCode;
+    private final Boolean statusCode;
 
-    State(String code){
+    State(Boolean code){
         this.statusCode = code;
     }
 }

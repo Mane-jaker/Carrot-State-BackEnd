@@ -39,7 +39,7 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<BaseResponse> create(@RequestBody @Valid BaseClientRequest request){
         BaseResponse response = service.createClient(request);
-        return null;
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PutMapping("{id}")

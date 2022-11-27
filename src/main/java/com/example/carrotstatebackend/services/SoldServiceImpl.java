@@ -32,11 +32,14 @@ public class SoldServiceImpl implements ISoldService {
 
     @Override
     public BaseResponse list() {
-        List<GetSoldResponse> list = repository.findAll()
-                .stream().map(this::from).collect(Collectors.toList());
+        List<GetSoldResponse> list = repository
+                .findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
         return BaseResponse.builder()
                 .data(list)
-                .message("All solds")
+                .message("All sold")
                 .success(true)
                 .httpStatus(HttpStatus.FOUND).build();
     }
@@ -90,12 +93,12 @@ public class SoldServiceImpl implements ISoldService {
                 .premise(from(sold.getPremise())).build();
     }
 
-    private GetClientResponse from(Client owner){
-        GetClientResponse response = new GetClientResponse();
-        response.setId(owner.getId());
-        response.setName(owner.getName());
-        response.setContact(owner.getContact());
-        return response;
+    private GetClientResponse from(Client client){
+        return GetClientResponse.builder()
+                .id(client.getId())
+                .name(client.getName())
+                .contact(client.getContact())
+                .budget(client.getBudget()).build();
     }
 
     private GetAgentResponse from(Agent agent){
@@ -115,7 +118,7 @@ public class SoldServiceImpl implements ISoldService {
         response.setName(realState.getName());
         response.setEmail(realState.getEmail());
         response.setCommissionAgent(realState.getCommissionAgent());
-        response.setRealStateCode(realState.getCode().getCode().toString());
+        response.setRealStateCode(realState.getCode().getCode());
         return response;
     }
 

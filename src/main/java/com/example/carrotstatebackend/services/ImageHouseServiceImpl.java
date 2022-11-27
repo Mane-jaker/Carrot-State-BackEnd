@@ -19,7 +19,10 @@ public class ImageHouseServiceImpl implements IBaseImageService {
 
     @Override
     public List<GetImageResponse> list() {
-        return repository.findAll().stream().map(this::from).collect(Collectors.toList());
+        return repository.findAll()
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.carrotstatebackend.controllers.dtos.response.persons;
 
+import com.example.carrotstatebackend.entities.enums.State;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +13,5 @@ public class GetAgentResponse {
     private String profilePicture;
     private Integer numberOfSales;
     private Integer numberOfProperties;
-    private Boolean state;
+    private State state;
 }

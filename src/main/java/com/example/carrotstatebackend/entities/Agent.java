@@ -1,5 +1,6 @@
 package com.example.carrotstatebackend.entities;
 
+import com.example.carrotstatebackend.entities.enums.State;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +33,7 @@ public class Agent{
     private Integer numberOfProperties;
 
     @Column(nullable = false)
-    private Boolean state;
+    private State state;
 
     @ManyToOne
     private RealState realState;

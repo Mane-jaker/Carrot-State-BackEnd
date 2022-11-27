@@ -3,9 +3,12 @@ import com.example.carrotstatebackend.controllers.dtos.request.persons.BaseAgent
 import com.example.carrotstatebackend.controllers.dtos.request.persons.UpdateCredentialsRequest;
 import com.example.carrotstatebackend.controllers.dtos.response.BaseResponse;
 import com.example.carrotstatebackend.controllers.dtos.response.persons.GetAgentResponse;
+import com.example.carrotstatebackend.entities.enums.State;
+import com.example.carrotstatebackend.exceptions.InvalidStatusException;
 import com.example.carrotstatebackend.exceptions.NotFoundException;
 import com.example.carrotstatebackend.entities.Agent;
 import com.example.carrotstatebackend.entities.RealState;
+import com.example.carrotstatebackend.exceptions.NotValidCityCodeException;
 import com.example.carrotstatebackend.repositories.persons.IAgentRepository;
 import com.example.carrotstatebackend.services.interfaces.persons.IAgentService;
 import com.example.carrotstatebackend.services.interfaces.persons.IRealStateService;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class AgentServiceImpl implements IAgentService{
 
@@ -89,7 +94,7 @@ public class AgentServiceImpl implements IAgentService{
     @Override
     public BaseResponse changeStatus(Boolean status, Long idAgent) {
         Agent agent = repository.findById(idAgent).orElseThrow(NotFoundException::new);
-        agent.setState(status);
+        agent.setState(from(status));
         return BaseResponse.builder()
                 .data(from(repository.save(agent)))
                 .message("the agent was updated")
@@ -123,6 +128,13 @@ public class AgentServiceImpl implements IAgentService{
     @Override
     public void delete(Long id) { repository.deleteById(id); }
 
+    private State from(Boolean stateCode){
+        return Stream.of(State.values())
+                .filter(state -> state.getStatusCode().equals(stateCode))
+                .findFirst()
+                .orElseThrow(InvalidStatusException::new);
+    }
+
     private Agent findOneAndEnsureExist(Long id){
         return repository.findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -141,7 +153,7 @@ public class AgentServiceImpl implements IAgentService{
         agent.setPassword(request.getPassword());
         agent.setEmail(request.getEmail());
         agent.setProfilePicture(DEFAULT_PICTURE);
-        agent.setState(true);
+        agent.setState(from(true));
         return agent;
     }
 

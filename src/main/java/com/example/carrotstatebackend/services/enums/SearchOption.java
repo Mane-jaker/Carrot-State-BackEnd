@@ -5,3 +5,4 @@ public enum SearchOption {
     BY_CITY_CODE,
     BY_ALL_FILTERS
 }
+

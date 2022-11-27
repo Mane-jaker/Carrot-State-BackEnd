@@ -229,8 +229,11 @@ public class FileServiceImpl implements IFileService {
 
     private String validateFormat(String fileName){
         String Ext = FilenameUtils.getExtension(fileName);
-        if(!Ext.equals("png")){
-            throw new NotValidFormatException(".png");
+        if (fileName == null){
+            throw new NotValidFormatException(".jpg, .png");
+        }
+        if(!Ext.equals("png") && !Ext.equals("jpg")){
+            throw new NotValidFormatException(".jpg, .png");
         }
         return fileName;
     }

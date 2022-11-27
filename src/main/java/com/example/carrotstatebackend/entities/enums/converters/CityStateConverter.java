@@ -2,12 +2,14 @@ package com.example.carrotstatebackend.entities.enums.converters;
 
 import com.example.carrotstatebackend.exceptions.NotValidCityCodeException;
 import com.example.carrotstatebackend.entities.enums.CityState;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)
+@Component
 public class CityStateConverter implements AttributeConverter<CityState, String> {
 
     @Override

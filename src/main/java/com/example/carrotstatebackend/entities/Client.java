@@ -3,6 +3,7 @@ package com.example.carrotstatebackend.entities;
 import com.example.carrotstatebackend.entities.pivots.ClientPremise;
 import com.example.carrotstatebackend.entities.pivots.ClientHouse;
 import com.example.carrotstatebackend.entities.pivots.ClientPlot;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +34,8 @@ public class Client {
 
     private Float budget;
 
+    private String profilePicture;
+
     @OneToMany(mappedBy = "client")
     private List<Sold> sold;
 
@@ -53,5 +56,4 @@ public class Client {
 
     @OneToMany(mappedBy = "client")
     private List<ClientPlot> clientPlots;
-
 }

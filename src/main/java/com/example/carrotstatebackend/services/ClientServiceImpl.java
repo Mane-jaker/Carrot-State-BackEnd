@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +43,9 @@ public class ClientServiceImpl implements IClientService {
 
     @Autowired
     private IBaseClientPropertyService<Plot> clientPlotService;
+
+    private final String DEFAULT_PICTURE = "https://conejobucket.s3.us-east-2.amazonaws.com/persons/default/profile/images.jpeg";
+
 
     @Override
     public BaseResponse listByHouse(Long idHouse) {
@@ -101,41 +105,17 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public BaseResponse createHouseClient(BaseClientRequest request, Long houseId) {
-        Client client = from(request);
-        client = repository.save(client);
-        House house = houseService.getPropertyE(houseId);
-        clientHouseService.create(client, house);
-        return BaseResponse.builder()
-                .data(from(client))
-                .message("The prospective buyer was created")
-                .success(true)
-                .httpStatus(HttpStatus.CREATED).build();
+        return null;
     }
 
     @Override
     public BaseResponse createPlotClient(BaseClientRequest request, Long idPlot) {
-        Client client = from(request);
-        client = repository.save(client);
-        Plot plot = plotService.getPropertyE(idPlot);
-        clientPlotService.create(client, plot);
-        return BaseResponse.builder()
-                .data(from(client))
-                .message("The prospective buyer was created")
-                .success(true)
-                .httpStatus(HttpStatus.CREATED).build();
+        return null;
     }
 
     @Override
     public BaseResponse createPremiseClient(BaseClientRequest request, Long idPremise) {
-        Client client = from(request);
-        client = repository.save(client);
-        Premise premise = premiseService.getPropertyE(idPremise);
-        clientPremiseService.create(client, premise);
-        return BaseResponse.builder()
-                .data(from(client))
-                .message("The prospective buyer was created")
-                .success(true)
-                .httpStatus(HttpStatus.CREATED).build();
+        return null;
     }
 
     @Override
@@ -151,43 +131,27 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public BaseResponse deleteHouseClient(Long id) {
-        Client client = repository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        clientHouseService.delete(client);
-        repository.delete(client);
-        return BaseResponse.builder()
-                .message("the prospective buyer was deleted")
-                .success(true)
-                .httpStatus(HttpStatus.ACCEPTED).build();
+       return null;
     }
 
     @Override
     public BaseResponse deletePlotClient(Long id) {
-        Client client = repository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        clientPlotService.delete(client);
-        repository.delete(client);
-        return BaseResponse.builder()
-                .message("the prospective buyer was deleted")
-                .success(true)
-                .httpStatus(HttpStatus.ACCEPTED).build();
+        return null;
     }
 
     @Override
     public BaseResponse deletePremiseClient(Long id) {
-        Client client = repository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        clientPremiseService.delete(client);
-        repository.delete(client);
-        return BaseResponse.builder()
-                .message("the prospective buyer was deleted")
-                .success(true)
-                .httpStatus(HttpStatus.ACCEPTED).build();
+        return null;
     }
 
     @Override
     public Client getClient(Long id){
         return findOneAndEnsureExist(id);
+    }
+
+    @Override
+    public Optional<Client> getClient(String email) {
+        return repository.findByEmail(email);
     }
 
     private Client findOneAndEnsureExist(Long id){
@@ -196,6 +160,8 @@ public class ClientServiceImpl implements IClientService {
     }
 
     private Client update(Client client, BaseClientRequest request){
+        client.setPassword(request.getPassword());
+        client.setEmail(request.getEmail());
         client.setName(request.getName());
         client.setContact(request.getContact());
         client.setBudget(request.getBudget());
@@ -209,20 +175,22 @@ public class ClientServiceImpl implements IClientService {
         client.setName(request.getName());
         client.setContact(request.getContact());
         client.setBudget(request.getBudget());
+        client.setProfilePicture(DEFAULT_PICTURE);
         return client;
     }
 
     private GetClientResponse from(Client client){
-        GetClientResponse response = new GetClientResponse();
-        response.setId(client.getId());
-        response.setName(client.getName());
-        response.setContact(client.getContact());
-        response.setBudget(client.getBudget());
-        return response;
+        return GetClientResponse.builder()
+                .id(client.getId())
+                .name(client.getName())
+                .contact(client.getContact())
+                .budget(client.getBudget())
+                .email(client.getEmail())
+                .profilePicture(client.getProfilePicture()).build();
     }
 
-    private GetClientResponse from(Long idProspectiveBuyer){
-        return repository.findById(idProspectiveBuyer)
+    private GetClientResponse from(Long idClient){
+        return repository.findById(idClient)
                 .map(this::from)
                 .orElseThrow(NotFoundException::new);
     }
