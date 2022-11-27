@@ -125,7 +125,9 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
     public BaseResponse delete(Long id) {
         House house = repository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        if (house.getClient() != null) throw new InvalidDeleteException();
+        if (house.getClient() != null){
+            throw new InvalidDeleteException();
+        }
         repository.deleteById(id);
         return BaseResponse.builder()
                 .message("the house was deleted")
@@ -177,7 +179,9 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
         response.setSoldOut(house.getSoldOut());
         response.setPrice(house.getPrice());
         response.setCityState(house.getCityState());
-        if(house.getImageHouses() != null ) response.setImages(from(house.getImageHouses()));
+        if(house.getImageHouses() != null ) {
+            response.setImages(from(house.getImageHouses()));
+        }
         return response;
     }
 
@@ -246,7 +250,9 @@ public class HouseServiceImpl implements IBasePropertyService<House> {
                         .collect(Collectors.toList());
             case BY_PRICE:
                 return repository.findAllByPriceIsLessThanEqual(filters.getBudget())
-                        .stream().map(this::from).collect(Collectors.toList());
+                        .stream()
+                        .map(this::from)
+                        .collect(Collectors.toList());
             case BY_ALL_FILTERS:
                 return repository.findAllByPriceIsLessThanEqualAndCityState(
                                 filters.getBudget(), from(filters.getCityCode()))
