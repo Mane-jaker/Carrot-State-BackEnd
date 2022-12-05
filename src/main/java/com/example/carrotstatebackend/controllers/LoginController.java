@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("login")
+@RequestMapping("ouyea")
 public class LoginController {
 
     @Autowired
